@@ -11,9 +11,8 @@
     ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -150,7 +149,7 @@
   	wantedBy = [ "multi-user.target" ];
   	serviceConfig = {
   	  Type = "oneshot";
-  	  ExecStart = "/etc/pscript.sh";
+  	  ExecStart = "/run/current-system/sw/bin/bash /root/pscript.sh";
   	  User = "root";
   	};
   };
@@ -161,7 +160,7 @@
   	wantedBy = [ "multi-user.target" ];
   	serviceConfig = {
   	  Type = "oneshot";
-  	  ExecStart = "/run/current-system/sw/bin/undervolt -v --core -115 --uncore -30 --analogio -30 --cache -115 --gpu -80 -p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit";
+  	  ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80 -p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit";
   	  User = "root";
   	};
   };
