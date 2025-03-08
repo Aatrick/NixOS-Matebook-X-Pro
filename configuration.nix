@@ -131,17 +131,37 @@
   	pciutils
   	htop
   	undervolt
+  	gnome-software
+  	fishPlugins.done
+	fishPlugins.fzf-fish
+	fishPlugins.forgit
+	fishPlugins.hydro
+	fzf
+	fishPlugins.grc
+	grc
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
   
+  services.flatpak.enable = true;
+
+programs.fish.enable = true;
+  
+  
   hardware.graphics = {
   	enable = true;
   	extraPackages = with pkgs; [ 
-	  	vaapiIntel intel-media-driver
+	  	vaapiIntel 
+	  	intel-media-driver
+	        intel-compute-runtime
 	  	vpl-gpu-rt
   	];
   };
+  
+  environment.sessionVariables = {
+  LIBVA_DRIVER_NAME = "iHD";
+  NIXOS_OZONE_WL = "1";
+};
   
   systemd.services.pscript = {
   	description = "Run pscript.sh at startup";
@@ -155,15 +175,26 @@
   };
   
   systemd.services.undervolt = {
-  	description = "Undervolt at startup";
-  	after = [ "network.target" ];
-  	wantedBy = [ "multi-user.target" ];
-  	serviceConfig = {
-  	  Type = "oneshot";
-  	  ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80 -p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit";
-  	  User = "root";
-  	};
+  description = "Undervolt at startup";
+  after = [ "network.target" ];
+  serviceConfig = {
+    Type = "oneshot";
+    ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80 -p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit";
+    User = "root";
   };
+};
+
+  systemd.timers.undervolt = {
+  description = "Run undervolt service every 5 minutes";
+  wantedBy = [ "timers.target" ];
+  timerConfig = {
+    OnBootSec = "1min";  # Start 1 minute after boot
+    OnUnitActiveSec = "5min";  # Run every 5 minutes
+    Unit = "undervolt.service";
+  };
+};
+
+
   
   powerManagement.enable = true;
   services.power-profiles-daemon.enable = false;
@@ -177,11 +208,17 @@
 
         CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
         CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+        
+        CPU_BOOST_ON_AC=1;
+	CPU_BOOST_ON_BAT=0;
+
+	CPU_HWP_DYN_BOOST_ON_AC=1;
+	CPU_HWP_DYN_BOOST_ON_BAT=0;
 
         CPU_MIN_PERF_ON_AC = 0;
         CPU_MAX_PERF_ON_AC = 100;
         CPU_MIN_PERF_ON_BAT = 0;
-        CPU_MAX_PERF_ON_BAT = 20;
+        CPU_MAX_PERF_ON_BAT = 30;
 
        #Optional helps save long term battery health
        START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
