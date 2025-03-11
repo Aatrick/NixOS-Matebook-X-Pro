@@ -1,0 +1,94 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "claude-3-5-sonnet"
+    },
+    "version": "2",
+    "button": false,
+    "enable_experimental_live_diffs": true
+  },
+  "open_files_in_new_window": false,
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Catppuccin Macchiato"
+  },
+  "diagnostics": {
+    "include_warnings": false
+  },
+  "collaboration_panel": {
+    "button": false
+  },
+
+  "chat_panel": {
+    "button": false
+  },
+
+  "show_wrap_guides": false,
+
+  "tab_bar": {
+    "show": false
+  },
+
+  "inline_completions": {
+    "enabled": true
+  },
+
+  "soft_wrap": "bounded",
+  "soft_wrap_column": 80,
+
+  "notification_panel": {
+    "button": false
+  },
+
+  "autosave": "on_focus_change",
+
+  "telemetry": {
+    "enabled": false
+  },
+
+  "languages": {
+    "Python": {
+      "language_servers": ["ruff"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
+    }
+  },
+
+  "lsp": {
+    "pyright": {
+      "settings": {
+        "python.analysis": {
+          "diagnosticMode": "workspace",
+          "typeCheckingMode": "strict"
+        },
+        "python": {
+          "pythonPath": ".venv/bin/python"
+        }
+      }
+    }
+  }
+}

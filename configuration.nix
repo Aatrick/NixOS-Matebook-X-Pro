@@ -86,7 +86,7 @@
     #  thunderbird
     ];
   };
-  
+
   environment.gnome.excludePackages = (with pkgs; [
 	  atomix # puzzle game
 	  cheese # webcam tool
@@ -126,7 +126,6 @@
   	wget
   	git
   	google-chrome
-  	vscode
   	legcord
   	pciutils
   	htop
@@ -139,30 +138,37 @@
 	fzf
 	fishPlugins.grc
 	grc
+	gcc
+	zed-editor
+	clang-tools
+	python312
+	ruff
+	uv
+	gh
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
-  
+
   services.flatpak.enable = true;
 
 programs.fish.enable = true;
-  
-  
+
+
   hardware.graphics = {
   	enable = true;
-  	extraPackages = with pkgs; [ 
-	  	vaapiIntel 
+  	extraPackages = with pkgs; [
+	  	vaapiIntel
 	  	intel-media-driver
 	        intel-compute-runtime
 	  	vpl-gpu-rt
   	];
   };
-  
+
   environment.sessionVariables = {
   LIBVA_DRIVER_NAME = "iHD";
   NIXOS_OZONE_WL = "1";
 };
-  
+
   systemd.services.pscript = {
   	description = "Run pscript.sh at startup";
   	after = [ "network.target" ];
@@ -173,7 +179,7 @@ programs.fish.enable = true;
   	  User = "root";
   	};
   };
-  
+
   systemd.services.undervolt = {
   description = "Undervolt at startup";
   after = [ "network.target" ];
@@ -189,17 +195,17 @@ programs.fish.enable = true;
   wantedBy = [ "timers.target" ];
   timerConfig = {
     OnBootSec = "1min";  # Start 1 minute after boot
-    OnUnitActiveSec = "5min";  # Run every 5 minutes
+    OnUnitActiveSec = "1min";  # Run every 1 minute
     Unit = "undervolt.service";
   };
 };
 
 
-  
+
   powerManagement.enable = true;
   services.power-profiles-daemon.enable = false;
   services.thermald.enable = true;
-  
+
   services.tlp = {
       enable = true;
       settings = {
@@ -208,7 +214,7 @@ programs.fish.enable = true;
 
         CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
         CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-        
+
         CPU_BOOST_ON_AC=1;
 	CPU_BOOST_ON_BAT=0;
 
@@ -219,6 +225,20 @@ programs.fish.enable = true;
         CPU_MAX_PERF_ON_AC = 100;
         CPU_MIN_PERF_ON_BAT = 0;
         CPU_MAX_PERF_ON_BAT = 30;
+        
+        CPU_SCALING_MIN_FREQ_ON_AC=400000;
+	CPU_SCALING_MAX_FREQ_ON_AC=2800000;
+	CPU_SCALING_MIN_FREQ_ON_BAT=400000;
+	CPU_SCALING_MAX_FREQ_ON_BAT=1200000;
+        
+        INTEL_GPU_MIN_FREQ_ON_AC=300;
+	INTEL_GPU_MIN_FREQ_ON_BAT=300;
+	INTEL_GPU_MAX_FREQ_ON_AC=1100;
+	INTEL_GPU_MAX_FREQ_ON_BAT=300;
+	INTEL_GPU_BOOST_FREQ_ON_AC=1300;
+	INTEL_GPU_BOOST_FREQ_ON_BAT=300;
+	
+	NMI_WATCHDOG=0;
 
        #Optional helps save long term battery health
        START_CHARGE_THRESH_BAT0 = 40; # 40 and below it starts to charge
@@ -226,9 +246,9 @@ programs.fish.enable = true;
 
       };
   };
-  
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
+
   hardware.nvidia = {
 
     # Modesetting is required.
@@ -236,7 +256,7 @@ programs.fish.enable = true;
 
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
     # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
     # of just the bare essentials.
     powerManagement.enable = false;
 
@@ -246,9 +266,9 @@ programs.fish.enable = true;
 
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+    # Support is limited to the Turing and later architectures. Full list of
+    # supported GPUs is at:
+    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
     # Only available from driver 515.43.04+
     open = false;
 
@@ -259,7 +279,7 @@ programs.fish.enable = true;
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-  
+
   # nix run github:bayasdev/envycontrol --no-write-lock-file -- -s integrated
 
   # Some programs need SUID wrappers, can be configured further or are
