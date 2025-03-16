@@ -110,7 +110,7 @@
 	  yelp
 	  gnome-calculator gnome-calendar gnome-characters gnome-clocks gnome-contacts
     gnome-font-viewer gnome-logs gnome-maps gnome-music gnome-photos gnome-screenshot
-    gnome-system-monitor gnome-weather gnome-disk-utility pkgs.gnome-connections
+    gnome-system-monitor gnome-weather gnome-connections
 	]);
 
   # Install firefox.
@@ -125,7 +125,6 @@
   	nano
   	wget
   	git
-  	google-chrome
   	legcord
   	pciutils
   	htop
@@ -139,17 +138,24 @@
 	fishPlugins.grc
 	grc
 	gcc
-	zed-editor
-	clang-tools
 	python312
-	ruff
 	uv
 	gh
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+	cargo
+	rustc
+	rustup
+	vscode
+	jetbrains.idea-ultimate
   ];
 
+
   services.flatpak.enable = true;
+  programs.steam = {
+	  enable = true;
+	  remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+	  dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+	  localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+	};
 
 programs.fish.enable = true;
 
@@ -168,17 +174,6 @@ programs.fish.enable = true;
   LIBVA_DRIVER_NAME = "iHD";
   NIXOS_OZONE_WL = "1";
 };
-
-  systemd.services.pscript = {
-  	description = "Run pscript.sh at startup";
-  	after = [ "network.target" ];
-  	wantedBy = [ "multi-user.target" ];
-  	serviceConfig = {
-  	  Type = "oneshot";
-  	  ExecStart = "/run/current-system/sw/bin/bash /root/pscript.sh";
-  	  User = "root";
-  	};
-  };
 
   systemd.services.undervolt = {
   description = "Undervolt at startup";
@@ -199,9 +194,6 @@ programs.fish.enable = true;
     Unit = "undervolt.service";
   };
 };
-
-
-
   powerManagement.enable = true;
   services.power-profiles-daemon.enable = false;
   services.thermald.enable = true;
@@ -225,19 +217,19 @@ programs.fish.enable = true;
         CPU_MAX_PERF_ON_AC = 100;
         CPU_MIN_PERF_ON_BAT = 0;
         CPU_MAX_PERF_ON_BAT = 30;
-        
+
         CPU_SCALING_MIN_FREQ_ON_AC=400000;
 	CPU_SCALING_MAX_FREQ_ON_AC=2800000;
 	CPU_SCALING_MIN_FREQ_ON_BAT=400000;
-	CPU_SCALING_MAX_FREQ_ON_BAT=1200000;
-        
+	CPU_SCALING_MAX_FREQ_ON_BAT=1800000;
+
         INTEL_GPU_MIN_FREQ_ON_AC=300;
 	INTEL_GPU_MIN_FREQ_ON_BAT=300;
 	INTEL_GPU_MAX_FREQ_ON_AC=1100;
 	INTEL_GPU_MAX_FREQ_ON_BAT=300;
 	INTEL_GPU_BOOST_FREQ_ON_AC=1300;
 	INTEL_GPU_BOOST_FREQ_ON_BAT=300;
-	
+
 	NMI_WATCHDOG=0;
 
        #Optional helps save long term battery health
