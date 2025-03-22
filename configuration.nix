@@ -142,8 +142,6 @@ in
 	};
     };
     
-    
-      
       programs.git = {
         enable = true;
     userName  = "Aatrick";
@@ -153,6 +151,8 @@ in
       home.stateVersion = "24.11";
       
   };
+  home-manager.useUserPackages = true;
+  home-manager.backupFileExtension = "hm-backup";
 
   environment.gnome.excludePackages = (with pkgs; [
 	  atomix # puzzle game
