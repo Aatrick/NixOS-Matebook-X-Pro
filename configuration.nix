@@ -3,16 +3,31 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
+let
+  nix-software-center = import (pkgs.fetchFromGitHub {
+    owner = "snowfallorg";
+    repo = "nix-software-center";
+    rev = "0.1.2";
+    sha256 = "xiqF1mP8wFubdsAQ1BmfjzCgOD3YZf7EGWl9i69FTls=";
+  }) {};
+in
+let
+  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      (import "${home-manager}/nixos")
     ];
+   
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  
+  system.autoUpgrade.enable  = true;
+  system.autoUpgrade.allowReboot  = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -83,8 +98,60 @@
     description = "Emilio Melis";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
+  	gnome-software
+  	fishPlugins.done
+	fishPlugins.fzf-fish
+	fishPlugins.forgit
+	fishPlugins.hydro
+	fzf
+	fishPlugins.grc
+	vscode
+	jetbrains.idea-ultimate
+	nix-software-center
+    	zeal
+    	gnome-tweaks
+    	dconf-editor
+    	gnome-extension-manager
+    	vesktop
+    	gruvbox-gtk-theme
+    	blackbox-terminal
     ];
+  };
+  
+  home-manager.users.aatricks = { pkgs, ... }: {
+    home.packages = [];
+    programs.bash.enable = true;
+    dconf = {
+      enable = true;
+      settings."org/gnome/shell" = {
+        disable-user-extensions = false;
+        enabled-extensions = with pkgs.gnomeExtensions; [
+	      blur-my-shell.extensionUuid
+	      dash-to-dock.extensionUuid
+	      user-themes.extensionUuid
+	      caffeine.extensionUuid
+	      appindicator.extensionUuid
+	      just-perfection.extensionUuid
+	      open-bar.extensionUuid
+	      light-style.extensionUuid
+	      places-status-indicator.extensionUuid
+        ];
+      };
+      settings."org/gnome/shell/extensions/user-theme" = {
+   		name = "Gruvbox-Dark";
+	};
+    };
+    
+    
+      
+      programs.git = {
+        enable = true;
+    userName  = "Aatrick";
+    userEmail = "melis.emilio1@gmail.com";
+      };
+      
+      home.stateVersion = "24.11";
+      
   };
 
   environment.gnome.excludePackages = (with pkgs; [
@@ -110,7 +177,7 @@
 	  yelp
 	  gnome-calculator gnome-calendar gnome-characters gnome-clocks gnome-contacts
     gnome-font-viewer gnome-logs gnome-maps gnome-music gnome-photos gnome-screenshot
-    gnome-system-monitor gnome-weather gnome-connections
+    gnome-system-monitor gnome-weather gnome-connections gnome-console
 	]);
 
   # Install firefox.
@@ -122,20 +189,13 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+  	home-manager
   	nano
   	wget
   	git
-  	legcord
   	pciutils
-  	htop
   	undervolt
-  	gnome-software
-  	fishPlugins.done
-	fishPlugins.fzf-fish
-	fishPlugins.forgit
-	fishPlugins.hydro
-	fzf
-	fishPlugins.grc
+	wakeonlan
 	grc
 	gcc
 	python312
@@ -144,9 +204,27 @@
 	cargo
 	rustc
 	rustup
-	vscode
-	jetbrains.idea-ultimate
   ];
+  
+  nixpkgs.overlays = [
+    # GNOME 46: triple-buffering-v4-46
+    (final: prev: {
+      gnome = prev.gnome.overrideScope (gnomeFinal: gnomePrev: {
+        mutter = gnomePrev.mutter.overrideAttrs (old: {
+          src = pkgs.fetchFromGitLab  {
+            domain = "gitlab.gnome.org";
+            owner = "vanvugt";
+            repo = "mutter";
+            rev = "triple-buffering-v4-46";
+            hash = "sha256-fkPjB/5DPBX06t7yj0Rb3UEuu5b9mu3aS+jhH18+lpI=";
+          };
+        });
+      });
+    })
+  ];
+  
+  nixpkgs.config.allowAliases = false;
+
 
 
   services.flatpak.enable = true;
@@ -159,14 +237,23 @@
 
 programs.fish.enable = true;
 
+  programs.dconf.profiles.gdm.databases = [
+    {
+        settings."org/gnome/settings-daemon/plugins/power" = {
+            ambient-enabled = true;
+        };
+    }
+];
+
+
 
   hardware.graphics = {
   	enable = true;
   	extraPackages = with pkgs; [
-	  	vaapiIntel
 	  	intel-media-driver
 	        intel-compute-runtime
 	  	vpl-gpu-rt
+	  	libvdpau-va-gl
   	];
   };
 
@@ -180,7 +267,7 @@ programs.fish.enable = true;
   after = [ "network.target" ];
   serviceConfig = {
     Type = "oneshot";
-    ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80 -p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit";
+    ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80 "; #-p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit
     User = "root";
   };
 };
@@ -205,7 +292,13 @@ programs.fish.enable = true;
         CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
 
         CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-        CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+        
+        RUNTIME_PM_ON_AC="auto";
+	RUNTIME_PM_ON_BAT="auto";
+	
+	WIFI_PWR_ON_AC="on";
+	WIFI_PWR_ON_BAT="on";
 
         CPU_BOOST_ON_AC=1;
 	CPU_BOOST_ON_BAT=0;
@@ -216,19 +309,19 @@ programs.fish.enable = true;
         CPU_MIN_PERF_ON_AC = 0;
         CPU_MAX_PERF_ON_AC = 100;
         CPU_MIN_PERF_ON_BAT = 0;
-        CPU_MAX_PERF_ON_BAT = 30;
+        CPU_MAX_PERF_ON_BAT = 50;
 
         CPU_SCALING_MIN_FREQ_ON_AC=400000;
 	CPU_SCALING_MAX_FREQ_ON_AC=2800000;
 	CPU_SCALING_MIN_FREQ_ON_BAT=400000;
-	CPU_SCALING_MAX_FREQ_ON_BAT=1800000;
+	CPU_SCALING_MAX_FREQ_ON_BAT=1600000;
 
         INTEL_GPU_MIN_FREQ_ON_AC=300;
 	INTEL_GPU_MIN_FREQ_ON_BAT=300;
 	INTEL_GPU_MAX_FREQ_ON_AC=1100;
-	INTEL_GPU_MAX_FREQ_ON_BAT=300;
+	INTEL_GPU_MAX_FREQ_ON_BAT=600;
 	INTEL_GPU_BOOST_FREQ_ON_AC=1300;
-	INTEL_GPU_BOOST_FREQ_ON_BAT=300;
+	INTEL_GPU_BOOST_FREQ_ON_BAT=600;
 
 	NMI_WATCHDOG=0;
 
