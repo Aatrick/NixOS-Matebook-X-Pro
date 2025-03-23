@@ -12,12 +12,12 @@ in
       ./hardware-configuration.nix
       (import "${home-manager}/nixos")
     ];
-   
+
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
+
   system.autoUpgrade.enable  = true;
   system.autoUpgrade.allowReboot  = true;
 
@@ -84,7 +84,7 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Dont forget to set a password with ‘passwd’.
   users.users.aatricks = {
     isNormalUser = true;
     description = "Emilio Melis";
@@ -108,7 +108,7 @@ in
     	blackbox-terminal
     ];
   };
-  
+
   home-manager.users.aatricks = { pkgs, ... }: {
     home.packages = [];
     programs.bash.enable = true;
@@ -131,16 +131,176 @@ in
       settings."org/gnome/shell/extensions/user-theme" = {
    		name = "Gruvbox-Dark";
 	};
+      settings."org/gnome/shell/extensions/dash-to-dock" = {
+   		show-icons-emblems = false;
+   		show-show-apps-button = false;
+   		show-trash = false;
+   		transparency-mode = "FIXED";
+   		custom-theme-shrink = true;
+	};
+      settings."com/raggesilver/BlackBox" = {
+      	custom-shell-command = "/run/current-system/sw/bin/fish";
+      	delay-before-showing-floating-controls = 100;
+      	easy-copy-paste = true;
+      	floating-controls = true;
+      	floating-controls-hover-area=30;
+      	font = "Source Code Pro 12";
+      	opacity = 100;
+      	pretty = true;
+      	remember-window-size = true;
+      	scrollback-mode = false;
+      	show-headerbar = false;
+      	show-scrollbars = false;
+      	terminal-bell = false;
+      	theme-bold-is-bright = false;
+      	theme-dark = "Dracula";
+      	use-custom-command = true;
+      };
+      settings."org/gnome/nautilus/list-view" = {
+      	default-zoom-level = "small";
+      };
+      settings."org/gnome/nautilus/preferences" = {
+      	default-folder-viewer = "list-view";
+      };
+      settings."org/gnome/shell/extensions/openbar" = {
+            accent-override=false;
+            apply-accent-shell=false;
+            apply-all-shell=false;
+            apply-flatpak=false;
+            apply-gtk=false;
+            apply-menu-notif=false;
+            apply-menu-shell=false;
+            auto-bgalpha=true;
+            autofg-bar=false;
+            autofg-menu=true;
+            autohg-bar=true;
+            autohg-menu=true;
+            autotheme-dark="Dark";
+            autotheme-font=false;
+            autotheme-light="Pastel";
+            autotheme-refresh=false;
+            balpha=0.84999999999999998;
+            bartype="Islands";
+            bg-change=false;
+            bgalpha=0.0;
+            bgalpha-wmax=1.0;
+            bgalpha2=0.69999999999999996;
+            bgpalette=true;
+            bguri=file:///home/aatricks/.config/background;
+            border-wmax=true;
+            bordertype="solid";
+            bottom-margin=6.5;
+            boxalpha=0.0;
+            bradius=30.0;
+            buttonbg-wmax=true;
+            bwidth=0.0;
+            candyalpha=0.98999999999999999;
+            candybar=false;
+            card-hint=10;
+            color-scheme="default";
+            corner-radius=false;
+            count1=274666;
+            count10=168;
+            count11=120;
+            count12=4;
+            count2=231949;
+            count3=92540;
+            count4=41616;
+            count5=12006;
+            count6=6051;
+            count7=4369;
+            count8=2126;
+            count9=385;
+            cust-margin-wmax=true;
+            dark-bguri=file:///home/aatricks/.config/background;
+            dashdock-style="Default";
+            dbgalpha=0.69999999999999996;
+            dborder=true;
+            dbradius=0.0;
+            default-font="Sans 12";
+            disize=38.0;
+            dshadow=true;
+            fgalpha=0.75;
+            fitts-widgets=true;
+            gradient=false;
+            gradient-direction="vertical";
+            gtk-popover=false;
+            gtk-shadow="Default";
+            gtk-transparency=1.0;
+            halpha=0.5;
+            handle-border=3.0;
+            hbar-gtk3only=false;
+            headerbar-hint=0;
+            heffect=false;
+            height=35.0;
+            hpad=1.0;
+            import-export=true;
+            isalpha=0.0;
+            margin=0.0;
+            margin-wmax=0.0;
+            mbalpha=0.59999999999999998;
+            mbg-gradient=false;
+            mbgalpha=0.90000000000000002;
+            menu-radius=21.0;
+            menustyle=false;
+            mfgalpha=1.0;
+            mhalpha=0.29999999999999999;
+            monitor-height=2000;
+            monitor-width=3000;
+            monitors="all";
+            msalpha=0.84999999999999998;
+            mshalpha=0.16;
+            neon=false;
+            neon-wmax=true;
+            notif-radius=10.0;
+            pause-reload=false;
+            position="Top";
+            qtoggle-radius=50.0;
+            radius-bottomleft=true;
+            radius-bottomright=true;
+            radius-topleft=true;
+            radius-topright=true;
+            reloadstyle=true;
+            removestyle=false;
+            sbar-gradient="none";
+            set-bottom-margin=false;
+            set-fullscreen=true;
+            set-notif-position=true;
+            set-notifications=false;
+            set-overview=false;
+            set-yarutheme=false;
+            shadow=false;
+            shalpha=0.20000000000000001;
+            sidebar-hint=10;
+            slider-height=4.0;
+            smbgalpha=0.94999999999999996;
+            smbgoverride=true;
+            traffic-light=false;
+            trigger-autotheme=true;
+            trigger-reload=false;
+            view-hint=0;
+            vpad=4.0;
+            width-bottom=true;
+            width-left=true;
+            width-right=true;
+            width-top=true;
+            winbalpha=0.75;
+            winbradius=15.0;
+            winbwidth=0.0;
+            window-hint=0;
+            wmax-hbarhint=false;
+            wmaxbar=true;
+      };
     };
-    
+
       programs.git = {
         enable = true;
     userName  = "Aatrick";
     userEmail = "melis.emilio1@gmail.com";
       };
-      
+
       home.stateVersion = "25.05";
-      
+
   };
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "hm-backup";
@@ -196,7 +356,7 @@ in
 	rustc
 	rustup
   ];
-  
+
   nixpkgs.overlays = [
     # GNOME 46: triple-buffering-v4-46
     (final: prev: {
@@ -213,7 +373,7 @@ in
       });
     })
   ];
-  
+
   nixpkgs.config.allowAliases = false;
 
 
@@ -281,16 +441,16 @@ programs.fish.enable = true;
       settings = {
       	CPU_DRIVER_OPMODE_ON_AC="passive";
       	CPU_DRIVER_OPMODE_ON_BAT="passive";
-      
+
         CPU_SCALING_GOVERNOR_ON_AC = "ondemand";
         CPU_SCALING_GOVERNOR_ON_BAT = "conservative";
 
         CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        
+
         RUNTIME_PM_ON_AC="auto";
 	RUNTIME_PM_ON_BAT="auto";
-	
+
 	WIFI_PWR_ON_AC="on";
 	WIFI_PWR_ON_BAT="on";
 
@@ -299,7 +459,7 @@ programs.fish.enable = true;
 
 	CPU_HWP_DYN_BOOST_ON_AC=1;
 	CPU_HWP_DYN_BOOST_ON_BAT=0;
-	
+
 	PLATFORM_PROFILE_ON_AC="balanced";
 	PLATFORM_PROFILE_ON_BAT="low-power";
 
@@ -319,11 +479,11 @@ programs.fish.enable = true;
 	#INTEL_GPU_MAX_FREQ_ON_BAT=600;
 	#INTEL_GPU_BOOST_FREQ_ON_AC=1300;
 	#INTEL_GPU_BOOST_FREQ_ON_BAT=600;
-	
+
 	RESTORE_DEVICE_STATE_ON_STARTUP=1;
 
 	NMI_WATCHDOG=0;
-	
+
 	NATACPI_ENABLE=1;
 
        #Optional helps save long term battery health
