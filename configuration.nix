@@ -4,14 +4,6 @@
 
 { config, pkgs, ... }:
 let
-  nix-software-center = import (pkgs.fetchFromGitHub {
-    owner = "snowfallorg";
-    repo = "nix-software-center";
-    rev = "0.1.2";
-    sha256 = "xiqF1mP8wFubdsAQ1BmfjzCgOD3YZf7EGWl9i69FTls=";
-  }) {};
-in
-let
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
 in
 {
@@ -107,7 +99,6 @@ in
 	fishPlugins.grc
 	vscode
 	jetbrains.idea-ultimate
-	nix-software-center
     	zeal
     	gnome-tweaks
     	dconf-editor
@@ -148,7 +139,7 @@ in
     userEmail = "melis.emilio1@gmail.com";
       };
       
-      home.stateVersion = "24.11";
+      home.stateVersion = "25.05";
       
   };
   home-manager.useUserPackages = true;
@@ -328,6 +319,8 @@ programs.fish.enable = true;
 	#INTEL_GPU_MAX_FREQ_ON_BAT=600;
 	#INTEL_GPU_BOOST_FREQ_ON_AC=1300;
 	#INTEL_GPU_BOOST_FREQ_ON_BAT=600;
+	
+	RESTORE_DEVICE_STATE_ON_STARTUP=1;
 
 	NMI_WATCHDOG=0;
 	
@@ -400,6 +393,6 @@ programs.fish.enable = true;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
 }
