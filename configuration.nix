@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
+  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/master.tar.gz;
 in
 {
   imports =
@@ -12,7 +12,9 @@ in
       ./hardware-configuration.nix
       (import "${home-manager}/nixos")
     ];
-
+    
+  
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -106,6 +108,7 @@ in
     	vesktop
     	gruvbox-gtk-theme
     	blackbox-terminal
+    	#zed-editor
     ];
   };
 
@@ -356,27 +359,6 @@ in
 	rustc
 	rustup
   ];
-
-  nixpkgs.overlays = [
-    # GNOME 46: triple-buffering-v4-46
-    (final: prev: {
-      gnome = prev.gnome.overrideScope (gnomeFinal: gnomePrev: {
-        mutter = gnomePrev.mutter.overrideAttrs (old: {
-          src = pkgs.fetchFromGitLab  {
-            domain = "gitlab.gnome.org";
-            owner = "vanvugt";
-            repo = "mutter";
-            rev = "triple-buffering-v4-46";
-            hash = "sha256-fkPjB/5DPBX06t7yj0Rb3UEuu5b9mu3aS+jhH18+lpI=";
-          };
-        });
-      });
-    })
-  ];
-
-  nixpkgs.config.allowAliases = false;
-
-
 
   services.flatpak.enable = true;
   programs.steam = {
