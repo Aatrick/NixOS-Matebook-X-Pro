@@ -11,7 +11,15 @@ in
     ];
     
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nixpkgs.config.allowUnfree = true;
+  
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: {
+      unstable = import <unstable> {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
     
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -58,7 +66,7 @@ in
       	vesktop
       	gruvbox-gtk-theme
       	blackbox-terminal
-      	zed-editor
+      	unstable.zed-editor
     ];
   };
   
