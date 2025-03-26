@@ -67,6 +67,7 @@ in
       	gruvbox-gtk-theme
       	blackbox-terminal
       	unstable.zed-editor
+      	unstable.vscode
     ];
   };
   
@@ -85,10 +86,10 @@ in
       gnome-weather gnome-connections
       gnome-console gnome-system-monitor
 	  ]);
-    sessionVariables = {
-      LIBVA_DRIVER_NAME = "iHD";
-      NIXOS_OZONE_WL = "1";
-    };
+    #sessionVariables = {
+    #  LIBVA_DRIVER_NAME = "iHD";
+    #  NIXOS_OZONE_WL = "1";
+    #};
     systemPackages = with pkgs; [
       	home-manager
       	nano
@@ -108,6 +109,7 @@ in
 	    rust-analyzer 
 	    clang-tools
 	    htop
+	    ruff
     ];
   };
 
@@ -306,6 +308,8 @@ in
   home-manager.backupFileExtension = "hm-backup";
 
   programs = {
+    nix-ld.enable = true;
+    nix-ld.libraries = with pkgs; [];
     firefox.enable = false;
     gamescope.enable = true;
     gamemode.enable = true;
@@ -330,15 +334,20 @@ in
       	enable = true;
       	extraPackages = with pkgs; [
 	      	intel-media-driver
-	            intel-compute-runtime
+	      intel-compute-runtime
 	      	vpl-gpu-rt
 	      	libvdpau-va-gl
+	      	vaapiIntel
       	];
     };
     pulseaudio.enable = false;
   };
   
   services = {
+    system76-scheduler = {
+      enable = true;
+      useStockConfig = true;
+    };
     xserver.enable = true;
     xserver.displayManager.gdm.enable = true;
     xserver.desktopManager.gnome.enable = true;
@@ -356,38 +365,40 @@ in
     flatpak.enable = true;
     power-profiles-daemon.enable = false;
     thermald.enable = true;
-    tlp = {
-        enable = true;
-        settings = {
-        	CPU_DRIVER_OPMODE_ON_AC="passive";
-        	CPU_DRIVER_OPMODE_ON_BAT="passive";
-        CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
-        CPU_SCALING_GOVERNOR_ON_BAT = "conservative";
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        RUNTIME_PM_ON_AC="auto";
-	      RUNTIME_PM_ON_BAT="auto";
-        WIFI_PWR_ON_AC="on";
-        WIFI_PWR_ON_BAT="on";
-        CPU_BOOST_ON_AC=1;
-	      CPU_BOOST_ON_BAT=0;
-	      CPU_HWP_DYN_BOOST_ON_AC=1;
-	      CPU_HWP_DYN_BOOST_ON_BAT=0;
-        PLATFORM_PROFILE_ON_AC="balanced";
-	      PLATFORM_PROFILE_ON_BAT="low-power";
-        CPU_MIN_PERF_ON_AC = 0;
-        CPU_MAX_PERF_ON_AC = 100;
-        CPU_MIN_PERF_ON_BAT = 0;
-        CPU_MAX_PERF_ON_BAT = 50;
-        RESTORE_DEVICE_STATE_ON_STARTUP=1;
-        NMI_WATCHDOG=0;
-        NATACPI_ENABLE=1;
-        START_CHARGE_THRESH_BAT0 = 40;
-        STOP_CHARGE_THRESH_BAT0 = 80;
+    auto-cpufreq ={
+      enable = true;
+      settings = {
+        battery = {
+           governor = "powersave";
+           turbo = "never";
+        };
+        charger = {
+           governor = "performance";
+           turbo = "auto";
+        };
       };
     };
+    udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+    '';
   };
-  powerManagement.enable = true;
+  powerManagement = {
+    enable = true;
+    powertop.enable = true;
+    cpuFreqGovernor = "powersave";
+  };
+  
+  boot = {
+    extraModprobeConfig = ''
+      blacklist nouveau
+      options nouveau modeset=0
+    '';
+    blacklistedKernelModules =
+      [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+  };
   
   
   
