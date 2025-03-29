@@ -68,6 +68,7 @@ in
       	blackbox-terminal
       	unstable.zed-editor
       	unstable.vscode
+      	unstable.jetbrains.idea-ultimate
     ];
   };
   
@@ -365,42 +366,36 @@ in
     flatpak.enable = true;
     power-profiles-daemon.enable = false;
     thermald.enable = true;
-    auto-cpufreq ={
-      enable = true;
-      settings = {
-        battery = {
-           governor = "powersave";
-           turbo = "never";
-        };
-        charger = {
-           governor = "performance";
-           turbo = "auto";
-        };
+    tlp = {
+        enable = true;
+        settings = {
+        	CPU_DRIVER_OPMODE_ON_AC="passive";
+        	CPU_DRIVER_OPMODE_ON_BAT="passive";
+        CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
+        CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
+        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        RUNTIME_PM_ON_AC="auto";
+	      RUNTIME_PM_ON_BAT="auto";
+        WIFI_PWR_ON_AC="on";
+        WIFI_PWR_ON_BAT="on";
+        CPU_BOOST_ON_AC=1;
+	      CPU_BOOST_ON_BAT=0;
+	      CPU_HWP_DYN_BOOST_ON_AC=1;
+	      CPU_HWP_DYN_BOOST_ON_BAT=0;
+        PLATFORM_PROFILE_ON_AC="balanced";
+	      PLATFORM_PROFILE_ON_BAT="low-power";
+        RESTORE_DEVICE_STATE_ON_STARTUP=1;
+        NMI_WATCHDOG=0;
+        NATACPI_ENABLE=1;
+        START_CHARGE_THRESH_BAT0 = 40;
+        STOP_CHARGE_THRESH_BAT0 = 80;
       };
     };
-    udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-    '';
   };
   powerManagement = {
     enable = true;
-    powertop.enable = true;
-    cpuFreqGovernor = "powersave";
   };
-  
-  boot = {
-    extraModprobeConfig = ''
-      blacklist nouveau
-      options nouveau modeset=0
-    '';
-    blacklistedKernelModules =
-      [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
-  };
-  
-  
   
   systemd.services.undervolt = {
     description = "Undervolt at startup";
