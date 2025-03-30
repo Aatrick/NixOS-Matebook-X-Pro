@@ -25,9 +25,6 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  system.autoUpgrade.enable  = true;
-  system.autoUpgrade.allowReboot  = true;
-
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
@@ -66,7 +63,6 @@ in
       	vesktop
       	gruvbox-gtk-theme
       	blackbox-terminal
-      	unstable.zed-editor
       	unstable.vscode
       	unstable.jetbrains.idea-ultimate
     ];
@@ -87,10 +83,6 @@ in
       gnome-weather gnome-connections
       gnome-console gnome-system-monitor
 	  ]);
-    #sessionVariables = {
-    #  LIBVA_DRIVER_NAME = "iHD";
-    #  NIXOS_OZONE_WL = "1";
-    #};
     systemPackages = with pkgs; [
       	home-manager
       	nano
@@ -297,13 +289,12 @@ in
             wmaxbar=true;
       };
     };
-
-      programs.git = {
-        enable = true;
-        userName  = "Aatrick";
-        userEmail = "melis.emilio1@gmail.com";
-      };
-      home.stateVersion = "24.11";
+    programs.git = {
+      enable = true;
+      userName  = "Aatrick";
+      userEmail = "melis.emilio1@gmail.com";
+    };
+    home.stateVersion = "24.11";
   };
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "hm-backup";
@@ -315,13 +306,6 @@ in
     gamescope.enable = true;
     gamemode.enable = true;
     fish.enable = true;
-    dconf.profiles.gdm.databases = [
-        {
-          settings."org/gnome/settings-daemon/plugins/power" = {
-              ambient-enabled = true;
-          };
-         }
-      ];
     steam = {
 	    enable = true;
 	    remotePlay.openFirewall = true;
@@ -330,25 +314,7 @@ in
 	  };
   };
   
-  hardware = {
-    graphics = {
-      	enable = true;
-      	extraPackages = with pkgs; [
-	      	intel-media-driver
-	      intel-compute-runtime
-	      	vpl-gpu-rt
-	      	libvdpau-va-gl
-	      	vaapiIntel
-      	];
-    };
-    pulseaudio.enable = false;
-  };
-  
   services = {
-    system76-scheduler = {
-      enable = true;
-      useStockConfig = true;
-    };
     xserver.enable = true;
     xserver.displayManager.gdm.enable = true;
     xserver.desktopManager.gnome.enable = true;
@@ -367,30 +333,26 @@ in
     power-profiles-daemon.enable = false;
     thermald.enable = true;
     tlp = {
-        enable = true;
-        settings = {
-        	CPU_DRIVER_OPMODE_ON_AC="passive";
-        	CPU_DRIVER_OPMODE_ON_BAT="passive";
+      enable = true;
+      settings = {
+        CPU_DRIVER_OPMODE_ON_AC="passive";
+        CPU_DRIVER_OPMODE_ON_BAT="passive";
         CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
         CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
         CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
         RUNTIME_PM_ON_AC="auto";
 	      RUNTIME_PM_ON_BAT="auto";
-        WIFI_PWR_ON_AC="on";
-        WIFI_PWR_ON_BAT="on";
-        CPU_BOOST_ON_AC=1;
-	      CPU_BOOST_ON_BAT=0;
-	      CPU_HWP_DYN_BOOST_ON_AC=1;
-	      CPU_HWP_DYN_BOOST_ON_BAT=0;
-        PLATFORM_PROFILE_ON_AC="balanced";
-	      PLATFORM_PROFILE_ON_BAT="low-power";
         RESTORE_DEVICE_STATE_ON_STARTUP=1;
         NMI_WATCHDOG=0;
         NATACPI_ENABLE=1;
         START_CHARGE_THRESH_BAT0 = 40;
         STOP_CHARGE_THRESH_BAT0 = 80;
       };
+    };
+    system76-scheduler = {
+      enable = true;
+      useStockConfig = true;
     };
   };
   powerManagement = {
@@ -402,7 +364,7 @@ in
     after = [ "network.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80 "; #-p1 5 20 -p2 10 0.01 --turbo 1 --lock-power-limit
+      ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80";
       User = "root";
     };
   };
