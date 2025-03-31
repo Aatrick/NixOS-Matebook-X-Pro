@@ -1,21 +1,28 @@
 { config, pkgs, ... }:
 let
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
+  nixos-hardware = builtins.fetchTarball https://github.com/NixOS/nixos-hardware/archive/master.tar.gz;
+in
+let
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in
 {
   imports =
     [ # Include the results of the hardware scan.
-      <nixos-hardware/huawei/machc-wa>
       ./hardware-configuration.nix
+      (import "${nixos-hardware}/huawei/machc-wa")
       (import "${home-manager}/nixos")
     ];
     
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = pkgs: {
-      unstable = import <unstable> {
+      unstable = import unstableTarball {
         config = config.nixpkgs.config;
       };
     };
@@ -49,22 +56,21 @@ in
     description = "Emilio Melis";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      	gnome-software
-      	fishPlugins.done
+      fishPlugins.done
 	    fishPlugins.fzf-fish
 	    fishPlugins.forgit
 	    fishPlugins.hydro
 	    fzf
 	    fishPlugins.grc
       zeal
-      	gnome-tweaks
-      	dconf-editor
-      	gnome-extension-manager
-      	vesktop
-      	gruvbox-gtk-theme
-      	blackbox-terminal
-      	unstable.vscode
-      	unstable.jetbrains.idea-ultimate
+      gnome-tweaks
+      dconf-editor
+      gnome-extension-manager
+      vesktop
+      gruvbox-gtk-theme
+      blackbox-terminal
+      unstable.vscode
+      unstable.jetbrains.idea-ultimate
     ];
   };
   
@@ -75,7 +81,7 @@ in
 	    seahorse epiphany evince geary
 	    hitori iagno tali totem
 	    yelp gnome-characters gnome-music 
-	    gnome-photos gnome-tour
+	    gnome-photos gnome-tour gnome-software
 	    gnome-calculator gnome-calendar
 	    gnome-clocks gnome-contacts
       gnome-font-viewer gnome-logs
@@ -84,12 +90,12 @@ in
       gnome-console gnome-system-monitor
 	  ]);
     systemPackages = with pkgs; [
-      	home-manager
-      	nano
-      	wget
-      	git
-      	pciutils
-      	undervolt
+      home-manager
+      nano
+      wget
+      git
+      pciutils
+      undervolt
 	    wakeonlan
 	    grc
 	    gcc
@@ -358,6 +364,8 @@ in
   powerManagement = {
     enable = true;
   };
+  
+  hardware.sensor.iio.enable = true;
   
   systemd.services.undervolt = {
     description = "Undervolt at startup";
