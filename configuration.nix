@@ -109,6 +109,7 @@ in
 	    clang-tools
 	    htop
 	    ruff
+	    steam-run # for launching single executable
     ];
   };
 
@@ -311,7 +312,19 @@ in
     firefox.enable = false;
     gamescope.enable = true;
     gamemode.enable = true;
-    fish.enable = true;
+    fish = {
+      enable = true;
+      shellAliases = {
+            ll = "ls -l";
+            update = "sudo nix-channel --update
+                      sudo nix-env -u --always
+                      sudo nixos-rebuild boot --upgrade-all
+                      sudo rm /nix/var/nix/gcroots/auto/*
+                      sudo nix-store --gc
+                      sudo nix-collect-garbage -d
+                      ";
+          };
+    };
     steam = {
 	    enable = true;
 	    remotePlay.openFirewall = true;
@@ -388,6 +401,6 @@ in
   };
 
   # nix run github:bayasdev/envycontrol --no-write-lock-file -- -s integrated
-  system.stateVersion = "24.11";
+  system.stateVersion = config.system.nixos.release;
 
 }
