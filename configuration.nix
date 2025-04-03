@@ -2,11 +2,7 @@
 let
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
   nixos-hardware = builtins.fetchTarball https://github.com/NixOS/nixos-hardware/archive/master.tar.gz;
-in
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in
 {
   imports =
@@ -15,8 +11,6 @@ in
       (import "${nixos-hardware}/huawei/machc-wa")
       (import "${home-manager}/nixos")
     ];
-    
-  boot.kernelPackages = pkgs.linuxPackages_zen;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   
   nixpkgs.config = {
@@ -54,7 +48,7 @@ in
   users.users.aatricks = {
     isNormalUser = true;
     description = "Emilio Melis";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     packages = with pkgs; [
       fishPlugins.done
 	    fishPlugins.fzf-fish
@@ -70,7 +64,6 @@ in
       gruvbox-gtk-theme
       blackbox-terminal
       unstable.vscode
-      unstable.jetbrains.idea-ultimate
     ];
   };
   
@@ -110,6 +103,8 @@ in
 	    htop
 	    ruff
 	    steam-run # for launching single executable
+	    libvirt
+	    virt-manager
     ];
   };
 
@@ -319,10 +314,10 @@ in
             update = "sudo nix-channel --update
                       sudo nix-env -u --always
                       sudo nixos-rebuild boot --upgrade-all
-                      sudo rm /nix/var/nix/gcroots/auto/*
+                      flatpak update";
+            cleanup = "sudo rm /nix/var/nix/gcroots/auto/*
                       sudo nix-store --gc
-                      sudo nix-collect-garbage -d
-                      ";
+                      sudo nix-collect-garbage -d";
           };
     };
     steam = {
@@ -369,10 +364,6 @@ in
         STOP_CHARGE_THRESH_BAT0 = 80;
       };
     };
-    system76-scheduler = {
-      enable = true;
-      useStockConfig = true;
-    };
   };
   powerManagement = {
     enable = true;
@@ -399,7 +390,28 @@ in
       Unit = "undervolt.service";
     };
   };
-
+  
+  # VM
+  security.apparmor.enable = false;
+  programs.virt-manager.enable = true;
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;  # enable copy and paste between host and guest
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = true;
+        packages = [(pkgs.OVMF.override {
+          secureBoot = true;
+          tpmSupport = true;
+        }).fd];
+      };
+    };
+  };
+  
   # nix run github:bayasdev/envycontrol --no-write-lock-file -- -s integrated
   system.stateVersion = config.system.nixos.release;
 
