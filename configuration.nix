@@ -82,16 +82,23 @@ in
       gnome-weather gnome-connections
       gnome-console gnome-system-monitor
 	  ]);
+	  sessionVariables = {
+      LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+    };
     systemPackages = with pkgs; [
       home-manager
       nano
       wget
       git
       pciutils
-      undervolt
 	    wakeonlan
 	    grc
 	    gcc
+      libgcc
+      gnumake
+      cmake
+      extra-cmake-modules
+      stdenv.cc.cc.lib
 	    python312
 	    uv
 	    gh
@@ -345,51 +352,29 @@ in
     };
     flatpak.enable = true;
     power-profiles-daemon.enable = false;
-    thermald.enable = true;
     tlp = {
       enable = true;
       settings = {
-        CPU_DRIVER_OPMODE_ON_AC="passive";
-        CPU_DRIVER_OPMODE_ON_BAT="passive";
-        CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
-        CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
-        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-        RUNTIME_PM_ON_AC="auto";
-	      RUNTIME_PM_ON_BAT="auto";
         RESTORE_DEVICE_STATE_ON_STARTUP=1;
-        NMI_WATCHDOG=0;
-        NATACPI_ENABLE=1;
         START_CHARGE_THRESH_BAT0 = 40;
         STOP_CHARGE_THRESH_BAT0 = 80;
       };
     };
+    undervolt = {
+      enable = true;
+      analogioOffset = -30;
+      coreOffset = -100;
+      uncoreOffset = -100;
+      gpuOffset = -90;
+      useTimer = true;
+    };
+    ollama.enable = true;
   };
   powerManagement = {
     enable = true;
   };
   
   hardware.sensor.iio.enable = true;
-  
-  systemd.services.undervolt = {
-    description = "Undervolt at startup";
-    after = [ "network.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/undervolt -v --core -100 --uncore -30 --analogio -30 --cache -100 --gpu -80";
-      User = "root";
-    };
-  };
-
-  systemd.timers.undervolt = {
-    description = "Run undervolt service every 5 minutes";
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnBootSec = "1min";  # Start 1 minute after boot
-      OnUnitActiveSec = "1min";  # Run every 1 minute
-      Unit = "undervolt.service";
-    };
-  };
   
   # VM
   security.apparmor.enable = false;
