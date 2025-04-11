@@ -48,7 +48,7 @@ in
   users.users.aatricks = {
     isNormalUser = true;
     description = "Emilio Melis";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "adbusers" ];
     packages = with pkgs; [
       fishPlugins.done
 	    fishPlugins.fzf-fish
@@ -64,6 +64,7 @@ in
       gruvbox-gtk-theme
       blackbox-terminal
       unstable.vscode
+      unstable.android-studio
     ];
   };
   
@@ -112,6 +113,7 @@ in
 	    steam-run # for launching single executable
 	    libvirt
 	    virt-manager
+	    util-linux
     ];
   };
 
@@ -309,6 +311,7 @@ in
   home-manager.backupFileExtension = "hm-backup";
 
   programs = {
+    adb.enable = true;
     nix-ld.enable = true;
     nix-ld.libraries = with pkgs; [];
     firefox.enable = false;
@@ -363,15 +366,12 @@ in
     undervolt = {
       enable = true;
       analogioOffset = -30;
-      coreOffset = -100;
-      uncoreOffset = -100;
-      gpuOffset = -90;
+      coreOffset = -90;
+      uncoreOffset = -30;
+      gpuOffset = -80;
       useTimer = true;
     };
     ollama.enable = true;
-  };
-  powerManagement = {
-    enable = true;
   };
   
   hardware.sensor.iio.enable = true;
