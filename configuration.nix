@@ -1,14 +1,12 @@
 { config, pkgs, ... }:
 let
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
-  nixos-hardware = builtins.fetchTarball https://github.com/NixOS/nixos-hardware/archive/master.tar.gz;
-  unstableTarball = fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+  unstableTarball = builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      (import "${nixos-hardware}/huawei/machc-wa")
       (import "${home-manager}/nixos")
     ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -25,6 +23,7 @@ in
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -50,21 +49,17 @@ in
     description = "Emilio Melis";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "adbusers" ];
     packages = with pkgs; [
-      fishPlugins.done
-	    fishPlugins.fzf-fish
-	    fishPlugins.forgit
-	    fishPlugins.hydro
-	    fzf
-	    fishPlugins.grc
-      zeal
-      gnome-tweaks
-      dconf-editor
+      fishPlugins.done fishPlugins.fzf-fish
+	    fishPlugins.forgit fishPlugins.hydro
+	    fishPlugins.grc fzf
+      gnome-tweaks dconf-editor
       gnome-extension-manager
-      vesktop
       gruvbox-gtk-theme
+      vesktop
       blackbox-terminal
+      zeal
       unstable.vscode
-      unstable.android-studio
+      zed-editor
     ];
   };
   
@@ -87,33 +82,14 @@ in
       LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
     };
     systemPackages = with pkgs; [
-      home-manager
-      nano
-      wget
-      git
-      pciutils
-	    wakeonlan
-	    grc
-	    gcc
-      libgcc
-      gnumake
-      cmake
-      extra-cmake-modules
+      home-manager nano git wget gh htop
+	    grc gcc libgcc gnumake clang-tools
+      cmake extra-cmake-modules
       stdenv.cc.cc.lib
-	    python312
-	    uv
-	    gh
-	    cargo
-	    rustc
-	    rustup
-	    rust-analyzer 
-	    clang-tools
-	    htop
-	    ruff
+	    python312 uv ruff
+	    cargo rustc rustup rust-analyzer 
 	    steam-run # for launching single executable
-	    libvirt
-	    virt-manager
-	    util-linux
+	    libvirt virt-manager
     ];
   };
 
@@ -125,26 +101,40 @@ in
       settings."org/gnome/shell" = {
         disable-user-extensions = false;
         enabled-extensions = with pkgs.gnomeExtensions; [
-	      blur-my-shell.extensionUuid
-	      dash-to-dock.extensionUuid
-	      user-themes.extensionUuid
-	      caffeine.extensionUuid
-	      appindicator.extensionUuid
-	      just-perfection.extensionUuid
-	      open-bar.extensionUuid
-	      light-style.extensionUuid
-	      places-status-indicator.extensionUuid
+	        blur-my-shell.extensionUuid
+	        dash-to-dock.extensionUuid
+	        user-themes.extensionUuid
+	        caffeine.extensionUuid
+	        appindicator.extensionUuid
+	        light-style.extensionUuid
+	        places-status-indicator.extensionUuid
         ];
       };
       settings."org/gnome/shell/extensions/user-theme" = {
        		name = "Gruvbox-Dark";
 	    };
+	    #settings."/org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
+	    #  blur = false;
+	    #};
+	    #settings."/org/gnome/shell/extensions/blur-my-shell/panel" = {
+	    #  blur = true;
+	    #  brightness = 0.6;
+	    #  override-background = true;
+	    #  override-background-dynamically = true;
+	    #  sigma = 0;
+	    #  static-blur = false;
+	    #  style-panel = 0;
+	    #  unblur-in-overview = true;
+	    #};
+	    #settings."/org/gnome/shell/extensions/blur-my-shell" = {
+	    #  hack-level = 0;
+	    #};
       settings."org/gnome/shell/extensions/dash-to-dock" = {
-       		show-icons-emblems = false;
-       		show-show-apps-button = false;
-       		show-trash = false;
-       		transparency-mode = "FIXED";
-       		custom-theme-shrink = true;
+       	show-icons-emblems = false;
+      	  show-show-apps-button = false;
+       	show-trash = false;
+       	transparency-mode = "FIXED";
+       	custom-theme-shrink = true;
 	    };
       settings."com/raggesilver/BlackBox" = {
         	custom-shell-command = "/run/current-system/sw/bin/fish";
@@ -170,135 +160,6 @@ in
       settings."org/gnome/nautilus/preferences" = {
         	default-folder-viewer = "list-view";
       };
-      settings."org/gnome/shell/extensions/openbar" = {
-            accent-override=false;
-            apply-accent-shell=false;
-            apply-all-shell=false;
-            apply-flatpak=false;
-            apply-gtk=false;
-            apply-menu-notif=false;
-            apply-menu-shell=false;
-            auto-bgalpha=true;
-            autofg-bar=false;
-            autofg-menu=true;
-            autohg-bar=true;
-            autohg-menu=true;
-            autotheme-dark="Dark";
-            autotheme-font=false;
-            autotheme-light="Pastel";
-            autotheme-refresh=false;
-            balpha=0.84999999999999998;
-            bartype="Islands";
-            bg-change=false;
-            bgalpha=0.0;
-            bgalpha-wmax=1.0;
-            bgalpha2=0.69999999999999996;
-            bgpalette=true;
-            bguri=file:///home/aatricks/.config/background;
-            border-wmax=true;
-            bordertype="solid";
-            bottom-margin=6.5;
-            boxalpha=0.0;
-            bradius=30.0;
-            buttonbg-wmax=true;
-            bwidth=0.0;
-            candyalpha=0.98999999999999999;
-            candybar=false;
-            card-hint=10;
-            color-scheme="default";
-            corner-radius=false;
-            count1=274666;
-            count10=168;
-            count11=120;
-            count12=4;
-            count2=231949;
-            count3=92540;
-            count4=41616;
-            count5=12006;
-            count6=6051;
-            count7=4369;
-            count8=2126;
-            count9=385;
-            cust-margin-wmax=true;
-            dark-bguri=file:///home/aatricks/.config/background;
-            dashdock-style="Default";
-            dbgalpha=0.69999999999999996;
-            dborder=true;
-            dbradius=0.0;
-            default-font="Sans 12";
-            disize=38.0;
-            dshadow=true;
-            fgalpha=0.75;
-            fitts-widgets=true;
-            gradient=false;
-            gradient-direction="vertical";
-            gtk-popover=false;
-            gtk-shadow="Default";
-            gtk-transparency=1.0;
-            halpha=0.5;
-            handle-border=3.0;
-            hbar-gtk3only=false;
-            headerbar-hint=0;
-            heffect=false;
-            height=35.0;
-            hpad=1.0;
-            import-export=true;
-            isalpha=0.0;
-            margin=0.0;
-            margin-wmax=0.0;
-            mbalpha=0.59999999999999998;
-            mbg-gradient=false;
-            mbgalpha=0.90000000000000002;
-            menu-radius=21.0;
-            menustyle=false;
-            mfgalpha=1.0;
-            mhalpha=0.29999999999999999;
-            monitor-height=2000;
-            monitor-width=3000;
-            monitors="all";
-            msalpha=0.84999999999999998;
-            mshalpha=0.16;
-            neon=false;
-            neon-wmax=true;
-            notif-radius=10.0;
-            pause-reload=false;
-            position="Top";
-            qtoggle-radius=50.0;
-            radius-bottomleft=true;
-            radius-bottomright=true;
-            radius-topleft=true;
-            radius-topright=true;
-            reloadstyle=true;
-            removestyle=false;
-            sbar-gradient="none";
-            set-bottom-margin=false;
-            set-fullscreen=true;
-            set-notif-position=true;
-            set-notifications=false;
-            set-overview=false;
-            set-yarutheme=false;
-            shadow=false;
-            shalpha=0.20000000000000001;
-            sidebar-hint=10;
-            slider-height=4.0;
-            smbgalpha=0.94999999999999996;
-            smbgoverride=true;
-            traffic-light=false;
-            trigger-autotheme=true;
-            trigger-reload=false;
-            view-hint=0;
-            vpad=4.0;
-            width-bottom=true;
-            width-left=true;
-            width-right=true;
-            width-top=true;
-            winbalpha=0.75;
-            winbradius=15.0;
-            winbwidth=0.0;
-            window-hint=0;
-            wmax-hbarhint=false;
-            wmaxbar=true;
-      };
     };
     programs.git = {
       enable = true;
@@ -308,7 +169,6 @@ in
     home.stateVersion = "24.11";
   };
   home-manager.useUserPackages = true;
-  home-manager.backupFileExtension = "hm-backup";
 
   programs = {
     adb.enable = true;
@@ -346,6 +206,9 @@ in
       layout = "us";
       variant = "";
     };
+    xserver.excludePackages = with pkgs; [
+      xterm
+    ];
     printing.enable = false;
     pipewire = {
       enable = true;
@@ -358,6 +221,14 @@ in
     tlp = {
       enable = true;
       settings = {
+        RUNTIME_PM_ON_AC = "auto";
+        RUNTIME_PM_ON_BAT = "auto";
+        CPU_BOOST_ON_AC=1;
+        CPU_BOOST_ON_BAT=0;
+        CPU_HWP_DYN_BOOST_ON_AC=1;
+        CPU_HWP_DYN_BOOST_ON_BAT=0;
+        CPU_MAX_PERF_ON_AC = 100;
+        CPU_MAX_PERF_ON_BAT = 50;
         RESTORE_DEVICE_STATE_ON_STARTUP=1;
         START_CHARGE_THRESH_BAT0 = 40;
         STOP_CHARGE_THRESH_BAT0 = 80;
@@ -375,6 +246,33 @@ in
   };
   
   hardware.sensor.iio.enable = true;
+  
+  hardware.graphics = {
+  	enable = true;
+  	extraPackages = with pkgs; [
+	  	intel-media-driver
+	  	vpl-gpu-rt
+	  	libvdpau-va-gl
+	  	intel-compute-runtime
+  	];
+  };
+ 
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+  };
+ 
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    prime = {
+		  intelBusId = "PCI:0:2:0";
+		  nvidiaBusId = "PCI:1:0:0";
+	  };
+  };
   
   # VM
   security.apparmor.enable = false;
@@ -398,6 +296,9 @@ in
   };
   
   # nix run github:bayasdev/envycontrol --no-write-lock-file -- -s integrated
+  # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  # flatpak install flathub app.zen_browser.zen
+  
   system.stateVersion = config.system.nixos.release;
 
 }
