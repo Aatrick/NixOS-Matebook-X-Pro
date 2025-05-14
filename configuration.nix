@@ -1,33 +1,44 @@
-{ config, pkgs, ... }:
-let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
-  unstableTarball = builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-in
+{ config, pkgs, lib, ... }:
 
+let
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz";
+  unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       (import "${home-manager}/nixos")
     ];
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
+
   nixpkgs.config = {
-    allowUnfree = true;
     packageOverrides = pkgs: {
       unstable = import unstableTarball {
         config = config.nixpkgs.config;
       };
     };
   };
-    
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  networking.hostName = "FMac-Aatricks";
+  # Enable networking
   networking.networkmanager.enable = true;
+  networking.firewall.enable = true;
 
+  # Bootloader.
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    loader= {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+  };
+
+  # Set your time zone.
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
@@ -42,165 +53,345 @@ in
     LC_TIME = "fr_FR.UTF-8";
   };
   
+
+  # Enable the GNOME Desktop Environment.
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    excludePackages = with pkgs; [
+      xterm
+    ];
+    desktopManager.gnome.enable = true;
+  };
+
+  # VM
+  security.apparmor.enable = false;
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;  # enable copy and paste between host and guest
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = true;
+        packages = [(pkgs.OVMF.override {
+          secureBoot = true;
+          tpmSupport = true;
+        }).fd];
+      };
+    };
+  };
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
+  # Enable CUPS to print documents.
+  # services.printing.enable = true;
+
+  # Enable sound with pipewire.
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
-
-  users.users.aatricks = {
-    isNormalUser = true;
-    description = "Emilio Melis";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "adbusers" ];
-    packages = with pkgs; [
-      fishPlugins.done fishPlugins.fzf-fish
-	    fishPlugins.forgit fishPlugins.hydro
-	    fishPlugins.grc fzf
-      gnome-tweaks dconf-editor
-      gnome-extension-manager
-      unstable.vesktop
-      blackbox-terminal
-      zeal
-      unstable.vscode
-      texliveFull
-      texstudio
-      foliate
-      unstable.zed-editor
-    ];
-  };
-  
-  environment = {
-    gnome.excludePackages = (with pkgs; [
-	    atomix cheese baobab snapshot
-	    simple-scan eog file-roller
-	    seahorse epiphany evince geary
-	    hitori iagno tali totem
-	    yelp gnome-characters gnome-music 
-	    gnome-photos gnome-tour gnome-software
-	    gnome-calculator gnome-calendar
-	    gnome-clocks gnome-contacts
-      gnome-font-viewer gnome-logs
-      gnome-maps gnome-screenshot
-      gnome-weather gnome-connections
-      gnome-console gnome-system-monitor
-	  ]);
-	  sessionVariables = {
-      LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
-    };
-    systemPackages = with pkgs; [
-      home-manager nano git wget gh htop
-      python312 unstable.uv unstable.ruff
-      steam-run
-      libvirt virt-manager
-      python312Packages.pygments
-      nixd
-      nil
-      grc gcc libgcc gnumake clang-tools
-      cmake extra-cmake-modules clang gdb
-      stdenv.cc.cc.lib
-      cargo rustc rustup rust-analyzer 
-    ];
-  };
-
-  home-manager.users.aatricks = { pkgs, ... }: {
-    home.packages = [];
-    programs.bash.enable = true;
-    dconf = {
-      enable = true;
-      settings."org/gnome/shell" = {
-        disable-user-extensions = false;
-        enabled-extensions = with pkgs.gnomeExtensions; [
-	        blur-my-shell.extensionUuid
-	        dash-to-dock.extensionUuid
-	        user-themes.extensionUuid
-	        caffeine.extensionUuid
-	        appindicator.extensionUuid
-	        light-style.extensionUuid
-	        places-status-indicator.extensionUuid
-        ];
-      };
-      settings."org/gnome/shell/extensions/dash-to-dock" = {
-       	show-icons-emblems = false;
-      	  show-show-apps-button = false;
-       	show-trash = false;
-       	transparency-mode = "FIXED";
-       	custom-theme-shrink = true;
-	    };
-      settings."com/raggesilver/BlackBox" = {
-        	custom-shell-command = "/run/current-system/sw/bin/fish";
-        	delay-before-showing-floating-controls = 100;
-        	easy-copy-paste = true;
-        	floating-controls = true;
-        	floating-controls-hover-area=30;
-        	font = "Source Code Pro 12";
-        	opacity = 100;
-        	pretty = true;
-        	remember-window-size = true;
-        	scrollback-mode = false;
-        	show-headerbar = false;
-        	show-scrollbars = false;
-        	terminal-bell = false;
-        	theme-bold-is-bright = false;
-        	theme-dark = "Dracula";
-        	use-custom-command = true;
-      };
-      settings."org/gnome/nautilus/list-view" = {
-      	  default-zoom-level = "small";
-      };
-      settings."org/gnome/nautilus/preferences" = {
-        	default-folder-viewer = "list-view";
-      };
-    };
-    programs.git = {
-      enable = true;
-      userName  = "Aatrick";
-      userEmail = "melis.emilio1@gmail.com";
-    };
-    home.stateVersion = "24.11";
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
   };
 
   programs = {
     adb.enable = true;
-    nix-ld.enable = true;
-    nix-ld.libraries = with pkgs; [];
     firefox.enable = false;
+    dconf.profiles.gdm.databases = [{
+      settings = {
+        "org/gnome/settings-daemon/plugins/color" = {
+          night-light-enabled = true;
+        };
+        "org/gnome/desktop/interface" = {
+          show-battery-percentage = true;
+          text-scaling-factor = 0.9;
+        };
+      };
+    }];
+    
+    fish.enable = true;
+
+    nix-ld.enable = true;
+
+    # Games
     gamescope.enable = true;
     gamemode.enable = true;
     steam = {
-	    enable = true;
-	    remotePlay.openFirewall = true;
-	    dedicatedServer.openFirewall = true;
-	    localNetworkGameTransfers.openFirewall = true;
-	  };
-	  fish = {
+      gamescopeSession.enable = true;
       enable = true;
-      shellAliases = {
-        ll = "ls -l";
-        update = "sudo nix-channel --update
-                  sudo nix-env -u --always
-                  sudo nixos-rebuild boot --upgrade-all
-                  flatpak update";
-        cleanup = "sudo rm /nix/var/nix/gcroots/auto/*
-                   sudo nix-store --gc
-                   sudo nix-collect-garbage -d";
-      };
+      extest.enable = true;
+      remotePlay.openFirewall = false;
+      dedicatedServer.openFirewall = false;
+      localNetworkGameTransfers.openFirewall = true;
+      extraCompatPackages = with pkgs; [
+        unstable.proton-ge-bin
+      ];
     };
   };
+  environment.sessionVariables = {
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+    LIBVA_DRIVER_NAME = "iHD";
+  };
+
+  # Define a user account. Don't forget to set a password with 'passwd'.
+  users.users.aatricks = {
+    isNormalUser = true;
+    description = "Emilio Melis";
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "adbusers" ];
+    shell = pkgs.fish;
+
+
+    packages = with pkgs; [
+      # Gnome extension
+      gnomeExtensions.dash-to-dock
+      gnomeExtensions.blur-my-shell
+      gnomeExtensions.appindicator
+      gnomeExtensions.caffeine
+
+      # VM
+      libvirt
+      virt-manager
+
+      # Dev
+      unstable.zed-editor
+      #unstable.vscode
+      zeal
+      blackbox-terminal
+
+      # Nix
+      nixd # Nix language server for zeditor
+      nil
+
+      # C / C++
+      gcc
+      clang-tools
+      clang
+      cmake
+      gnumake
+
+      # Rust
+      cargo
+      rustc
+      rustup
+      rust-analyzer
+
+      # Python
+      python312
+      uv
+      ruff
+
+      # Games
+      adwsteamgtk
+      vesktop
+
+      # Latex
+      texstudio
+      texliveFull
+      python312Packages.pygments
+      
+      foliate
+      
+    ];
+  };
+  home-manager.users.aatricks = { pkgs, lib, ... }: {
+    # Pointer settings for VM
+    home.pointerCursor = {
+      gtk.enable = true;
+      package = pkgs.vanilla-dmz;
+      name = "Vanilla-DMZ";
+    };
+    home.packages = [];
+
+    dconf = {
+      enable = true;
+      settings = {
+        "org/gnome/shell" = {
+          disable-user-extensions = false;
+          enabled-extensions = with pkgs.gnomeExtensions; [
+	          blur-my-shell.extensionUuid
+	          dash-to-dock.extensionUuid
+	          user-themes.extensionUuid
+	          caffeine.extensionUuid
+	          appindicator.extensionUuid
+	          light-style.extensionUuid
+	          places-status-indicator.extensionUuid
+          ];
+        };
+        "org/gnome/shell/extensions/dash-to-dock" = {
+         	show-icons-emblems = false;
+        	  show-show-apps-button = false;
+         	show-trash = false;
+         	transparency-mode = "FIXED";
+         	custom-theme-shrink = true;
+         	dash-max-icon-size = 32;
+         	background-opacity = 0.3;
+	      };
+        "org/gnome/desktop/privacy".hide-identity = true;
+        "org/gnome/SessionManager".logout-prompt = false;
+        "org/gnome/shell/extensions/blur-my-shell/dash-to-dock".blur = false;
+        "org/gnome/TextEditor" = {
+          indent-style = "space";
+          restore-session = true;
+          show-right-margin = false;
+          style-scheme = "Adwaita";
+          tab-width = lib.hm.gvariant.mkUint32 2;
+          use-system-font = true;
+        };
+        "org/gnome/gnome-session".logout-prompt = false;
+        "com/raggesilver/BlackBox" = {
+          	custom-shell-command = "/run/current-system/sw/bin/fish";
+          	delay-before-showing-floating-controls = 100;
+          	easy-copy-paste = true;
+          	floating-controls = true;
+          	floating-controls-hover-area=30;
+          	font = "Source Code Pro 12";
+          	opacity = 100;
+          	pretty = true;
+          	remember-window-size = true;
+          	scrollback-mode = false;
+          	show-headerbar = false;
+          	show-scrollbars = false;
+          	terminal-bell = false;
+          	theme-bold-is-bright = false;
+          	theme-dark = "Dracula";
+          	use-custom-command = true;
+        };
+        "org/gnome/nautilus/list-view" = {
+        	  default-zoom-level = "small";
+        };
+        "org/gnome/nautilus/preferences" = {
+          	default-folder-viewer = "list-view";
+        };
+      };
+    };
+
+    programs = {
+      git = {
+        enable = true;
+        userName  = "Aatrick";
+        userEmail = "melis.emilio1@gmail.com";
+      };
+	    fish = {
+        enable = true;
+        shellAliases = {
+          ll = "ls -l";
+          update = "sudo nix-channel --update
+                    sudo nix-env -u --always
+                    sudo nixos-rebuild boot --upgrade-all
+                    flatpak update";
+          cleanup = "sudo rm /nix/var/nix/gcroots/auto/*
+                     sudo nix-store --gc
+                     sudo nix-collect-garbage -d";
+        };
+      };
+    };
+    home.stateVersion = config.system.nixos.release;
+  };
+
+  environment.gnome.excludePackages = with pkgs; [
+    atomix # puzzle game
+    cheese # webcam tool
+    baobab
+    snapshot
+    simple-scan
+    eog
+    file-roller
+    seahorse
+    epiphany # web browser
+    evince # document viewer
+    geary # email reader
+    gnome-characters
+    gnome-music
+    gnome-photos
+    gnome-tour
+    hitori # sudoku game
+    iagno # go game
+    tali # poker game
+    totem # video player
+    yelp
+    gnome-calculator
+    gnome-calendar
+    gnome-clocks
+    gnome-contacts
+    gnome-font-viewer
+    gnome-logs
+    gnome-maps
+    gnome-screenshot
+    gnome-system-monitor
+    gnome-weather
+    gnome-connections
+    gnomeExtensions.auto-move-windows
+    gnome-software
+    gnome-disk-utility
+    gnome-console
+  ];
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.dates = "weekly";
+
+  nix.gc.automatic = true;
+  nix.gc.dates = "daily";
+  nix.gc.options = "--delete-older-than 10d";
+  nix.settings.auto-optimise-store = true;
+
+  /* services.ollama = {
+      enable = true;
+      acceleration = "rocm";
+      # Optional: preload models, see https://ollama.com/library
+      loadModels = [ "llama3.2:3b" ];
+    };
+  services.open-webui.enable = true;*/
+
+  environment.systemPackages = with pkgs; [
+    home-manager
+    
+    #fish
+    grc
+    fish
+    fishPlugins.done 
+    fishPlugins.fzf-fish
+	  fishPlugins.forgit 
+	  fishPlugins.hydro
+	  fishPlugins.grc 
+	  fzf
+    
+    stdenv.cc.cc.lib
+
+    # Tools
+    git
+    fastfetch
+    htop
+    gh
+    nano
+    gnome-tweaks
+    dconf-editor
+    gnome-extension-manager
+    steam-run # For launch single executable (no connection with valve)
+    # ollama
+    # open-webui
+  ];
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 25;
+    priority = 5;
+  };
+  
   
   services = {
-    xserver.enable = true;
-    xserver.displayManager.gdm.enable = true;
-    xserver.desktopManager.gnome.enable = true;
-    xserver.xkb = {
-      layout = "us";
-      variant = "";
-    };
-    xserver.excludePackages = with pkgs; [
-      xterm
-    ];
-    printing.enable = false;
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
     flatpak.enable = true;
     power-profiles-daemon.enable = false;
     thermald.enable = true;
@@ -226,36 +417,19 @@ in
       gpuOffset = -70;
       useTimer = true;
     };
-    ollama.enable = true;
-    udev.extraRules = ''
-    # Remove NVIDIA USB xHCI Host Controller devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA USB Type-C UCSI devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA Audio devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA VGA/3D controller devices
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-  '';
   };
-  
-  hardware.sensor.iio.enable = true;
   
   hardware.graphics = {
-  	enable = true;
-	enable32Bit = true;
-  	extraPackages = with pkgs; [
-	  	intel-media-driver
-	  	vpl-gpu-rt
-	  	libvdpau-va-gl
-	  	intel-compute-runtime
-    	];
+    	enable = true;
+	  enable32Bit = true;
+    	extraPackages = with pkgs; [
+	    	intel-media-driver
+	    	vpl-gpu-rt
+	    	libvdpau-va-gl
+	    	intel-compute-runtime
+    ];
   };
- 
-  environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "iHD";
-  };
- 
+  
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = false;
@@ -268,39 +442,11 @@ in
 		  nvidiaBusId = "PCI:1:0:0";
 	  };
   };
-  boot.extraModprobeConfig = ''
-    blacklist nouveau
-    options nouveau modeset=0
-  '';
-  boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
-  
-  
-  
-  # VM
-  security.apparmor.enable = false;
-  programs.virt-manager.enable = true;
-  services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;  # enable copy and paste between host and guest
-  virtualisation.libvirtd = {
-    enable = true;
-    qemu = {
-      package = pkgs.qemu_kvm;
-      runAsRoot = true;
-      swtpm.enable = true;
-      ovmf = {
-        enable = true;
-        packages = [(pkgs.OVMF.override {
-          secureBoot = true;
-          tpmSupport = true;
-        }).fd];
-      };
-    };
-  };
   
   # nix run github:bayasdev/envycontrol --no-write-lock-file -- -s integrated
   # flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   # flatpak install flathub app.zen_browser.zen
+
   
   system.stateVersion = config.system.nixos.release;
-
 }
