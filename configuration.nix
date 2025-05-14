@@ -3,6 +3,7 @@ let
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
   unstableTarball = builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in
+
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -23,7 +24,6 @@ in
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -54,12 +54,14 @@ in
 	    fishPlugins.grc fzf
       gnome-tweaks dconf-editor
       gnome-extension-manager
-      gruvbox-gtk-theme
-      vesktop
+      unstable.vesktop
       blackbox-terminal
       zeal
       unstable.vscode
-      zed-editor
+      texliveFull
+      texstudio
+      foliate
+      unstable.zed-editor
     ];
   };
   
@@ -83,13 +85,16 @@ in
     };
     systemPackages = with pkgs; [
       home-manager nano git wget gh htop
-	    grc gcc libgcc gnumake clang-tools
-      cmake extra-cmake-modules
+      python312 unstable.uv unstable.ruff
+      steam-run
+      libvirt virt-manager
+      python312Packages.pygments
+      nixd
+      nil
+      grc gcc libgcc gnumake clang-tools
+      cmake extra-cmake-modules clang gdb
       stdenv.cc.cc.lib
-	    python312 uv ruff
-	    cargo rustc rustup rust-analyzer 
-	    steam-run # for launching single executable
-	    libvirt virt-manager
+      cargo rustc rustup rust-analyzer 
     ];
   };
 
@@ -110,25 +115,6 @@ in
 	        places-status-indicator.extensionUuid
         ];
       };
-      settings."org/gnome/shell/extensions/user-theme" = {
-       		name = "Gruvbox-Dark";
-	    };
-	    #settings."/org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
-	    #  blur = false;
-	    #};
-	    #settings."/org/gnome/shell/extensions/blur-my-shell/panel" = {
-	    #  blur = true;
-	    #  brightness = 0.6;
-	    #  override-background = true;
-	    #  override-background-dynamically = true;
-	    #  sigma = 0;
-	    #  static-blur = false;
-	    #  style-panel = 0;
-	    #  unblur-in-overview = true;
-	    #};
-	    #settings."/org/gnome/shell/extensions/blur-my-shell" = {
-	    #  hack-level = 0;
-	    #};
       settings."org/gnome/shell/extensions/dash-to-dock" = {
        	show-icons-emblems = false;
       	  show-show-apps-button = false;
@@ -168,7 +154,6 @@ in
     };
     home.stateVersion = "24.11";
   };
-  home-manager.useUserPackages = true;
 
   programs = {
     adb.enable = true;
@@ -177,25 +162,25 @@ in
     firefox.enable = false;
     gamescope.enable = true;
     gamemode.enable = true;
-    fish = {
-      enable = true;
-      shellAliases = {
-            ll = "ls -l";
-            update = "sudo nix-channel --update
-                      sudo nix-env -u --always
-                      sudo nixos-rebuild boot --upgrade-all
-                      flatpak update";
-            cleanup = "sudo rm /nix/var/nix/gcroots/auto/*
-                      sudo nix-store --gc
-                      sudo nix-collect-garbage -d";
-          };
-    };
     steam = {
 	    enable = true;
 	    remotePlay.openFirewall = true;
 	    dedicatedServer.openFirewall = true;
 	    localNetworkGameTransfers.openFirewall = true;
 	  };
+	  fish = {
+      enable = true;
+      shellAliases = {
+        ll = "ls -l";
+        update = "sudo nix-channel --update
+                  sudo nix-env -u --always
+                  sudo nixos-rebuild boot --upgrade-all
+                  flatpak update";
+        cleanup = "sudo rm /nix/var/nix/gcroots/auto/*
+                   sudo nix-store --gc
+                   sudo nix-collect-garbage -d";
+      };
+    };
   };
   
   services = {
@@ -218,17 +203,16 @@ in
     };
     flatpak.enable = true;
     power-profiles-daemon.enable = false;
+    thermald.enable = true;
     tlp = {
       enable = true;
       settings = {
+        CPU_DRIVER_OPMODE_ON_AC="passive";
+        CPU_DRIVER_OPMODE_ON_BAT="passive";
+        CPU_SCALING_GOVERNOR_ON_AC="schedutil";
+        CPU_SCALING_GOVERNOR_ON_BAT="schedutil";
         RUNTIME_PM_ON_AC = "auto";
         RUNTIME_PM_ON_BAT = "auto";
-        CPU_BOOST_ON_AC=1;
-        CPU_BOOST_ON_BAT=0;
-        CPU_HWP_DYN_BOOST_ON_AC=1;
-        CPU_HWP_DYN_BOOST_ON_BAT=0;
-        CPU_MAX_PERF_ON_AC = 100;
-        CPU_MAX_PERF_ON_BAT = 50;
         RESTORE_DEVICE_STATE_ON_STARTUP=1;
         START_CHARGE_THRESH_BAT0 = 40;
         STOP_CHARGE_THRESH_BAT0 = 80;
@@ -236,25 +220,36 @@ in
     };
     undervolt = {
       enable = true;
-      analogioOffset = -30;
-      coreOffset = -90;
-      uncoreOffset = -30;
-      gpuOffset = -80;
+      #analogioOffset = -30;
+      coreOffset = -80;
+      #uncoreOffset = -30;
+      gpuOffset = -70;
       useTimer = true;
     };
     ollama.enable = true;
+    udev.extraRules = ''
+    # Remove NVIDIA USB xHCI Host Controller devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA USB Type-C UCSI devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA Audio devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA VGA/3D controller devices
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+  '';
   };
   
   hardware.sensor.iio.enable = true;
   
   hardware.graphics = {
   	enable = true;
+	enable32Bit = true;
   	extraPackages = with pkgs; [
 	  	intel-media-driver
 	  	vpl-gpu-rt
 	  	libvdpau-va-gl
 	  	intel-compute-runtime
-  	];
+    	];
   };
  
   environment.sessionVariables = {
@@ -273,6 +268,13 @@ in
 		  nvidiaBusId = "PCI:1:0:0";
 	  };
   };
+  boot.extraModprobeConfig = ''
+    blacklist nouveau
+    options nouveau modeset=0
+  '';
+  boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+  
+  
   
   # VM
   security.apparmor.enable = false;
