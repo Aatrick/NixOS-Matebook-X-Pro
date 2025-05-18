@@ -7,10 +7,17 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "assistant": {
+  "icon_theme": "Material Icon Theme",
+  "agent": {
+    "always_allow_tool_actions": true,
+    "default_profile": "write",
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
+    },
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "model": "claude-3.7-sonnet"
     },
     "version": "2",
     "button": false,
@@ -21,18 +28,18 @@
   "buffer_font_size": 16,
   "theme": {
     "mode": "system",
-    "light": "One Light",
-    "dark": "Catppuccin Macchiato"
+    "light": "Material Theme Lighter",
+    "dark": "Material Theme Darker"
   },
   "diagnostics": {
     "include_warnings": false
   },
   "collaboration_panel": {
-    "button": false
+    "button": true
   },
 
   "chat_panel": {
-    "button": false
+    "button": "never"
   },
 
   "show_wrap_guides": false,
@@ -41,7 +48,7 @@
     "show": false
   },
 
-  "inline_completions": {
+  "edit_predictions": {
     "enabled": true
   },
 
@@ -76,6 +83,12 @@
         }
       ]
     }
+  },
+  "file_types": {
+    "C++": ["tpp"]
+  },
+  "outline_panel": {
+    "button": false
   },
 
   "lsp": {
