@@ -7,27 +7,20 @@
     extensions = ["html" "toml" "make" "neocmake"];
 
     userSettings = {
-    assistant = {
-        enabled = true;
-        version = "2";
-        default_model = {
-          provider = "ollama";
-          model = "llama3.2";
-        };
-    };
-    language_models = {
-      ollama = {
-          api_url = "http://localhost:11434";
-          available_models = [
-            {
-              name = "llama3.2";
-              display_name = "llama3.2";
-              max_tokens = 32768;
-              supports_tools = true;
-            }
-          ];
-        };
+    agent = {
+      default_profile = "minimal";
+      inline_assistant_model = {
+        provider = "copilot_chat";
+        model = "gpt-4.1";
       };
+      default_model = {
+        provider = "copilot_chat";
+        model = "gpt-4.1";
+      };
+      version = "2";
+      button = false;
+      enable_experimental_live_diffs = true;
+    };
 
     hour_format = "hour24";
     auto_update = true;
@@ -119,11 +112,14 @@
     chat_panel.button = "when_in_call";
     show_wrap_guides = false;
     tab_bar.show = false;
-    edit_prediction.enabled = false;
+    show_edit_predictions = true;
+    edit_predictions.enabled = true;
+    edit_predictions.mode = "subtle";
     soft_wrap = "bounded";
     soft_wrap_column = 80;
     notification_panel.button = false;
     autosave = "on_focus_change";
+    open_files_in_new_window = false;
 
     calls = {
       mute_on_join = true;

@@ -1,11 +1,13 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
+    grc
     fish
     fishPlugins.done
     fishPlugins.fzf-fish
 	  fishPlugins.forgit
 	  fishPlugins.hydro
 	  fishPlugins.grc
+	  fzf
   ];
   programs.fish = {
     enable = true;
