@@ -34,7 +34,7 @@
 	    	intel-compute-runtime
       ];
     };
-
+    zramSwap.memoryPercent = 25;
     hardware.nvidia = {
       modesetting.enable = true;
       powerManagement.enable = false;
