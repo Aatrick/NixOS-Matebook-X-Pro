@@ -22,7 +22,7 @@
     nixosConfigurations = {
       "mach-w19c" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit system pkgs-unstable nixos-hardware; };
+        specialArgs = { inherit self system pkgs-unstable nixos-hardware; };
         modules = [
           ./hosts/mach-w19c.nix
         ];

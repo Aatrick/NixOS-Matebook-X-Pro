@@ -22,7 +22,6 @@
 
   environment.systemPackages = with pkgs; [
     qemu
-    virt-manager
     spice
     spice-gtk
     spice-vdagent

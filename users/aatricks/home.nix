@@ -72,6 +72,12 @@
     gnome-extension-manager
     steam-run
 
+    orca-slicer
+    spotify
+    media-downloader
+    vlc
+
+    deskflow
   ];
 
   home.stateVersion = "25.05";

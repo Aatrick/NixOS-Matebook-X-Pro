@@ -43,10 +43,13 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
       prime = {
-		  intelBusId = "PCI:0:2:0";
-		  nvidiaBusId = "PCI:1:0:0";
-	  };
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
     };
+
+    hardware.sensor.iio.enable = true;
+
     nix.settings.download-buffer-size = 1024288000;
 
     services = {
@@ -56,30 +59,30 @@
       tlp = {
         enable = true;
         settings = {
-          CPU_DRIVER_OPMODE_ON_AC="passive";
-          CPU_DRIVER_OPMODE_ON_BAT="passive";
-          CPU_SCALING_GOVERNOR_ON_AC="schedutil";
-          CPU_SCALING_GOVERNOR_ON_BAT="schedutil";
+          # CPU_DRIVER_OPMODE_ON_AC="passive";
+          # CPU_DRIVER_OPMODE_ON_BAT="passive";
+          # CPU_SCALING_GOVERNOR_ON_AC="schedutil";
+          # CPU_SCALING_GOVERNOR_ON_BAT="schedutil";
           CPU_ENERGY_PERF_POLICY_ON_AC="balance_performance";
           CPU_ENERGY_PERF_POLICY_ON_BAT="power";
           PLATFORM_PROFILE_ON_AC="balanced";
           PLATFORM_PROFILE_ON_BAT="low-power";
-          CPU_BOOST_ON_AC=1;
-          CPU_BOOST_ON_BAT=0;
-          CPU_HWP_DYN_BOOST_ON_AC=1;
-          CPU_HWP_DYN_BOOST_ON_BAT=0;
+          # CPU_BOOST_ON_AC=1;
+          # CPU_BOOST_ON_BAT=0;
+          # CPU_HWP_DYN_BOOST_ON_AC=1;
+          # CPU_HWP_DYN_BOOST_ON_BAT=0;
           WIFI_PWR_ON_AC="on";
           WIFI_PWR_ON_BAT="on";
           CPU_MIN_PERF_ON_AC = 0;
           CPU_MAX_PERF_ON_AC = 100;
           CPU_MIN_PERF_ON_BAT = 0;
           CPU_MAX_PERF_ON_BAT = 70;
-          INTEL_GPU_MIN_FREQ_ON_AC=300;
-	        INTEL_GPU_MIN_FREQ_ON_BAT=100;
-	        INTEL_GPU_MAX_FREQ_ON_AC=1100;
-	        INTEL_GPU_MAX_FREQ_ON_BAT=500;
-	        INTEL_GPU_BOOST_FREQ_ON_AC=1300;
-	        INTEL_GPU_BOOST_FREQ_ON_BAT=500;
+          # INTEL_GPU_MIN_FREQ_ON_AC=300;
+	        # INTEL_GPU_MIN_FREQ_ON_BAT=100;
+	        # INTEL_GPU_MAX_FREQ_ON_AC=1100;
+	        # INTEL_GPU_MAX_FREQ_ON_BAT=500;
+	        # INTEL_GPU_BOOST_FREQ_ON_AC=1300;
+	        # INTEL_GPU_BOOST_FREQ_ON_BAT=500;
           RUNTIME_PM_ON_AC = "auto";
           RUNTIME_PM_ON_BAT = "auto";
           RESTORE_DEVICE_STATE_ON_STARTUP=1;
@@ -89,10 +92,10 @@
       };
       undervolt = {
         enable = true;
-        #analogioOffset = -30;
-        coreOffset = -80;
-        #uncoreOffset = -30;
-        gpuOffset = -70;
+        analogioOffset = -20;
+        coreOffset = -105;
+        uncoreOffset = -20;
+        gpuOffset = -75;
         useTimer = true;
       };
     };
