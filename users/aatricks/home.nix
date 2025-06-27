@@ -78,6 +78,8 @@
     vlc
 
     deskflow
+
+    parsec-bin
   ];
 
   home.stateVersion = "25.05";

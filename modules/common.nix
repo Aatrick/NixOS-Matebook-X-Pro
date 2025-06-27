@@ -28,5 +28,8 @@
 
   environment.systemPackages = with pkgs; [
     home-manager
+    powertop
+    tlp
+    thermald
   ];
 }
