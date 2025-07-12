@@ -8,9 +8,9 @@
     tmp.useTmpfs = lib.mkDefault true;
 
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-    #kernelParams = lib.mkDefault [ "quiet" ];
+    kernelParams = lib.mkDefault [ "quiet" ];
 
     initrd.systemd.enable = lib.mkDefault true;
-    #plymouth.enable = lib.mkDefault true;
+    plymouth.enable = lib.mkDefault true;
   };
 }

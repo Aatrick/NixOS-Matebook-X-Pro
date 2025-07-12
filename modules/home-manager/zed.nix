@@ -7,20 +7,6 @@
     extensions = ["html" "toml" "make" "neocmake"];
 
     userSettings = {
-    agent = {
-      default_profile = "minimal";
-      inline_assistant_model = {
-        provider = "copilot_chat";
-        model = "gpt-4.1";
-      };
-      default_model = {
-        provider = "copilot_chat";
-        model = "gpt-4.1";
-      };
-      version = "2";
-      button = false;
-      enable_experimental_live_diffs = true;
-    };
 
     hour_format = "hour24";
     auto_update = true;
@@ -45,11 +31,12 @@
       option_as_meta = false;
       button = false;
       shell = "system";
-      #{
-      #                    program = "zsh";
-      #};
       toolbar = {
-          title = false;
+        title = false;
+        breadcrumbs = false;
+      };
+      scrollbar = {
+        show = "never";
       };
       working_directory = "current_project_directory";
     };
@@ -62,7 +49,10 @@
         ];
     };
     "Nix" = {
-        language_servers = [ "nil" ];
+        language_servers = [ "nixd" ];
+        formatter = [
+          "alejandra"
+        ];
         format_on_save = "on";
     };
     };

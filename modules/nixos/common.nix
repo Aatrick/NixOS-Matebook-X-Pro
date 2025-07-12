@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -26,10 +26,13 @@
 
   programs.nix-ld.enable = lib.mkDefault true;
 
-  environment.systemPackages = with pkgs; [
-    home-manager
-    powertop
-    tlp
-    thermald
+  services.devmon.enable = true;
+  services.gvfs.enable = true;
+  services.udisks2 = {
+    enable = true;
+    mountOnMedia = true;
+  };
+  systemd.tmpfiles.rules = [
+    "d /media 0755 root root -"
   ];
 }

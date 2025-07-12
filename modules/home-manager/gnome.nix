@@ -5,6 +5,19 @@
     name = "Vanilla-DMZ";
   };
   home.packages = with pkgs; [
+    wineWowPackages.waylandFull
+    gnome-text-editor
+    gnome-calculator
+    file-roller
+    nautilus
+
+    fastfetch
+    htop
+    gnome-tweaks
+    dconf-editor
+    gnome-extension-manager
+    steam-run
+
     gnomeExtensions.dash-to-dock
     gnomeExtensions.blur-my-shell
     gnomeExtensions.appindicator
@@ -12,8 +25,6 @@
     gnomeExtensions.caffeine
     gnomeExtensions.user-themes
     gnomeExtensions.places-status-indicator
-    # Icons
-    pkgs-unstable.epapirus-icon-theme
   ];
 
   dconf = {
