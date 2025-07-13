@@ -31,6 +31,14 @@
           inputs.home-manager.nixosModules.default
        	];
       };
+      "homelab" = nixpkgs.lib.nixosSystem {
+       	system = "x86_64-linux";
+       	specialArgs = { inherit self inputs pkgs-unstable; };
+       	modules = [
+       	  ./hosts/homelab/configuration.nix
+          inputs.home-manager.nixosModules.default
+       	];
+      };
     };
   };
 }
