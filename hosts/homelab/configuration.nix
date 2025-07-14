@@ -18,9 +18,8 @@
     ../../modules/nixos/power.nix
     ../../modules/nixos/games.nix
     ../../modules/nixos/vm.nix
+    ../../modules/nixos/flatpak.nix
   ];
-
-  services.flatpak.enable = true;
 
   hardware.nvidia = {
       # modesetting.enable = true;

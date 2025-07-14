@@ -16,9 +16,10 @@
     ../../modules/nixos/zram.nix
     ../../modules/nixos/update.nix
     ../../modules/nixos/power.nix
+    ../../modules/nixos/flatpak.nix
+    # ../../modules/nixos/games.nix
+    # ../../modules/nixos/vm.nix
   ];
-
-  services.flatpak.enable = true;
 
   hardware.nvidia = {
       # modesetting.enable = true;
@@ -64,7 +65,8 @@
         p1.limit = 10;
         p1.window = 20;
         p2.limit = 40;
-        p2.window = 0.2;
+        p2.window = 0.01;
         tempBat = -40;
+        tempAc = -5;
       };
 }
