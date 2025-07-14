@@ -23,7 +23,6 @@
   home.packages = with pkgs; [
     vesktop
     spotify
-    gwe
     #deskflow
   ];
 

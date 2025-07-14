@@ -1,7 +1,7 @@
 { self, inputs, pkgs, pkgs-unstable, ... }:
 {
   imports = [
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
@@ -59,14 +59,30 @@
         enable = true;
         analogioOffset = -20;
         coreOffset = -105;
-        uncoreOffset = -20;
+        uncoreOffset = -105;
         gpuOffset = -75;
         useTimer = true;
-        p1.limit = 10;
+        p1.limit = 7;
         p1.window = 20;
-        p2.limit = 40;
+        p2.limit = 20;
         p2.window = 0.01;
-        tempBat = -40;
-        tempAc = -5;
+        tempBat = 50;
+        tempAc = 60;
       };
+    boot.extraModprobeConfig = ''
+    blacklist nouveau
+    options nouveau modeset=0
+  '';
+
+  services.udev.extraRules = ''
+    # Remove NVIDIA USB xHCI Host Controller devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA USB Type-C UCSI devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA Audio devices, if present
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
+    # Remove NVIDIA VGA/3D controller devices
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+  '';
+  boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
 }
