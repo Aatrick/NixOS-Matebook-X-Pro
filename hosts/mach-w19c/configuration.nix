@@ -62,7 +62,7 @@
         uncoreOffset = -105;
         gpuOffset = -75;
         useTimer = true;
-        p1.limit = 7;
+        p1.limit = 5;
         p1.window = 20;
         p2.limit = 20;
         p2.window = 0.01;

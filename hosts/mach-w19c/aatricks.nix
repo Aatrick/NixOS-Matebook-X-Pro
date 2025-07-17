@@ -2,7 +2,7 @@
 
   imports = [
     ../../modules/home-manager/gnome.nix
-    ../../modules/home-manager/zed.nix
+    #../../modules/home-manager/zed.nix
     ../../modules/home-manager/git.nix
     ../../modules/home-manager/dev.nix
     ../../modules/home-manager/shell.nix
@@ -28,7 +28,6 @@
     spotify
     media-downloader
     vlc
-
     #deskflow
   ];
 

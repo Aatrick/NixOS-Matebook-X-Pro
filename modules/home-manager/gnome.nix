@@ -65,10 +65,8 @@
       "org/gnome/gnome-session".logout-prompt = false;
       "com/raggesilver/BlackBox" = {
         	custom-shell-command = "/run/current-system/sw/bin/fish";
-        	delay-before-showing-floating-controls = 100;
         	easy-copy-paste = true;
         	floating-controls = true;
-        	floating-controls-hover-area=30;
         	font = "Adwaita Mono 12";
         	opacity = 100;
         	pretty = true;

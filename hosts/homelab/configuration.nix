@@ -32,7 +32,7 @@
 
   networking.hostName = "Homelab";
   boot.tmp.useTmpfs = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages;
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" "defaults" ];
 
   winter.main-user = {

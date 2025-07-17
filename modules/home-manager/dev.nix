@@ -1,7 +1,7 @@
 { pkgs, pkgs-unstable, ... }:
 {
   home.packages = with pkgs; [
-    pkgs-unstable.zed-editor
+    #pkgs-unstable.zed-editor
     zeal
     git
     gh
@@ -27,6 +27,8 @@
     nil
     nixd # Nix language server for zeditor
     alejandra
+
+    nodejs
   ];
 
 }
