@@ -2,9 +2,11 @@
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    #inputs.nixos-hardware.nixosModules.common-gpu-nvidia
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
+    inputs.nixos-hardware.nixosModules.huawei-machc-wa
     ./hardware-configuration.nix
     ../../modules/nixos/fonts
     ../../modules/nixos/gnome
@@ -22,7 +24,7 @@
   ];
 
   hardware.nvidia = {
-      # modesetting.enable = true;
+      modesetting.enable = true;
       # powerManagement.enable = false;
       # powerManagement.finegrained = false;
       open = false;
@@ -36,7 +38,7 @@
 
   networking.hostName = "FMac";
   boot.tmp.useTmpfs = false;
-  boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" "defaults" ];
 
   winter.main-user = {
@@ -62,13 +64,14 @@
         uncoreOffset = -105;
         gpuOffset = -75;
         useTimer = true;
-        p1.limit = 5;
-        p1.window = 20;
-        p2.limit = 20;
-        p2.window = 0.01;
+        # p1.limit = 5;
+        # p1.window = 20;
+        # p2.limit = 20;
+        # p2.window = 0.01;
         tempBat = 50;
-        tempAc = 60;
+        tempAc = 70;
       };
+
     boot.extraModprobeConfig = ''
     blacklist nouveau
     options nouveau modeset=0
