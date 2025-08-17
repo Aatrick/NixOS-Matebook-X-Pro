@@ -72,7 +72,7 @@
                 eog
                 file-roller
                 seahorse
-                #epiphany # web browser
+                epiphany # web browser
                 evince # document viewer
                 geary # email reader
                 gnome-characters
@@ -117,6 +117,7 @@
             xdg.mime.enable = true;
             environment.systemPackages = [ pkgs.xdg-utils ];
         }
+        # xdg-settings set default-web-browser com.microsoft.Edge.desktop
         {
             # Is used to fix blank screen on GDM
 
