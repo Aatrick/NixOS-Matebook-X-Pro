@@ -6,6 +6,7 @@
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
+    ../../modules/nixos/nvidia-standby-fix.nix
     ../../modules/nixos/fonts
     ../../modules/nixos/gnome
     ../../modules/nixos/boot.nix
@@ -19,6 +20,7 @@
     ../../modules/nixos/games.nix
     ../../modules/nixos/vm.nix
     ../../modules/nixos/flatpak.nix
+    ../../modules/nixos/ollama.nix
   ];
 
   hardware.nvidia = {
@@ -32,14 +34,24 @@
 
   networking.hostName = "Homelab";
   boot.tmp.useTmpfs = true;
-  boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" "defaults" ];
 
-  winter.main-user = {
-    enable = true;
-    userName = "aatricks";
-    userFullName = "Emilio Melis";
-  };
+  winter = {
+        ollama.acceleration = "cuda";
+        main-user = {
+            enable = true;
+            userName = "aatricks";
+            userFullName = "Emilio Melis";
+        };
+        gnome = {
+            scaling = 2;
+            text-scaling = 0.8;
+        };
+        vm = {
+            users = [ "aatricks" ];
+        };
+    };
 
   home-manager = {
     extraSpecialArgs = { inherit self inputs pkgs pkgs-unstable; };
