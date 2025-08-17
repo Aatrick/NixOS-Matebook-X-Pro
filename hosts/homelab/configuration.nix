@@ -18,9 +18,10 @@
     ../../modules/nixos/update.nix
     ../../modules/nixos/power.nix
     ../../modules/nixos/games.nix
-    ../../modules/nixos/vm.nix
+    # ../../modules/nixos/vm.nix
     ../../modules/nixos/flatpak.nix
     ../../modules/nixos/ollama.nix
+     ../../modules/nixos/wooting.nix
   ];
 
   hardware.nvidia = {
@@ -38,6 +39,10 @@
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" "defaults" ];
 
   winter = {
+        nvidia.standby = {
+            enable = true;
+            old-gpu = false;
+        };
         ollama.acceleration = "cuda";
         main-user = {
             enable = true;
@@ -48,9 +53,12 @@
             scaling = 2;
             text-scaling = 0.8;
         };
-        vm = {
-            users = [ "aatricks" ];
+        wooting = {
+            enable = true;
         };
+        # vm = {
+        #     users = [ "aatricks" ];
+        # };
     };
 
   home-manager = {
