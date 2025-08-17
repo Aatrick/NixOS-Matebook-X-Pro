@@ -1,4 +1,4 @@
-{ pkgs, pkgs-unstable, config, lib... }:
+{ pkgs, pkgs-unstable, config, lib, ... }:
 
 {
   options.winter.ollama.acceleration = lib.mkOption {

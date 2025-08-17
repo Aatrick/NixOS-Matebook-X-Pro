@@ -72,7 +72,7 @@
                 eog
                 file-roller
                 seahorse
-                epiphany # web browser
+                #epiphany # web browser
                 evince # document viewer
                 geary # email reader
                 gnome-characters
@@ -106,6 +106,16 @@
                 simple-scan
                 gnome-shell-extensions
             ];
+        }
+        {
+            # Enable portals and MIME database so default applications can be managed via GNOME Settings
+            xdg.portal = {
+                enable = true;
+                extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+                #gtkUsePortal = true;
+            };
+            xdg.mime.enable = true;
+            environment.systemPackages = [ pkgs.xdg-utils ];
         }
         {
             # Is used to fix blank screen on GDM
