@@ -1,3 +1,5 @@
+{ pkgs, pkgs-unstable, config, lib... }:
+
 {
   options.winter.ollama.acceleration = lib.mkOption {
     description = "ollama acceleration";
