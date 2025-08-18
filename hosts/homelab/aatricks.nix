@@ -32,6 +32,7 @@
   home.packages = with pkgs; [
     vesktop
     spotify
+    brave
     #deskflow
   ];
 

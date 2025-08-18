@@ -37,6 +37,8 @@
     spotify
     media-downloader
     vlc
+
+    brave
     #deskflow
   ];
 
