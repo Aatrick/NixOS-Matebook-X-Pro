@@ -1,4 +1,4 @@
-{ self, inputs, pkgs, pkgs-unstable, ... }:
+{ self, inputs, pkgs, pkgs-unstable, config, ... }:
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
@@ -29,7 +29,7 @@
       # powerManagement.finegrained = false;
       open = false;
       nvidiaSettings = true;
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
       prime = {
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";

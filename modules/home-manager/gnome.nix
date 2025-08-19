@@ -45,13 +45,42 @@
 	          places-status-indicator.extensionUuid
             quick-settings-audio-panel.extensionUuid
         ];
+        favorite-apps = ["vesktop.desktop"
+            "spotify.desktop"
+            "brave-browser.desktop"
+            "com.raggesilver.BlackBox.desktop"
+            "code.desktop"
+            ];
+      };
+      "org/gnome/nautilus/list-view" = {
+          use-tree-view = true;
+      };
+      "org/gnome/desktop/privacy" = {
+          old-files-age = 1;
+          remove-old-temp-files = true;
+          remove-old-trash-files = true;
+      };
+      "org/gnome/desktop/peripherals/touchpad" = {
+          speed = 0.18;
       };
       "org/gnome/desktop/interface" = {
+            accent-color = "teal";
+            color-scheme = "prefer-dark";
             icon-theme = "Papirus";
             show-battery-percentage = true;
             toolbar-style = "text";
             gtk-theme = "Adwaita";
+            text-scaling-factor = 0.85;
         };
+      "org/gnome/desktop/app-folders" ={
+        folder-children = ["System" "Utilities" "YaST" "Pardus" "SysApps"];
+      };
+      "org/gnome/desktop/app-folders/folders/Utilities" = {
+        apps = ["org.gnome.Connections.desktop" "org.gnome.Evince.desktop" "org.gnome.font-viewer.desktop" "org.gnome.Loupe.desktop" "org.gnome.seahorse.Application.desktop" "com.mattjakeman.ExtensionManager.desktop" "ca.desrt.dconf-editor.desktop" "org.gnome.tweaks.desktop" "org.gnome.Calculator.desktop"];
+      };
+      "org/gnome/desktop/app-folders/folders/SysApps" = {
+        apps = ["org.gnome.Extensions.desktop" "org.gnome.Settings.desktop" "org.gnome.FileRoller.desktop" "cmake-gui.desktop" "htop.desktop" "fish.desktop" "nixos-manual.desktop" "vlc.desktop" "io.github.Foldex.AdwSteamGtk.desktop"];
+      };
       "org/gnome/desktop/wm/preferences" = {
             button-layout = "appmenu:minimize,maximize,close";
         };
