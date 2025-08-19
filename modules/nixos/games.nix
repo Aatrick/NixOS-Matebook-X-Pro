@@ -77,8 +77,9 @@
   hardware = {
       graphics = {
         enable = true;
-        package = pkgs.mesa;
-        package32 = pkgs.pkgsi686Linux.mesa;
+        enable32Bit = true;
+        # package = pkgs.mesa;
+        # package32 = pkgs.pkgsi686Linux.mesa;
       };
   };
 }
