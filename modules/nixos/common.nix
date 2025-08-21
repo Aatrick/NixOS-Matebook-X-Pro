@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -25,11 +25,6 @@
   console.keyMap = "us";
 
   programs.nix-ld.enable = lib.mkDefault true;
-  # Make common runtime libs available to foreign binaries (pip wheels, etc.)
-  programs.nix-ld.libraries = with pkgs; [
-    stdenv.cc.cc  # provides libstdc++.so.6 and libgcc_s.so.1
-    zlib          # common dependency for many wheels
-  ];
 
   services.devmon.enable = true;
   services.gvfs.enable = true;
