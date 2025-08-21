@@ -15,19 +15,22 @@ install_packages() {
   LOG "Installing baseline packages..."
 
   sudo dnf install -y --skip-broken --allowerasing --skip-unavailable \
-    wine \
     gnome-text-editor \
     gnome-calculator \
-    file-roller \
     nautilus \
     fastfetch \
     htop \
     gnome-tweaks \
-    dconf-editor \
-    steam \
     papirus-icon-theme
     
-  flatpak install flathub dev.vencord.Vesktop com.brave.Browser  com.mattjakeman.ExtensionManager -y
+  flatpak install flathub dev.vencord.Vesktop \
+    com.brave.Browser \
+    com.mattjakeman.ExtensionManager \
+    com.valvesoftware.Steam \
+    com.valvesoftware.Steam.CompatibilityTool.Proton-GE \
+    ca.desrt.dconf-editor  \
+    page.tesk.Refine \
+    org.gnome.Extensions -y
   
   sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
@@ -43,7 +46,6 @@ install_extensions() {
 
 # Install popular extensions from Fedora repos
 sudo dnf install -y \
-    gnome-extensions-app \
     gnome-shell-extension-appindicator \
 # dash-to-dock
 # caffeine
