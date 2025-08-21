@@ -93,7 +93,7 @@
                 gnome-maps
                 gnome-screenshot
                 gnome-system-monitor
-                gnome-weather
+                #gnome-weather
                 gnome-connections
                 gnome-software
                 gnome-disk-utility

@@ -20,7 +20,7 @@
     rust-analyzer
 
     # Python
-    python3
+    python312
     uv
     ruff
 

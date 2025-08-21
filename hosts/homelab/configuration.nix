@@ -22,6 +22,7 @@
     ../../modules/nixos/flatpak.nix
     #../../modules/nixos/ollama.nix
     ../../modules/nixos/wooting.nix
+    ../../modules/nixos/cuda.nix
   ];
 
   hardware.nvidia = {
