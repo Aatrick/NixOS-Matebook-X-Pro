@@ -23,6 +23,7 @@
     #../../modules/nixos/ollama.nix
     ../../modules/nixos/wooting.nix
     ../../modules/nixos/cuda.nix
+    ../../modules/nixos/docker.nix
   ];
 
   hardware.nvidia = {

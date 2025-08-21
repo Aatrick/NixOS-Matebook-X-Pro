@@ -21,6 +21,7 @@
     ../../modules/nixos/flatpak.nix
     ../../modules/nixos/games.nix
     # ../../modules/nixos/vm.nix
+    ../../modules/nixos/docker.nix
   ];
 
   hardware.nvidia = {
