@@ -1,11 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Fedora Setup Script
-# This script is generated from your NixOS configuration.
+# -------------------------------
+# Fedora Post-Install Setup Script
+# Modular + Idempotent Refactor
+# -------------------------------
+
+LOG() { echo -e "\033[1;34m[*]\033[0m $*"; }
+WARN() { echo -e "\033[1;33m[!]\033[0m $*"; }
+ERR() { echo -e "\033[1;31m[✗]\033[0m $*"; }
 
 # --- Package Installation ---
-echo "Installing packages..."
-sudo dnf install -y \
+install_packages() {
+  LOG "Installing baseline packages..."
+
+  sudo dnf install -y --skip-broken --allowerasing \
     wine \
     gnome-text-editor \
     gnome-calculator \
@@ -18,77 +27,88 @@ sudo dnf install -y \
     gnome-shell-extension-manager \
     steam \
     papirus-icon-theme
-
-# --- GNOME Extension Installation ---
-echo "Installing GNOME extensions..."
-
-# Install gnome-extensions-cli if not present
-if ! command -v gnome-extensions-cli &> /dev/null
-then
-    echo "gnome-extensions-cli not found, installing..."
-    wget -O gnome-extensions-cli.py https://raw.githubusercontent.com/GNOME/gnome-extensions-cli/main/gnome-extensions-cli.py
-    chmod +x gnome-extensions-cli.py
-    sudo mv gnome-extensions-cli.py /usr/local/bin/gnome-extensions-cli
-fi
-
-gnome-extensions-cli install dash-to-dock@micxgx.gmail.com
-gnome-extensions-cli install blur-my-shell@aunetx
-gnome-extensions-cli install appindicatorsupport@rgcjonas.gmail.com
-gnome-extensions-cli install light-style@gnome-shell-extensions.gcampax.github.com
-gnome-extensions-cli install caffeine@patapon.info
-gnome-extensions-cli install user-theme@gnome-shell-extensions.gcampax.github.com
-gnome-extensions-cli install places-menu@gnome-shell-extensions.gcampax.github.com
-gnome-extensions-cli install quick-settings-audio-panel@gnome-shell-extensions.gcampax.github.com
-gnome-extensions-cli install weatheroclock@malekim.github.io
+}
 
 
-# --- Dconf Settings ---
-echo "Applying dconf settings..."
+# --- GNOME Extensions ---
+install_extensions() {
+  LOG "Installing GNOME extensions..."
 
-dconf write /org/gnome/shell/disable-user-extensions false
-dconf write /org/gnome/shell/enabled-extensions "['blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'appindicatorsupport@rgcjonas.gmail.com', 'light-style@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'quick-settings-audio-panel@gnome-shell-extensions.gcampax.github.com', 'weatheroclock@malekim.github.io']"
-dconf write /org/gnome/shell/favorite-apps "['vesktop.desktop', 'spotify.desktop', 'brave-browser.desktop', 'com.raggesilver.BlackBox.desktop', 'code.desktop']"
-dconf write /org/gnome/nautilus/list-view/use-tree-view true
-dconf write /org/gnome/desktop/privacy/old-files-age "uint32 1"
-dconf write /org/gnome/desktop/privacy/remove-old-temp-files true
-dconf write /org/gnome/desktop/privacy/remove-old-trash-files true
-dconf write /org/gnome/desktop/peripherals/touchpad/speed 0.18
-dconf write /org/gnome/desktop/interface/accent-color "'teal'"
-dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
-dconf write /org/gnome/desktop/interface/icon-theme "'Papirus'"
-dconf write /org/gnome/desktop/interface/show-battery-percentage true
-dconf write /org/gnome/desktop/interface/toolbar-style "'text'"
-dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita'"
-dconf write /org/gnome/desktop/interface/text-scaling-factor 0.95
-dconf write /org/gnome/desktop/app-folders/folder-children "['System', 'Utilities', 'YaST', 'Pardus', 'SysApps']"
-dconf write /org/gnome/desktop/app-folders/folders/Utilities/apps "['org.gnome.Connections.desktop', 'org.gnome.Evince.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Loupe.desktop', 'org.gnome.seahorse.Application.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.tweaks.desktop', 'org.gnome.Calculator.desktop']"
-dconf write /org/gnome/desktop/app-folders/folders/SysApps/apps "['org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop', 'org.gnome.FileRoller.desktop', 'cmake-gui.desktop', 'htop.desktop', 'fish.desktop', 'nixos-manual.desktop', 'vlc.desktop', 'io.github.Foldex.AdwSteamGtk.desktop']"
-dconf write /org/gnome/desktop/wm/preferences/button-layout "'appmenu:minimize,maximize,close'"
-dconf write /org/desktop/vm/preferences/button-layout "'appmenu:minimize,maximize,close'"
-dconf write /org/gnome/shell/extensions/weather-oclock/weather-after-clock true
-dconf write /org/gnome/shell/extensions/dash-to-dock/show-icons-emblems false
-dconf write /org/gnome/shell/extensions/dash-to-dock/show-show-apps-button false
-dconf write /org/gnome/shell/extensions/dash-to-dock/show-trash false
-dconf write /org/gnome/shell/extensions/dash-to-dock/transparency-mode "'FIXED'"
-dconf write /org/gnome/shell/extensions/dash-to-dock/custom-theme-shrink true
+  # Install gnome-extensions-cli if not present
+  if ! command -v gnome-extensions-cli &>/dev/null; then
+    LOG "gnome-extensions-cli not found, installing..."
+    wget -qO /tmp/gnome-extensions-cli.py https://raw.githubusercontent.com/GNOME/gnome-extensions-cli/main/gnome-extensions-cli.py
+    chmod +x /tmp/gnome-extensions-cli.py
+    sudo mv /tmp/gnome-extensions-cli.py /usr/local/bin/gnome-extensions-cli
+  fi
+
+  EXTENSIONS=(
+    dash-to-dock@micxgx.gmail.com
+    blur-my-shell@aunetx
+    appindicatorsupport@rgcjonas.gmail.com
+    light-style@gnome-shell-extensions.gcampax.github.com
+    caffeine@patapon.info
+    user-theme@gnome-shell-extensions.gcampax.github.com
+    places-menu@gnome-shell-extensions.gcampax.github.com
+    quick-settings-audio-panel@gnome-shell-extensions.gcampax.github.com
+    weatheroclock@malekim.github.io
+  )
+
+  for ext in "${EXTENSIONS[@]}"; do
+    if ! gnome-extensions list | grep -q "$ext"; then
+      LOG "Installing extension: $ext"
+      gnome-extensions-cli install "$ext"
+    else
+      LOG "Extension already installed: $ext"
+    fi
+  done
+}
+
+
+# --- GNOME Settings ---
+apply_gnome_settings() {
+  LOG "Applying GNOME settings..."
+
+  if [[ -f ./gnome-settings.dconf ]]; then
+    LOG "Restoring GNOME settings from gnome-settings.dconf"
+    dconf load / < ./gnome-settings.dconf
+  else
+    WARN "No gnome-settings.dconf found. Skipping GNOME config restore."
+    WARN "Run: dconf dump / > gnome-settings.dconf to export your baseline later."
+  fi
+}
+
 
 # --- Laptop Specific Setup ---
-if [[ $(hostnamectl status | grep "Chassis:" | awk '{print $2}') == "laptop" ]]; then
-  echo "Laptop detected. Installing NVIDIA drivers and TLP..."
+setup_laptop() {
+  LOG "Checking if this is a laptop..."
+  if [[ $(hostnamectl chassis) == "laptop" ]]; then
+    LOG "Laptop detected."
 
-  # Enable RPM Fusion repositories
-  sudo dnf install -y "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
-  sudo dnf install -y "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+    # Enable RPM Fusion repos if missing
+    if ! rpm -qa | grep -q rpmfusion-free-release; then
+      LOG "Enabling RPM Fusion repos..."
+      sudo dnf install -y \
+        "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
+        "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+    fi
 
-  # Install NVIDIA drivers and TLP
-  sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia-cuda tlp tlp-rdw
+    # Check for NVIDIA hardware before installing drivers
+    if lspci | grep -qi nvidia; then
+      LOG "NVIDIA GPU detected. Installing drivers..."
+      sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia-cuda
+      WARN "A reboot is required for NVIDIA driver to load."
+    else
+      LOG "No NVIDIA GPU detected. Skipping NVIDIA drivers."
+    fi
 
-  # Enable TLP
-  sudo systemctl enable tlp
+    LOG "Installing TLP for power management..."
+    sudo dnf install -y tlp tlp-rdw
+    sudo systemctl enable tlp
 
-  # Configure TLP from power.nix
-  sudo tee /etc/tlp.conf > /dev/null <<EOF
-# TLP settings based on power.nix
+    # Write TLP config
+    sudo tee /etc/tlp.conf > /dev/null <<'EOF'
+# TLP custom config
 CPU_DRIVER_OPMODE_ON_AC="passive"
 CPU_DRIVER_OPMODE_ON_BAT="passive"
 CPU_SCALING_GOVERNOR_ON_AC="ondemand"
@@ -113,22 +133,14 @@ STOP_CHARGE_THRESH_BAT0=80
 TLP_DEFAULT_MODE="BAT"
 EOF
 
-  echo "NVIDIA drivers and TLP have been installed."
-
-  # Undervolt prompt
-  read -p "This laptop may support undervolting. Do you want to apply undervolt settings? (y/N) " -n 1 -r
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]
-  then
-      echo "Applying undervolt settings..."
-      # Install undervolt tool
+    # Ask about undervolt
+    read -rp "Apply undervolt settings? (y/N): " REPLY
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      LOG "Installing undervolt tool..."
       sudo dnf install -y python3-pip
-      sudo pip3 install undervolt
+      sudo pip3 install --upgrade undervolt
 
-      # Apply settings from mach-w19c/configuration.nix
-      sudo undervolt --core -95 --uncore -95 --gpu -75 --analogio -20 --temp-bat 50 --temp-ac 70
-
-      # Create systemd service for undervolt to apply on boot
+      LOG "Creating systemd service for undervolt..."
       sudo tee /etc/systemd/system/undervolt.service > /dev/null <<'EOT'
 [Unit]
 Description=Apply undervolt settings on boot
@@ -143,15 +155,21 @@ RemainAfterExit=true
 WantedBy=multi-user.target
 EOT
 
-      # Enable the service
       sudo systemctl enable --now undervolt.service
-      echo "Undervolt settings applied and will be reapplied on boot."
+      LOG "Undervolt settings applied and enabled."
+    fi
+  else
+    LOG "Not a laptop. Skipping laptop setup."
   fi
+}
 
-  echo "A reboot is required for the NVIDIA driver to be loaded."
-fi
+# -------------------------------
+# Main
+# -------------------------------
+install_packages
+install_extensions
+apply_gnome_settings
+setup_laptop
 
-
-echo "Setup complete!"
-echo "Please log out and log back in for all changes to take effect."
-echo "If NVIDIA drivers were installed, please reboot your system."
+LOG "Setup complete!"
+LOG "Please log out and back in. If NVIDIA drivers were installed, reboot."
