@@ -14,7 +14,7 @@ ERR() { echo -e "\033[1;31m[✗]\033[0m $*"; }
 install_packages() {
   LOG "Installing baseline packages..."
 
-  sudo dnf install -y --skip-broken --allowerasing \
+  sudo dnf install -y --skip-broken --allowerasing --skip-unavailable \
     wine \
     gnome-text-editor \
     gnome-calculator \
@@ -24,44 +24,36 @@ install_packages() {
     htop \
     gnome-tweaks \
     dconf-editor \
-    gnome-shell-extension-manager \
     steam \
     papirus-icon-theme
+    
+  flatpak install flathub dev.vencord.Vesktop com.brave.Browser  com.mattjakeman.ExtensionManager -y
+  
+  sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+  dnf check-update
+  sudo dnf install code-insiders
+
 }
 
 
 # --- GNOME Extensions ---
 install_extensions() {
-  LOG "Installing GNOME extensions..."
+  echo "[*] Installing GNOME extensions..."
 
-  # Install gnome-extensions-cli if not present
-  if ! command -v gnome-extensions-cli &>/dev/null; then
-    LOG "gnome-extensions-cli not found, installing..."
-    wget -qO /tmp/gnome-extensions-cli.py https://raw.githubusercontent.com/GNOME/gnome-extensions-cli/main/gnome-extensions-cli.py
-    chmod +x /tmp/gnome-extensions-cli.py
-    sudo mv /tmp/gnome-extensions-cli.py /usr/local/bin/gnome-extensions-cli
-  fi
+# Install popular extensions from Fedora repos
+sudo dnf install -y \
+    gnome-extensions-app \
+    gnome-shell-extension-appindicator \
+# dash-to-dock
+# caffeine
+# blur-my-shell
+# user-themes
+# weather-oclock
+# quick-settings-audio-panel
+# light-style
 
-  EXTENSIONS=(
-    dash-to-dock@micxgx.gmail.com
-    blur-my-shell@aunetx
-    appindicatorsupport@rgcjonas.gmail.com
-    light-style@gnome-shell-extensions.gcampax.github.com
-    caffeine@patapon.info
-    user-theme@gnome-shell-extensions.gcampax.github.com
-    places-menu@gnome-shell-extensions.gcampax.github.com
-    quick-settings-audio-panel@gnome-shell-extensions.gcampax.github.com
-    weatheroclock@malekim.github.io
-  )
-
-  for ext in "${EXTENSIONS[@]}"; do
-    if ! gnome-extensions list | grep -q "$ext"; then
-      LOG "Installing extension: $ext"
-      gnome-extensions-cli install "$ext"
-    else
-      LOG "Extension already installed: $ext"
-    fi
-  done
+echo "[*] GNOME extensions installed and enabled."
 }
 
 
@@ -81,11 +73,7 @@ apply_gnome_settings() {
 
 # --- Laptop Specific Setup ---
 setup_laptop() {
-  LOG "Checking if this is a laptop..."
-  if [[ $(hostnamectl chassis) == "laptop" ]]; then
-    LOG "Laptop detected."
-
-    # Enable RPM Fusion repos if missing
+  # Enable RPM Fusion repos if missing
     if ! rpm -qa | grep -q rpmfusion-free-release; then
       LOG "Enabling RPM Fusion repos..."
       sudo dnf install -y \
@@ -101,6 +89,10 @@ setup_laptop() {
     else
       LOG "No NVIDIA GPU detected. Skipping NVIDIA drivers."
     fi
+    
+  LOG "Checking if this is a laptop..."
+  if [[ $(hostnamectl chassis) == "laptop" ]]; then
+    LOG "Laptop detected."
 
     LOG "Installing TLP for power management..."
     sudo dnf install -y tlp tlp-rdw
