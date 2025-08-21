@@ -40,5 +40,15 @@
        	];
       };
     };
+
+    homeConfigurations = {
+      "aatricks@fedora" = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = { inherit self inputs pkgs-unstable; };
+        modules = [ 
+          ./hosts/fedora/aatricks.nix
+        ];
+      };
+    };
   };
 }
