@@ -72,7 +72,7 @@
             show-battery-percentage = true;
             toolbar-style = "text";
             gtk-theme = "Adwaita";
-            text-scaling-factor = 0.85;
+            text-scaling-factor = 0.95;
         };
       "org/gnome/desktop/app-folders" ={
         folder-children = ["System" "Utilities" "YaST" "Pardus" "SysApps"];
@@ -89,7 +89,9 @@
         "org/desktop/vm/preferences" = {
             button-layout = "appmenu:minimize,maximize,close";
         };
-      "org/gnome/shell/extensions/weather-oclock/weather-after-clock" = true;
+      "org/gnome/shell/extensions/weather-oclock" = {
+        weather-after-clock = true;
+      };
       "org/gnome/shell/extensions/dash-to-dock" = {
        	show-icons-emblems = false;
       	  show-show-apps-button = false;
