@@ -72,7 +72,7 @@
             show-battery-percentage = true;
             toolbar-style = "text";
             gtk-theme = "Adwaita";
-            text-scaling-factor = 0.95;
+            text-scaling-factor = 0.85;
         };
       "org/gnome/desktop/app-folders" ={
         folder-children = ["System" "Utilities" "YaST" "Pardus" "SysApps"];
