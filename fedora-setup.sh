@@ -241,6 +241,14 @@ EOF
   if [[ $(hostnamectl chassis) == "laptop" ]]; then
     LOG "Laptop detected."
 
+    read -rp "Install envy-control for nvidia optimus (y/N): " REPLY
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      LOG "Installing envy-control..."
+      sudo dnf copr enable sunwire/envycontrol
+      sudo dnf install -y python3-envycontrol
+      sudo envycontrol -s integrated
+    fi
+
     LOG "Installing TLP for power management..."
     sudo dnf remove -y tuned
     sudo dnf install -y tlp tlp-rdw
