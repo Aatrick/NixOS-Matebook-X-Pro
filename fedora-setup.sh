@@ -21,7 +21,12 @@ install_packages() {
     fastfetch \
     htop \
     gnome-tweaks \
-    papirus-icon-theme
+    papirus-icon-theme \
+  fish \
+  podman \
+  podman-compose \
+  slirp4netns \
+  fuse-overlayfs
     
   flatpak install flathub dev.vencord.Vesktop \
     com.brave.Browser \
@@ -30,6 +35,10 @@ install_packages() {
     com.valvesoftware.Steam.CompatibilityTool.Proton-GE \
     ca.desrt.dconf-editor  \
     page.tesk.Refine \
+    io.github.Foldex.AdwSteamGtk \
+    org.zealdocs.Zeal \
+    com.spotify.Client \
+    com.raggesilver.BlackBox \
     org.gnome.Extensions -y
   
   sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -46,7 +55,7 @@ install_extensions() {
 
 # Install popular extensions from Fedora repos
 sudo dnf install -y \
-    gnome-shell-extension-appindicator \
+  gnome-shell-extension-appindicator
 # dash-to-dock
 # caffeine
 # blur-my-shell
@@ -72,6 +81,47 @@ apply_gnome_settings() {
   fi
 }
 
+  # --- Fish Shell Setup ---
+  set_fish_default_shell() {
+    LOG "Ensuring Fish shell is installed and set as default..."
+
+    # Ensure fish is installed (redundant if already installed above, but safe)
+    if ! command -v fish >/dev/null 2>&1; then
+      LOG "Fish not found; installing..."
+      if ! sudo dnf install -y fish; then
+        ERR "Failed to install Fish shell. Skipping default shell change."
+        return
+      fi
+    fi
+
+    # Determine fish path
+    local FISH_PATH
+    FISH_PATH="$(command -v fish || true)"
+    if [[ -z "$FISH_PATH" ]]; then
+      ERR "Fish binary not found after install. Skipping default shell change."
+      return
+    fi
+
+    # Ensure fish is listed in /etc/shells
+    if ! grep -q "^${FISH_PATH}$" /etc/shells; then
+      LOG "Adding ${FISH_PATH} to /etc/shells..."
+      echo "${FISH_PATH}" | sudo tee -a /etc/shells >/dev/null
+    fi
+
+    # Change the default shell if not already fish
+    if [[ "$SHELL" == "$FISH_PATH" ]]; then
+      LOG "Fish is already the default shell."
+    else
+      LOG "Setting default shell to Fish for user $USER..."
+      if chsh -s "$FISH_PATH" "$USER"; then
+        LOG "Default shell changed to Fish. Log out and back in to take effect."
+      else
+        WARN "Could not change default shell automatically. You can run: chsh -s $FISH_PATH"
+      fi
+    fi
+  }
+
+
 
 # --- Laptop Specific Setup ---
 setup_laptop() {
@@ -87,6 +137,40 @@ setup_laptop() {
     if lspci | grep -qi nvidia; then
       LOG "NVIDIA GPU detected. Installing drivers..."
       sudo dnf install -y akmod-nvidia xorg-x11-drv-nvidia-cuda
+
+      LOG "Installing NVIDIA Container Toolkit for Podman (CUDA support)..."
+      sudo dnf install -y nvidia-container-toolkit
+
+      # Ensure Podman's OCI hooks include NVIDIA hook directory (system-wide)
+  if [[ -d /usr/share/containers/oci/hooks.d ]]; then
+        LOG "OCI hooks directory exists at /usr/share/containers/oci/hooks.d"
+      fi
+      sudo mkdir -p /etc/containers
+      if ! grep -q "/usr/share/containers/oci/hooks.d" /etc/containers/containers.conf 2>/dev/null; then
+        LOG "Configuring containers.conf to include OCI hooks dir (NVIDIA)"
+        sudo tee -a /etc/containers/containers.conf >/dev/null <<'EOF'
+
+# Added by fedora-setup.sh for NVIDIA CUDA containers via Podman
+[engine]
+hooks_dir=["/etc/containers/oci/hooks.d","/usr/share/containers/oci/hooks.d"]
+EOF
+      else
+        LOG "containers.conf already includes OCI hooks directory."
+      fi
+
+      # Rootless config for the current user (optional but helpful)
+      mkdir -p "$HOME/.config/containers"
+      if ! grep -q "hooks_dir" "$HOME/.config/containers/containers.conf" 2>/dev/null; then
+        LOG "Adding OCI hooks dir to user containers.conf"
+        tee -a "$HOME/.config/containers/containers.conf" >/dev/null <<'EOF'
+[engine]
+hooks_dir=["/etc/containers/oci/hooks.d","/usr/share/containers/oci/hooks.d"]
+EOF
+      fi
+
+      LOG "Podman + CUDA support prerequisites installed."
+      WARN "To test GPU in Podman after reboot:"
+      WARN "  podman run --rm --env NVIDIA_VISIBLE_DEVICES=all --security-opt=label=disable docker.io/nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
       WARN "A reboot is required for NVIDIA driver to load."
     else
       LOG "No NVIDIA GPU detected. Skipping NVIDIA drivers."
@@ -163,6 +247,7 @@ EOT
 install_packages
 install_extensions
 apply_gnome_settings
+set_fish_default_shell
 setup_laptop
 
 LOG "Setup complete!"
