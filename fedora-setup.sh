@@ -10,6 +10,18 @@ LOG() { echo -e "\033[1;34m[*]\033[0m $*"; }
 WARN() { echo -e "\033[1;33m[!]\033[0m $*"; }
 ERR() { echo -e "\033[1;31m[✗]\033[0m $*"; }
 
+# --- Prepare Environment ---
+prepare_environment() {
+  LOG "Preparing environment..."
+
+  # Create necessary directories
+  rm -rf "$HOME/Templates"
+  rm -rf "$HOME/Music"
+  rm -rf "$HOME/Public"
+  rm -rf "$HOME/Videos"
+  rm -rf "$HOME/Desktop"
+}
+
 # --- Package Installation ---
 install_packages() {
   LOG "Installing baseline packages..."
@@ -79,34 +91,7 @@ apply_gnome_settings() {
 
   if [[ -f ./gnome-settings.dconf ]]; then
     LOG "Restoring GNOME settings from gnome-settings.dconf"
-  if [[ $EUID -eq 0 ]]; then
-      # Running under sudo/root: try to apply settings to the invoking user's session
-      if [[ -n "${SUDO_USER:-}" && "${SUDO_USER}" != "root" ]]; then
-        local TUSER TU_ID RUNDIR
-        TUSER="${SUDO_USER}"
-        TU_ID=$(id -u "$TUSER")
-        RUNDIR="/run/user/${TU_ID}"
-
-        if [[ -S "${RUNDIR}/bus" ]]; then
-          LOG "Applying GNOME settings for user ${TUSER} via DBus session at ${RUNDIR}/bus"
-          # Filter to only /org/gnome/ keys to avoid non-writable system keys
-          if ! awk 'BEGIN{in=0} /^\[/ {in = ($0 ~ /^\[org\/gnome\//)} {if (in || !/^\[/) print}' ./gnome-settings.dconf \
-            | sudo -u "$TUSER" env XDG_RUNTIME_DIR="$RUNDIR" DBUS_SESSION_BUS_ADDRESS="unix:path=${RUNDIR}/bus" dconf load /; then
-            WARN "Failed to load GNOME settings for ${TUSER}. Re-run the script without sudo to apply settings."
-          fi
-        else
-          WARN "User DBus session not found at ${RUNDIR}/bus. Skipping GNOME settings restore."
-          WARN "Tip: Run this script as the regular user (without sudo) to apply GNOME settings."
-        fi
-      else
-        WARN "No SUDO_USER detected while running as root. Skipping GNOME settings restore."
-      fi
-    else
-      # Filter to only /org/gnome/ keys when applying as a regular user
-      if ! awk 'BEGIN{in=0} /^\[/ {in = ($0 ~ /^\[org\/gnome\//)} {if (in || !/^\[/) print}' ./gnome-settings.dconf | dconf load /; then
-        WARN "Failed to load GNOME settings. Ensure you're running inside your user session."
-      fi
-    fi
+    dconf load / < ./gnome-settings.dconf
   else
     WARN "No gnome-settings.dconf found. Skipping GNOME config restore."
     WARN "Run: dconf dump / > gnome-settings.dconf to export your baseline later."
@@ -171,6 +156,8 @@ apply_gnome_settings() {
 
 # --- Laptop Specific Setup ---
 setup_laptop() {
+  read -rp "Install Nvidia and cuda for podman (y/N): " REPLY
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
   # Enable RPM Fusion repos if missing
     if ! rpm -qa | grep -q rpmfusion-free-release; then
       LOG "Enabling RPM Fusion repos..."
@@ -248,14 +235,20 @@ EOF
     else
       LOG "No NVIDIA GPU detected. Skipping NVIDIA drivers."
     fi
+  fi
     
   LOG "Checking if this is a laptop..."
   if [[ $(hostnamectl chassis) == "laptop" ]]; then
     LOG "Laptop detected."
 
     LOG "Installing TLP for power management..."
+    sudo dnf remove -y tuned
     sudo dnf install -y tlp tlp-rdw
     sudo systemctl enable tlp
+    systemctl mask systemd-rfkill.socket
+    systemctl mask systemd-rfkill.service
+    
+
 
     # Write TLP config
     sudo tee /etc/tlp.conf > /dev/null <<'EOF'
@@ -299,7 +292,7 @@ After=multi-user.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/undervolt --core -95 --uncore -95 --gpu -75 --analogio -20 --temp-bat 50 --temp-ac 70
+ExecStart=/usr/local/bin/undervolt --core -95 --cache -95 --uncore -95 --gpu -75 --analogio -20 --temp-bat 60 --temp-ac 70
 RemainAfterExit=true
 
 [Install]
@@ -317,6 +310,7 @@ EOT
 # -------------------------------
 # Main
 # -------------------------------
+prepare_environment
 install_packages
 install_extensions
 apply_gnome_settings

@@ -30,13 +30,16 @@ window-width=uint32 650
 [org/desktop/vm/preferences]
 button-layout='appmenu:minimize,maximize,close'
 
+[org/fedorahosted/background-logo-extension]
+logo-position='bottom-right'
+
 [org/gnome/GWeather4]
 temperature-unit='centigrade'
 
 [org/gnome/Ptyxis]
-default-profile-uuid='c13115757dd164174bca8f3368a7542e'
-profile-uuids=['c13115757dd164174bca8f3368a7542e']
-window-size=(uint32 80, uint32 24)
+default-profile-uuid='d56dc9c4a26b1e189fe0e6e868a8656a'
+profile-uuids=['d56dc9c4a26b1e189fe0e6e868a8656a']
+window-size=(uint32 90, uint32 26)
 
 [org/gnome/SessionManager]
 logout-prompt=false
@@ -51,33 +54,16 @@ use-system-font=true
 
 [org/gnome/Weather]
 locations=[<(uint32 2, <('Tours', 'LFOT', false, [(0.82815873007130947, 0.012508198790390201)], @a(dd) [])>)>]
-window-height=480
+window-height=486
 window-maximized=false
 window-width=587
 
 [org/gnome/control-center]
-last-panel='wellbeing'
+last-panel='mouse'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/app-folders]
-folder-children=['System', 'Utilities', 'YaST', 'Pardus', 'SysApps', '6320bb11-5b06-4783-afac-12133f61d5e3']
-
-[org/gnome/desktop/app-folders/folders/38b034af-b2dc-462a-9ac9-c8df65ac2028]
-apps=['org.gnome.FileRoller.desktop', 'org.gnome.Weather.desktop', 'htop.desktop', 'yelp.desktop', 'org.gnome.Settings.desktop', 'vlc.desktop', 'io.github.Foldex.AdwSteamGtk.desktop', 'cmake-gui.desktop', 'org.gnome.Ptyxis.desktop', 'fish.desktop']
-name='Accessories'
-
-[org/gnome/desktop/app-folders/folders/452e45a3-b049-4708-83c3-5488c7887b25]
-apps=['wine-notepad.desktop', 'wine-wineboot.desktop', 'wine-regedit.desktop', 'wine-winecfg.desktop', 'wine-winefile.desktop', 'wine-winhelp.desktop', 'wine-oleview.desktop', 'wine-uninstaller.desktop', 'wine-winemine.desktop', 'wine-wordpad.desktop', 'org.dosbox-staging.dosbox-staging.desktop']
-name='Unnamed Folder'
-
-[org/gnome/desktop/app-folders/folders/6320bb11-5b06-4783-afac-12133f61d5e3]
-apps=['wine-wineboot.desktop', 'wine-winemine.desktop', 'wine-uninstaller.desktop', 'wine-oleview.desktop', 'wine-winecfg.desktop', 'wine-wordpad.desktop', 'wine-winhelp.desktop', 'wine-winefile.desktop', 'wine-regedit.desktop', 'wine-notepad.desktop', 'org.dosbox-staging.dosbox-staging.desktop']
-name='Wine'
-translate=false
-
-[org/gnome/desktop/app-folders/folders/6677dee9-fdc2-4481-b2b4-99f2d011f4d0]
-apps=['org.gnome.tweaks.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'org.gnome.Calculator.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.Extensions.desktop']
-name='Accessories'
+folder-children=['System', 'Utilities', 'YaST', 'Pardus', 'SysApps']
 
 [org/gnome/desktop/app-folders/folders/7a6f3e22-a6b9-4399-ae1c-6a1adf1da5d8]
 apps=['org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop', 'org.gnome.FileRoller.desktop', 'cmake-gui.desktop', 'htop.desktop', 'fish.desktop', 'nixos-manual.desktop', 'vlc.desktop', 'io.github.Foldex.AdwSteamGtk.desktop']
@@ -90,7 +76,7 @@ name='X-Pardus-Apps.directory'
 translate=true
 
 [org/gnome/desktop/app-folders/folders/SysApps]
-apps=['org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop', 'org.gnome.FileRoller.desktop', 'cmake-gui.desktop', 'htop.desktop', 'fish.desktop', 'nixos-manual.desktop', 'vlc.desktop', 'io.github.Foldex.AdwSteamGtk.desktop', 'org.gnome.Weather.desktop', 'yelp.desktop']
+apps=['org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop', 'org.gnome.FileRoller.desktop', 'cmake-gui.desktop', 'htop.desktop', 'fish.desktop', 'nixos-manual.desktop', 'vlc.desktop', 'io.github.Foldex.AdwSteamGtk.desktop', 'org.gnome.Weather.desktop', 'org.gnome.Totem.desktop', 'yelp.desktop', 'org.gnome.Ptyxis.desktop', 'nvidia-settings.desktop']
 
 [org/gnome/desktop/app-folders/folders/System]
 apps=['org.gnome.baobab.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Logs.desktop', 'org.gnome.SystemMonitor.desktop']
@@ -98,7 +84,7 @@ name='X-GNOME-Shell-System.directory'
 translate=true
 
 [org/gnome/desktop/app-folders/folders/Utilities]
-apps=['org.gnome.Connections.desktop', 'org.gnome.Evince.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Loupe.desktop', 'org.gnome.seahorse.Application.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.tweaks.desktop', 'org.gnome.Calculator.desktop']
+apps=['org.gnome.Connections.desktop', 'org.gnome.Evince.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Loupe.desktop', 'org.gnome.seahorse.Application.desktop', 'com.mattjakeman.ExtensionManager.desktop', 'ca.desrt.dconf-editor.desktop', 'org.gnome.tweaks.desktop', 'org.gnome.Calculator.desktop', 'page.tesk.Refine.desktop']
 name='X-GNOME-Shell-Utilities.directory'
 translate=true
 
@@ -107,25 +93,13 @@ categories=['X-SuSE-YaST']
 name='suse-yast.directory'
 translate=true
 
-[org/gnome/desktop/app-folders/folders/a636477e-45a7-47b0-8a82-8191afbfea30]
-apps=['wine-winecfg.desktop', 'wine-wineboot.desktop', 'wine-winefile.desktop', 'wine-winhelp.desktop', 'wine-oleview.desktop', 'wine-uninstaller.desktop', 'wine-wordpad.desktop', 'wine-winemine.desktop', 'org.dosbox-staging.dosbox-staging.desktop', 'wine-regedit.desktop', 'wine-notepad.desktop']
-name='Unnamed Folder'
-
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/aatricks/.local/share/backgrounds/2025-08-20-01-56-05-daniel-leone-g30P1zcOzXo-unsplash.jpg'
-picture-uri-dark='file:///home/aatricks/.local/share/backgrounds/2025-08-20-01-56-05-daniel-leone-g30P1zcOzXo-unsplash.jpg'
-primary-color='#000000000000'
-secondary-color='#000000000000'
-
-[org/gnome/desktop/break-reminders/eyesight]
-play-sound=true
-
-[org/gnome/desktop/break-reminders/movement]
-duration-seconds=uint32 300
-interval-seconds=uint32 1800
-play-sound=true
+picture-uri='file:///home/aatricks/.config/background'
+picture-uri-dark='file:///home/aatricks/.config/background'
+primary-color='#241f31'
+secondary-color='#000000'
 
 [org/gnome/desktop/input-sources]
 current=uint32 0
@@ -133,17 +107,16 @@ sources=[('xkb', 'us')]
 xkb-options=@as []
 
 [org/gnome/desktop/interface]
-accent-color='teal'
+accent-color='pink'
 color-scheme='prefer-dark'
 gtk-theme='Adwaita'
 icon-theme='Papirus'
 show-battery-percentage=true
 text-scaling-factor=0.94999999999999996
 toolbar-style='text'
-toolkit-accessibility=false
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-power-panel', 'org-gnome-nautilus', 'vesktop', 'ca-desrt-dconf-editor', 'com-raggesilver-blackbox', 'org-gnome-software']
+application-children=['gnome-power-panel', 'org-gnome-nautilus', 'vesktop', 'ca-desrt-dconf-editor', 'com-raggesilver-blackbox', 'dev-vencord-vesktop', 'org-gnome-software']
 
 [org/gnome/desktop/notifications/application/ca-desrt-dconf-editor]
 application-id='ca.desrt.dconf-editor.desktop'
@@ -160,27 +133,15 @@ application-id='gnome-power-panel.desktop'
 [org/gnome/desktop/notifications/application/org-gnome-nautilus]
 application-id='org.gnome.Nautilus.desktop'
 
-[org/gnome/desktop/notifications/application/org-gnome-ptyxis]
-application-id='org.gnome.Ptyxis.desktop'
-
 [org/gnome/desktop/notifications/application/org-gnome-software]
 application-id='org.gnome.Software.desktop'
-
-[org/gnome/desktop/notifications/application/org-gnome-texteditor]
-application-id='org.gnome.TextEditor.desktop'
-
-[org/gnome/desktop/notifications/application/spotify]
-application-id='spotify.desktop'
-
-[org/gnome/desktop/notifications/application/steam]
-application-id='steam.desktop'
 
 [org/gnome/desktop/notifications/application/vesktop]
 application-id='vesktop.desktop'
 
 [org/gnome/desktop/peripherals/mouse]
 accel-profile='flat'
-speed=-0.18385650224215244
+speed=-0.24663677130044848
 
 [org/gnome/desktop/peripherals/touchpad]
 speed=0.17999999999999999
@@ -196,9 +157,9 @@ report-technical-problems=false
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/aatricks/.local/share/backgrounds/2025-08-20-01-56-05-daniel-leone-g30P1zcOzXo-unsplash.jpg'
-primary-color='#000000000000'
-secondary-color='#000000000000'
+picture-uri='file:///usr/share/backgrounds/gnome/blobs-l.svg'
+primary-color='#241f31'
+secondary-color='#000000'
 
 [org/gnome/desktop/search-providers]
 enabled=['org.gnome.Weather.desktop']
@@ -229,6 +190,7 @@ use-tree-view=true
 default-folder-viewer='list-view'
 migrated-gtk-settings=true
 search-filter-time-type='last_modified'
+show-delete-permanently=true
 
 [org/gnome/nautilus/window-state]
 initial-size=(890, 550)
@@ -238,27 +200,35 @@ initial-size-file-chooser=(890, 550)
 last-folder-path='/home/aatricks/Documents/fichierWin'
 
 [org/gnome/portal/filechooser/code-insiders]
-last-folder-path='/home/aatricks/config'
+last-folder-path='/home/aatricks/Documents'
 
 [org/gnome/portal/filechooser/code]
 last-folder-path='/home/aatricks/config'
+
+[org/gnome/portal/filechooser/com.brave.Browser]
+last-folder-path='/home/aatricks/Downloads'
 
 [org/gnome/portal/filechooser/org.gnome.Settings]
 last-folder-path='/home/aatricks/Downloads'
 
 [org/gnome/portal/filechooser/org.gnome.TextEditor]
-last-folder-path='/home/aatricks/config'
+last-folder-path='/home/aatricks/Downloads'
 
 [org/gnome/settings-daemon/plugins/color]
 night-light-enabled=true
 night-light-schedule-automatic=false
 
+[org/gnome/settings-daemon/plugins/power]
+ambient-enabled=false
+sleep-inactive-ac-timeout=3600
+sleep-inactive-battery-timeout=900
+
 [org/gnome/shell]
-app-picker-layout=[{'6320bb11-5b06-4783-afac-12133f61d5e3': <{'position': <0>}>, 'Utilities': <{'position': <1>}>, 'SysApps': <{'position': <2>}>, 'Counter-Strike 2.desktop': <{'position': <3>}>, 'org.gnome.Software.desktop': <{'position': <4>}>, 'nvidia-settings.desktop': <{'position': <5>}>, 'steam.desktop': <{'position': <6>}>, 'org.gnome.TextEditor.desktop': <{'position': <7>}>, 'org.gnome.Nautilus.desktop': <{'position': <8>}>}]
+app-picker-layout=[{'Utilities': <{'position': <0>}>, 'SysApps': <{'position': <1>}>, 'org.gnome.TextEditor.desktop': <{'position': <2>}>, 'org.gnome.Nautilus.desktop': <{'position': <3>}>, 'com.valvesoftware.Steam.desktop': <{'position': <4>}>, 'org.zealdocs.Zeal.desktop': <{'position': <5>}>, 'org.gnome.Software.desktop': <{'position': <6>}>, 'io.github.mhogomchungu.media-downloader.desktop': <{'position': <7>}>}]
 disable-user-extensions=false
-disabled-extensions=['background-logo@fedorahosted.org', 'window-list@gnome-shell-extensions.gcampax.github.com']
+disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com']
 enabled-extensions=['blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'appindicatorsupport@rgcjonas.gmail.com', 'light-style@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'quick-settings-audio-panel@rayzeq.github.io', 'weatheroclock@CleoMenezesJr.github.io']
-favorite-apps=['dev.vencord.Vesktop.desktop', 'steam.desktop', 'com.brave.Browser.desktop', 'org.gnome.Ptyxis.desktop', 'code-insiders.desktop']
+favorite-apps=['dev.vencord.Vesktop.desktop', 'com.spotify.Client.desktop', 'com.brave.Browser.desktop', 'com.raggesilver.BlackBox.desktop', 'code-insiders.desktop']
 welcome-dialog-last-shown-version='48.2'
 
 [org/gnome/shell/extensions/blur-my-shell]
@@ -300,7 +270,7 @@ brightness=0.59999999999999998
 sigma=30
 
 [org/gnome/shell/extensions/caffeine]
-indicator-position-max=3
+indicator-position-max=1
 user-enabled=true
 
 [org/gnome/shell/extensions/dash-to-dock]
@@ -322,7 +292,7 @@ transparency-mode='FIXED'
 layout=[['gnome@main', 'quick-settings-audio-panel@rayzeq.github.io/main']]
 
 [org/gnome/shell/extensions/quick-settings-audio-panel]
-profiles-renames={'Blue Snowball': {'off': ('Off', 'Off'), 'input:mono-fallback': ('Mono Input', 'Mono Input'), 'pro-audio': ('Pro Audio', 'Pro Audio')}, 'Family 17h/19h/1ah HD Audio Controller': {'off': ('Off', 'Off'), 'pro-audio': ('Pro Audio', 'Pro Audio'), 'input:analog-stereo': ('Analog Stereo Input', 'Analog Stereo Input'), 'output:analog-stereo': ('Analog Stereo Output', 'Analog Stereo Output'), 'output:analog-stereo+input:analog-stereo': ('Analog Stereo Duplex', 'Analog Stereo Duplex')}, 'HDA NVidia': {'off': ('Off', 'Off'), 'pro-audio': ('Pro Audio', 'Pro Audio'), 'output:hdmi-surround71-extra3': ('Digital Surround 7.1 (HDMI 4) Output', 'Digital Surround 7.1 (HDMI 4) Output'), 'output:hdmi-surround-extra3': ('Digital Surround 5.1 (HDMI 4) Output', 'Digital Surround 5.1 (HDMI 4) Output'), 'output:hdmi-surround71-extra2': ('Digital Surround 7.1 (HDMI 3) Output', 'Digital Surround 7.1 (HDMI 3) Output'), 'output:hdmi-surround-extra2': ('Digital Surround 5.1 (HDMI 3) Output', 'Digital Surround 5.1 (HDMI 3) Output'), 'output:hdmi-surround71-extra1': ('Digital Surround 7.1 (HDMI 2) Output', 'Digital Surround 7.1 (HDMI 2) Output'), 'output:hdmi-surround-extra1': ('Digital Surround 5.1 (HDMI 2) Output', 'Digital Surround 5.1 (HDMI 2) Output'), 'output:hdmi-stereo-extra3': ('Digital Stereo (HDMI 4) Output', 'Digital Stereo (HDMI 4) Output'), 'output:hdmi-stereo-extra2': ('Digital Stereo (HDMI 3) Output', 'Digital Stereo (HDMI 3) Output'), 'output:hdmi-stereo-extra1': ('Digital Stereo (HDMI 2) Output', 'Digital Stereo (HDMI 2) Output'), 'output:hdmi-stereo': ('Digital Stereo (HDMI) Output', 'Digital Stereo (HDMI) Output')}}
+profiles-renames={'Built-in Audio': {'off': ('Off', 'Off'), 'pro-audio': ('Pro Audio', 'Pro Audio'), 'input:analog-stereo': ('Analog Stereo Input', 'Analog Stereo Input'), 'output:hdmi-surround71-extra2': ('Digital Surround 7.1 (HDMI 3) Output', 'Digital Surround 7.1 (HDMI 3) Output'), 'output:hdmi-surround-extra2': ('Digital Surround 5.1 (HDMI 3) Output', 'Digital Surround 5.1 (HDMI 3) Output'), 'output:hdmi-surround71-extra1': ('Digital Surround 7.1 (HDMI 2) Output', 'Digital Surround 7.1 (HDMI 2) Output'), 'output:hdmi-surround-extra1': ('Digital Surround 5.1 (HDMI 2) Output', 'Digital Surround 5.1 (HDMI 2) Output'), 'output:hdmi-surround71-extra2+input:analog-stereo': ('Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround-extra2+input:analog-stereo': ('Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround71-extra1+input:analog-stereo': ('Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround-extra1+input:analog-stereo': ('Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround71': ('Digital Surround 7.1 (HDMI) Output', 'Digital Surround 7.1 (HDMI) Output'), 'output:hdmi-surround': ('Digital Surround 5.1 (HDMI) Output', 'Digital Surround 5.1 (HDMI) Output'), 'output:hdmi-surround71+input:analog-stereo': ('Digital Surround 7.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI) Output + Analog Stereo Input'), 'output:hdmi-surround+input:analog-stereo': ('Digital Surround 5.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI) Output + Analog Stereo Input'), 'output:analog-surround-40': ('Analog Surround 4.0 Output', 'Analog Surround 4.0 Output'), 'output:analog-surround-40+input:analog-stereo': ('Analog Surround 4.0 Output + Analog Stereo Input', 'Analog Surround 4.0 Output + Analog Stereo Input'), 'output:analog-surround-21': ('Analog Surround 2.1 Output', 'Analog Surround 2.1 Output'), 'output:analog-surround-21+input:analog-stereo': ('Analog Surround 2.1 Output + Analog Stereo Input', 'Analog Surround 2.1 Output + Analog Stereo Input'), 'output:hdmi-stereo-extra2': ('Digital Stereo (HDMI 3) Output', 'Digital Stereo (HDMI 3) Output'), 'output:hdmi-stereo-extra1': ('Digital Stereo (HDMI 2) Output', 'Digital Stereo (HDMI 2) Output'), 'output:hdmi-stereo-extra2+input:analog-stereo': ('Digital Stereo (HDMI 3) Output + Analog Stereo Input', 'Digital Stereo (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-stereo-extra1+input:analog-stereo': ('Digital Stereo (HDMI 2) Output + Analog Stereo Input', 'Digital Stereo (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-stereo': ('Digital Stereo (HDMI) Output', 'Digital Stereo (HDMI) Output'), 'output:hdmi-stereo+input:analog-stereo': ('Digital Stereo (HDMI) Output + Analog Stereo Input', 'Digital Stereo (HDMI) Output + Analog Stereo Input'), 'output:analog-stereo': ('Analog Stereo Output', 'Analog Stereo Output'), 'output:analog-stereo+input:analog-stereo': ('Analog Stereo Duplex', 'Analog Stereo Duplex')}}
 version=2
 
 [org/gnome/shell/extensions/weather-oclock]
@@ -333,11 +303,13 @@ automatic-location=true
 locations=[<(uint32 2, <('Tours', 'LFOT', false, [(0.82815873007130947, 0.012508198790390201)], @a(dd) [])>)>]
 
 [org/gnome/software]
-check-timestamp=int64 1755795999
+check-timestamp=int64 1755865093
 first-run=false
-install-timestamp=int64 1755796263
-packagekit-historical-updates-timestamp=uint64 1755796215
-update-notification-timestamp=int64 1755796361
+flatpak-purge-timestamp=int64 1755895707
+install-timestamp=int64 1755869406
+packagekit-historical-updates-timestamp=uint64 1755869406
+security-timestamp=int64 1755865102984009
+update-notification-timestamp=int64 1755869556
 
 [org/gnome/system/location]
 enabled=false
