@@ -312,6 +312,47 @@ EOT
   else
     LOG "Not a laptop. Skipping laptop setup."
   fi
+
+  # If this is a laptop with NVIDIA, set up hybrid graphics with EnvyControl
+  if [[ $(hostnamectl chassis) == "laptop" ]] && lspci | grep -qi nvidia; then
+    LOG "Configuring hybrid graphics for NVIDIA laptop (EnvyControl)..."
+
+    # Ensure switcheroo-control is installed and enabled (required for per-app GPU switching in GNOME)
+    sudo dnf install -y switcheroo-control || true
+    sudo systemctl enable --now switcheroo-control || true
+
+    # Install EnvyControl if missing (try DNF, fallback to pip3)
+    if ! command -v envycontrol >/dev/null 2>&1; then
+      LOG "Installing EnvyControl..."
+      if sudo dnf install -y envycontrol; then
+        LOG "EnvyControl installed via DNF."
+      else
+        LOG "EnvyControl not available in DNF; installing via pip3..."
+        sudo dnf install -y python3-pip || true
+        if sudo pip3 install --upgrade envycontrol; then
+          LOG "EnvyControl installed via pip3."
+        else
+          ERR "Failed to install EnvyControl. Skipping hybrid graphics setup."
+          return
+        fi
+      fi
+    fi
+
+    # Detect display manager (default to gdm on Fedora)
+    DM="gdm"
+    if systemctl is-enabled sddm >/dev/null 2>&1; then DM="sddm"; fi
+    if systemctl is-enabled lightdm >/dev/null 2>&1; then DM="lightdm"; fi
+
+    LOG "Setting EnvyControl to hybrid mode (DM=${DM})..."
+    if sudo envycontrol -s hybrid --dm "${DM}"; then
+      LOG "Hybrid graphics configured. A reboot is required for changes to take effect."
+      WARN "After reboot, you can verify offloading with:"
+      WARN "  env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia glxinfo -B | grep 'OpenGL renderer'"
+      WARN "GNOME per-app GPU selection appears when switcheroo-control is active."
+    else
+      WARN "EnvyControl failed to set hybrid mode. You can try manually: envycontrol -s hybrid --dm ${DM}"
+    fi
+  fi
 }
 
 # -------------------------------
