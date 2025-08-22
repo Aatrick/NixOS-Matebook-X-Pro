@@ -43,8 +43,13 @@ install_packages() {
   
   sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-  dnf check-update
-  sudo dnf install code-insiders
+  # dnf check-update returns 100 when updates are available, which would exit under set -e
+  if sudo dnf -q check-update; then
+    LOG "No package updates available."
+  else
+    LOG "Package updates are available; continuing without upgrading."
+  fi
+  sudo dnf install -y code-insiders
 
 }
 
@@ -74,7 +79,34 @@ apply_gnome_settings() {
 
   if [[ -f ./gnome-settings.dconf ]]; then
     LOG "Restoring GNOME settings from gnome-settings.dconf"
-    dconf load / < ./gnome-settings.dconf
+  if [[ $EUID -eq 0 ]]; then
+      # Running under sudo/root: try to apply settings to the invoking user's session
+      if [[ -n "${SUDO_USER:-}" && "${SUDO_USER}" != "root" ]]; then
+        local TUSER TU_ID RUNDIR
+        TUSER="${SUDO_USER}"
+        TU_ID=$(id -u "$TUSER")
+        RUNDIR="/run/user/${TU_ID}"
+
+        if [[ -S "${RUNDIR}/bus" ]]; then
+          LOG "Applying GNOME settings for user ${TUSER} via DBus session at ${RUNDIR}/bus"
+          # Filter to only /org/gnome/ keys to avoid non-writable system keys
+          if ! awk 'BEGIN{in=0} /^\[/ {in = ($0 ~ /^\[org\/gnome\//)} {if (in || !/^\[/) print}' ./gnome-settings.dconf \
+            | sudo -u "$TUSER" env XDG_RUNTIME_DIR="$RUNDIR" DBUS_SESSION_BUS_ADDRESS="unix:path=${RUNDIR}/bus" dconf load /; then
+            WARN "Failed to load GNOME settings for ${TUSER}. Re-run the script without sudo to apply settings."
+          fi
+        else
+          WARN "User DBus session not found at ${RUNDIR}/bus. Skipping GNOME settings restore."
+          WARN "Tip: Run this script as the regular user (without sudo) to apply GNOME settings."
+        fi
+      else
+        WARN "No SUDO_USER detected while running as root. Skipping GNOME settings restore."
+      fi
+    else
+      # Filter to only /org/gnome/ keys when applying as a regular user
+      if ! awk 'BEGIN{in=0} /^\[/ {in = ($0 ~ /^\[org\/gnome\//)} {if (in || !/^\[/) print}' ./gnome-settings.dconf | dconf load /; then
+        WARN "Failed to load GNOME settings. Ensure you're running inside your user session."
+      fi
+    fi
   else
     WARN "No gnome-settings.dconf found. Skipping GNOME config restore."
     WARN "Run: dconf dump / > gnome-settings.dconf to export your baseline later."
@@ -102,22 +134,36 @@ apply_gnome_settings() {
       return
     fi
 
+    # Determine which user to change shell for
+    local TARGET_USER TARGET_SHELL
+    if [[ $EUID -eq 0 && -n "${SUDO_USER:-}" && "${SUDO_USER}" != "root" ]]; then
+      TARGET_USER="${SUDO_USER}"
+    else
+      TARGET_USER="${USER}"
+    fi
+
+    if [[ "${TARGET_USER}" == "root" ]]; then
+      WARN "Refusing to change default shell for root. Skipping shell change."
+      return
+    fi
+
     # Ensure fish is listed in /etc/shells
     if ! grep -q "^${FISH_PATH}$" /etc/shells; then
       LOG "Adding ${FISH_PATH} to /etc/shells..."
       echo "${FISH_PATH}" | sudo tee -a /etc/shells >/dev/null
     fi
 
-    # Change the default shell if not already fish
-    if [[ "$SHELL" == "$FISH_PATH" ]]; then
-      LOG "Fish is already the default shell."
+    TARGET_SHELL="$(getent passwd "${TARGET_USER}" | awk -F: '{print $7}')"
+    if [[ "${TARGET_SHELL}" == "${FISH_PATH}" ]]; then
+      LOG "Fish is already the default shell for ${TARGET_USER}."
+      return
+    fi
+
+    LOG "Setting default shell to Fish for user ${TARGET_USER}..."
+    if chsh -s "${FISH_PATH}" "${TARGET_USER}"; then
+      LOG "Default shell changed to Fish for ${TARGET_USER}. Log out and back in to take effect."
     else
-      LOG "Setting default shell to Fish for user $USER..."
-      if chsh -s "$FISH_PATH" "$USER"; then
-        LOG "Default shell changed to Fish. Log out and back in to take effect."
-      else
-        WARN "Could not change default shell automatically. You can run: chsh -s $FISH_PATH"
-      fi
+      WARN "Could not change default shell automatically. You can run: chsh -s ${FISH_PATH} ${TARGET_USER}"
     fi
   }
 
@@ -140,6 +186,31 @@ setup_laptop() {
 
       LOG "Installing NVIDIA Container Toolkit for Podman (CUDA support)..."
       sudo dnf install -y nvidia-container-toolkit
+
+      # Generate CDI spec so Podman can resolve nvidia.com/gpu=* devices
+      if command -v nvidia-ctk >/dev/null 2>&1; then
+        LOG "Generating NVIDIA CDI specification (system-wide)..."
+        sudo mkdir -p /etc/cdi
+        if [[ ! -f /etc/cdi/nvidia.yaml ]]; then
+          if ! sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml; then
+            WARN "Failed to generate system CDI spec at /etc/cdi/nvidia.yaml"
+          fi
+        else
+          LOG "NVIDIA CDI spec already exists at /etc/cdi/nvidia.yaml"
+        fi
+
+        # Also generate a user-level CDI spec for rootless Podman (harmless if duplicate)
+        mkdir -p "$HOME/.config/cdi"
+        if [[ ! -f "$HOME/.config/cdi/nvidia.yaml" ]]; then
+          if ! nvidia-ctk cdi generate --output="$HOME/.config/cdi/nvidia.yaml"; then
+            WARN "Failed to generate user CDI spec at $HOME/.config/cdi/nvidia.yaml"
+          fi
+        else
+          LOG "User CDI spec already exists at $HOME/.config/cdi/nvidia.yaml"
+        fi
+      else
+        WARN "nvidia-ctk not found; cannot generate CDI spec. Ensure nvidia-container-toolkit installed."
+      fi
 
       # Ensure Podman's OCI hooks include NVIDIA hook directory (system-wide)
   if [[ -d /usr/share/containers/oci/hooks.d ]]; then
@@ -169,8 +240,10 @@ EOF
       fi
 
       LOG "Podman + CUDA support prerequisites installed."
-      WARN "To test GPU in Podman after reboot:"
-      WARN "  podman run --rm --env NVIDIA_VISIBLE_DEVICES=all --security-opt=label=disable docker.io/nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
+  WARN "To test GPU in Podman after reboot (CDI):"
+  WARN "  podman run --rm --device nvidia.com/gpu=all --security-opt=label=disable docker.io/nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
+  WARN "If CDI is unavailable, you can fallback to legacy hooks:"
+  WARN "  podman run --rm --env NVIDIA_VISIBLE_DEVICES=all --security-opt=label=disable docker.io/nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi"
       WARN "A reboot is required for NVIDIA driver to load."
     else
       LOG "No NVIDIA GPU detected. Skipping NVIDIA drivers."
