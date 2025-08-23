@@ -300,7 +300,7 @@ After=multi-user.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/undervolt --core -95 --cache -95 --uncore -95 --gpu -75 --analogio -20 --temp-bat 60 --temp-ac 70
+ExecStart=/usr/local/bin/undervolt --core -95 --cache -95 --uncore -95 --gpu -75 --analogio -20 --temp-bat 60 --temp-ac 95
 RemainAfterExit=true
 
 [Install]
