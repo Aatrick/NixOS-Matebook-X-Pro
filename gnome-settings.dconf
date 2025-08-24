@@ -54,12 +54,12 @@ use-system-font=true
 
 [org/gnome/Weather]
 locations=[<(uint32 2, <('Tours', 'LFOT', false, [(0.82815873007130947, 0.012508198790390201)], @a(dd) [])>)>]
-window-height=486
+window-height=572
 window-maximized=false
-window-width=587
+window-width=807
 
 [org/gnome/control-center]
-last-panel='mouse'
+last-panel='power'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/app-folders]
@@ -101,13 +101,25 @@ picture-uri-dark='file:///home/aatricks/.config/background'
 primary-color='#241f31'
 secondary-color='#000000'
 
+[org/gnome/desktop/break-reminders/eyesight]
+play-sound=true
+
+[org/gnome/desktop/break-reminders/movement]
+duration-seconds=uint32 300
+interval-seconds=uint32 1800
+play-sound=true
+
+[org/gnome/desktop/datetime]
+automatic-timezone=true
+
 [org/gnome/desktop/input-sources]
 current=uint32 0
 sources=[('xkb', 'us')]
 xkb-options=@as []
 
 [org/gnome/desktop/interface]
-accent-color='pink'
+accent-color='purple'
+clock-format='24h'
 color-scheme='prefer-dark'
 gtk-theme='Adwaita'
 icon-theme='Papirus'
@@ -116,13 +128,19 @@ text-scaling-factor=0.94999999999999996
 toolbar-style='text'
 
 [org/gnome/desktop/notifications]
-application-children=['gnome-power-panel', 'org-gnome-nautilus', 'vesktop', 'ca-desrt-dconf-editor', 'com-raggesilver-blackbox', 'dev-vencord-vesktop', 'org-gnome-software']
+application-children=['gnome-power-panel', 'org-gnome-nautilus', 'vesktop', 'ca-desrt-dconf-editor', 'com-raggesilver-blackbox', 'dev-vencord-vesktop', 'org-gnome-software', 'com-valvesoftware-steam', 'com-spotify-client', 'org-zealdocs-zeal']
 
 [org/gnome/desktop/notifications/application/ca-desrt-dconf-editor]
 application-id='ca.desrt.dconf-editor.desktop'
 
 [org/gnome/desktop/notifications/application/com-raggesilver-blackbox]
 application-id='com.raggesilver.BlackBox.desktop'
+
+[org/gnome/desktop/notifications/application/com-spotify-client]
+application-id='com.spotify.Client.desktop'
+
+[org/gnome/desktop/notifications/application/com-valvesoftware-steam]
+application-id='com.valvesoftware.Steam.desktop'
 
 [org/gnome/desktop/notifications/application/dev-vencord-vesktop]
 application-id='dev.vencord.Vesktop.desktop'
@@ -135,6 +153,9 @@ application-id='org.gnome.Nautilus.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-software]
 application-id='org.gnome.Software.desktop'
+
+[org/gnome/desktop/notifications/application/org-zealdocs-zeal]
+application-id='org.zealdocs.Zeal.desktop'
 
 [org/gnome/desktop/notifications/application/vesktop]
 application-id='vesktop.desktop'
@@ -200,12 +221,15 @@ initial-size-file-chooser=(890, 550)
 last-folder-path='/home/aatricks/Documents/fichierWin'
 
 [org/gnome/portal/filechooser/code-insiders]
-last-folder-path='/home/aatricks/Documents'
+last-folder-path='/home/aatricks/Downloads'
 
 [org/gnome/portal/filechooser/code]
 last-folder-path='/home/aatricks/config'
 
 [org/gnome/portal/filechooser/com.brave.Browser]
+last-folder-path='/home/aatricks/Downloads'
+
+[org/gnome/portal/filechooser/org.fedoraproject.MediaWriter]
 last-folder-path='/home/aatricks/Downloads'
 
 [org/gnome/portal/filechooser/org.gnome.Settings]
@@ -227,7 +251,7 @@ sleep-inactive-battery-timeout=900
 app-picker-layout=[{'Utilities': <{'position': <0>}>, 'SysApps': <{'position': <1>}>, 'org.gnome.TextEditor.desktop': <{'position': <2>}>, 'org.gnome.Nautilus.desktop': <{'position': <3>}>, 'com.valvesoftware.Steam.desktop': <{'position': <4>}>, 'org.zealdocs.Zeal.desktop': <{'position': <5>}>, 'org.gnome.Software.desktop': <{'position': <6>}>, 'io.github.mhogomchungu.media-downloader.desktop': <{'position': <7>}>}]
 disable-user-extensions=false
 disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com']
-enabled-extensions=['blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'appindicatorsupport@rgcjonas.gmail.com', 'light-style@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'quick-settings-audio-panel@rayzeq.github.io', 'weatheroclock@CleoMenezesJr.github.io']
+enabled-extensions=['blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'appindicatorsupport@rgcjonas.gmail.com', 'light-style@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'quick-settings-audio-panel@rayzeq.github.io', 'weatheroclock@CleoMenezesJr.github.io', 'GPU_profile_selector@lorenzo9904.gmail.com']
 favorite-apps=['dev.vencord.Vesktop.desktop', 'com.spotify.Client.desktop', 'com.brave.Browser.desktop', 'com.raggesilver.BlackBox.desktop', 'code-insiders.desktop']
 welcome-dialog-last-shown-version='48.2'
 
@@ -270,7 +294,7 @@ brightness=0.59999999999999998
 sigma=30
 
 [org/gnome/shell/extensions/caffeine]
-indicator-position-max=1
+indicator-position-max=2
 user-enabled=true
 
 [org/gnome/shell/extensions/dash-to-dock]
@@ -292,7 +316,7 @@ transparency-mode='FIXED'
 layout=[['gnome@main', 'quick-settings-audio-panel@rayzeq.github.io/main']]
 
 [org/gnome/shell/extensions/quick-settings-audio-panel]
-profiles-renames={'Built-in Audio': {'off': ('Off', 'Off'), 'pro-audio': ('Pro Audio', 'Pro Audio'), 'input:analog-stereo': ('Analog Stereo Input', 'Analog Stereo Input'), 'output:hdmi-surround71-extra2': ('Digital Surround 7.1 (HDMI 3) Output', 'Digital Surround 7.1 (HDMI 3) Output'), 'output:hdmi-surround-extra2': ('Digital Surround 5.1 (HDMI 3) Output', 'Digital Surround 5.1 (HDMI 3) Output'), 'output:hdmi-surround71-extra1': ('Digital Surround 7.1 (HDMI 2) Output', 'Digital Surround 7.1 (HDMI 2) Output'), 'output:hdmi-surround-extra1': ('Digital Surround 5.1 (HDMI 2) Output', 'Digital Surround 5.1 (HDMI 2) Output'), 'output:hdmi-surround71-extra2+input:analog-stereo': ('Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround-extra2+input:analog-stereo': ('Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround71-extra1+input:analog-stereo': ('Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround-extra1+input:analog-stereo': ('Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround71': ('Digital Surround 7.1 (HDMI) Output', 'Digital Surround 7.1 (HDMI) Output'), 'output:hdmi-surround': ('Digital Surround 5.1 (HDMI) Output', 'Digital Surround 5.1 (HDMI) Output'), 'output:hdmi-surround71+input:analog-stereo': ('Digital Surround 7.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI) Output + Analog Stereo Input'), 'output:hdmi-surround+input:analog-stereo': ('Digital Surround 5.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI) Output + Analog Stereo Input'), 'output:analog-surround-40': ('Analog Surround 4.0 Output', 'Analog Surround 4.0 Output'), 'output:analog-surround-40+input:analog-stereo': ('Analog Surround 4.0 Output + Analog Stereo Input', 'Analog Surround 4.0 Output + Analog Stereo Input'), 'output:analog-surround-21': ('Analog Surround 2.1 Output', 'Analog Surround 2.1 Output'), 'output:analog-surround-21+input:analog-stereo': ('Analog Surround 2.1 Output + Analog Stereo Input', 'Analog Surround 2.1 Output + Analog Stereo Input'), 'output:hdmi-stereo-extra2': ('Digital Stereo (HDMI 3) Output', 'Digital Stereo (HDMI 3) Output'), 'output:hdmi-stereo-extra1': ('Digital Stereo (HDMI 2) Output', 'Digital Stereo (HDMI 2) Output'), 'output:hdmi-stereo-extra2+input:analog-stereo': ('Digital Stereo (HDMI 3) Output + Analog Stereo Input', 'Digital Stereo (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-stereo-extra1+input:analog-stereo': ('Digital Stereo (HDMI 2) Output + Analog Stereo Input', 'Digital Stereo (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-stereo': ('Digital Stereo (HDMI) Output', 'Digital Stereo (HDMI) Output'), 'output:hdmi-stereo+input:analog-stereo': ('Digital Stereo (HDMI) Output + Analog Stereo Input', 'Digital Stereo (HDMI) Output + Analog Stereo Input'), 'output:analog-stereo': ('Analog Stereo Output', 'Analog Stereo Output'), 'output:analog-stereo+input:analog-stereo': ('Analog Stereo Duplex', 'Analog Stereo Duplex')}}
+profiles-renames={'Built-in Audio': {'off': ('Off', 'Off'), 'pro-audio': ('Pro Audio', 'Pro Audio'), 'input:analog-stereo': ('Analog Stereo Input', 'Analog Stereo Input'), 'output:hdmi-surround71-extra2': ('Digital Surround 7.1 (HDMI 3) Output', 'Digital Surround 7.1 (HDMI 3) Output'), 'output:hdmi-surround-extra2': ('Digital Surround 5.1 (HDMI 3) Output', 'Digital Surround 5.1 (HDMI 3) Output'), 'output:hdmi-surround71-extra1': ('Digital Surround 7.1 (HDMI 2) Output', 'Digital Surround 7.1 (HDMI 2) Output'), 'output:hdmi-surround-extra1': ('Digital Surround 5.1 (HDMI 2) Output', 'Digital Surround 5.1 (HDMI 2) Output'), 'output:hdmi-surround71-extra2+input:analog-stereo': ('Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround-extra2+input:analog-stereo': ('Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround71-extra1+input:analog-stereo': ('Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround-extra1+input:analog-stereo': ('Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround71': ('Digital Surround 7.1 (HDMI) Output', 'Digital Surround 7.1 (HDMI) Output'), 'output:hdmi-surround': ('Digital Surround 5.1 (HDMI) Output', 'Digital Surround 5.1 (HDMI) Output'), 'output:hdmi-surround71+input:analog-stereo': ('Digital Surround 7.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI) Output + Analog Stereo Input'), 'output:hdmi-surround+input:analog-stereo': ('Digital Surround 5.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI) Output + Analog Stereo Input'), 'output:analog-surround-40': ('Analog Surround 4.0 Output', 'Analog Surround 4.0 Output'), 'output:analog-surround-40+input:analog-stereo': ('Analog Surround 4.0 Output + Analog Stereo Input', 'Analog Surround 4.0 Output + Analog Stereo Input'), 'output:analog-surround-21': ('Analog Surround 2.1 Output', 'Analog Surround 2.1 Output'), 'output:analog-surround-21+input:analog-stereo': ('Analog Surround 2.1 Output + Analog Stereo Input', 'Analog Surround 2.1 Output + Analog Stereo Input'), 'output:hdmi-stereo-extra2': ('Digital Stereo (HDMI 3) Output', 'Digital Stereo (HDMI 3) Output'), 'output:hdmi-stereo-extra1': ('Digital Stereo (HDMI 2) Output', 'Digital Stereo (HDMI 2) Output'), 'output:hdmi-stereo-extra2+input:analog-stereo': ('Digital Stereo (HDMI 3) Output + Analog Stereo Input', 'Digital Stereo (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-stereo-extra1+input:analog-stereo': ('Digital Stereo (HDMI 2) Output + Analog Stereo Input', 'Digital Stereo (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-stereo': ('Digital Stereo (HDMI) Output', 'Digital Stereo (HDMI) Output'), 'output:hdmi-stereo+input:analog-stereo': ('Digital Stereo (HDMI) Output + Analog Stereo Input', 'Digital Stereo (HDMI) Output + Analog Stereo Input'), 'output:analog-stereo': ('Analog Stereo Output', 'Analog Stereo Output'), 'output:analog-stereo+input:analog-stereo': ('Analog Stereo Duplex', 'Analog Stereo Duplex')}, 'AirPods Pro': {'off': ('Off', 'Off'), 'headset-head-unit': ('Headset Head Unit (HSP/HFP, codec CVSD)', 'Headset Head Unit (HSP/HFP, codec CVSD)'), 'a2dp-sink-sbc_xq': ('High Fidelity Playback (A2DP Sink, codec SBC-XQ)', 'High Fidelity Playback (A2DP Sink, codec SBC-XQ)'), 'a2dp-sink-sbc': ('High Fidelity Playback (A2DP Sink, codec SBC)', 'High Fidelity Playback (A2DP Sink, codec SBC)'), 'a2dp-sink': ('High Fidelity Playback (A2DP Sink, codec AAC)', 'High Fidelity Playback (A2DP Sink, codec AAC)')}}
 version=2
 
 [org/gnome/shell/extensions/weather-oclock]
@@ -303,9 +327,9 @@ automatic-location=true
 locations=[<(uint32 2, <('Tours', 'LFOT', false, [(0.82815873007130947, 0.012508198790390201)], @a(dd) [])>)>]
 
 [org/gnome/software]
-check-timestamp=int64 1755865093
+check-timestamp=int64 1756023637
 first-run=false
-flatpak-purge-timestamp=int64 1755895707
+flatpak-purge-timestamp=int64 1756025802
 install-timestamp=int64 1755869406
 packagekit-historical-updates-timestamp=uint64 1755869406
 security-timestamp=int64 1755865102984009
@@ -320,3 +344,6 @@ show-extensions-notice=false
 [org/gtk/gtk4/settings/file-chooser]
 show-hidden=false
 sort-directories-first=true
+
+[org/gtk/settings/file-chooser]
+clock-format='24h'
