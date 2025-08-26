@@ -156,7 +156,7 @@ undervolt 3 'System Agent' -30
 undervolt 4 'Analog I/O' -30
 
 # Energy Versus Performance Preference Switch
-hwphint switch load:single:0.9 balance_power power
+#hwphint switch load:single:0.9 balance_power power
 
 # Daemon interval
 interval 5000
@@ -176,10 +176,11 @@ EOF
 install_video_drivers() {
     LOG "Installing video drivers (Intel + optional NVIDIA)..."
     # Always install Intel stack for iGPU systems
-    sudo pacman -S --noconfirm --needed xf86-video-intel libvdpau-va-gl intel-media-driver sof-firmware
+    sudo pacman -S --noconfirm --needed libvdpau-va-gl intel-media-driver sof-firmware
 
     if lspci | grep -qi nvidia; then
         LOG "NVIDIA GPU detected. Installing drivers..."
+        sudo pacman -S --noconfirm --needed linux-headers
         sudo pacman -S --noconfirm --needed nvidia-dkms nvidia-utils nvidia-settings
     else
         LOG "No NVIDIA GPU detected; skipping NVIDIA drivers."
@@ -221,7 +222,7 @@ setup_wallpaper() {
     mkdir -p "$HOME/Pictures/Wallpapers"
     local WP="$HOME/Pictures/Wallpapers/default-wallpaper.jpg"
     if [[ ! -f "$WP" ]]; then
-        curl -fsSL -o "$WP" https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/Monterey-dark.jpg || WARN "Failed to download wallpaper"
+        curl -fsSL -O "$WP" https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/Monterey-dark.jpg || WARN "Failed to download wallpaper"
     fi
 
     if command -v gsettings >/dev/null 2>&1 && gsettings list-schemas >/dev/null 2>&1; then
@@ -242,7 +243,25 @@ install_apps() {
         vlc \
         envycontrol \
         flatpak \
-        fish
+        fish \
+        gnome-extensions-cli
+}
+
+install_extensions() {
+    LOG "Installing GNOME extensions..."
+    if ! command -v gnome-extensions-cli >/dev/null 2>&1; then
+        WARN "gnome-extensions-cli not installed; skipping extensions."
+        return
+    else
+        gext install \
+            dash-to-dock@micxgx.gmail.com \
+            caffeine@patapon.info \
+            blur-my-shell@aunetx \
+            appindicatorsupport@rgcjonas.gmail.com \
+            weatheroclock@CleoMenezesJr.github.io \
+            quick-settings-audio-panel@rayzeq.github.io \
+            light-style@gnome-shell-extensions.gcampax.github.com 
+    fi
 }
 
 # --- Flatpak apps ---
