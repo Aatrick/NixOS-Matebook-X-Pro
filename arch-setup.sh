@@ -99,8 +99,8 @@ configure_tlp() {
 # TLP custom config
 CPU_DRIVER_OPMODE_ON_AC="passive"
 CPU_DRIVER_OPMODE_ON_BAT="passive"
-CPU_SCALING_GOVERNOR_ON_AC="ondemand"
-CPU_SCALING_GOVERNOR_ON_BAT="conservative"
+CPU_SCALING_GOVERNOR_ON_AC="schedutil"
+CPU_SCALING_GOVERNOR_ON_BAT="schedutil"
 CPU_ENERGY_PERF_POLICY_ON_AC="balance_performance"
 CPU_ENERGY_PERF_POLICY_ON_BAT="power"
 PLATFORM_PROFILE_ON_AC="performance"
@@ -108,9 +108,19 @@ PLATFORM_PROFILE_ON_BAT="low-power"
 WIFI_PWR_ON_AC="on"
 WIFI_PWR_ON_BAT="on"
 CPU_BOOST_ON_AC=1
-CPU_BOOST_ON_BAT=0
+CPU_BOOST_ON_BAT=1
 CPU_HWP_DYN_BOOST_ON_AC=1
-CPU_HWP_DYN_BOOST_ON_BAT=0
+CPU_HWP_DYN_BOOST_ON_BAT=1
+CPU_SCALING_MIN_FREQ_ON_AC=400000
+CPU_SCALING_MAX_FREQ_ON_AC=2700000
+CPU_SCALING_MIN_FREQ_ON_BAT=400000
+CPU_SCALING_MAX_FREQ_ON_BAT=2700000
+INTEL_GPU_MIN_FREQ_ON_AC=300
+INTEL_GPU_MIN_FREQ_ON_BAT=300
+INTEL_GPU_MAX_FREQ_ON_AC=1100
+INTEL_GPU_MAX_FREQ_ON_BAT=600
+INTEL_GPU_BOOST_FREQ_ON_AC=1300
+INTEL_GPU_BOOST_FREQ_ON_BAT=600
 PCIE_ASPM_ON_BAT="powersupersave"
 USB_AUTOSUSPEND=1
 RUNTIME_PM_ON_AC="auto"
@@ -154,6 +164,8 @@ undervolt 1 'GPU' -80
 undervolt 2 'CPU Cache' -95
 undervolt 3 'System Agent' -30
 undervolt 4 'Analog I/O' -30
+
+power package 18/5 15/60
 
 # Energy Versus Performance Preference Switch
 #hwphint switch load:single:0.9 balance_power power
@@ -244,7 +256,11 @@ install_apps() {
         envycontrol \
         flatpak \
         fish \
-        gnome-extensions-cli
+        gnome-extensions-cli \
+        arch-update
+    
+    arch-update --tray --enable
+    systemctl --user enable --now arch-update.timer
 }
 
 install_extensions() {
