@@ -258,7 +258,10 @@ install_apps() {
         fish \
         gnome-extensions-cli \
         arch-update \
-        papirus-icon-theme 
+        papirus-icon-theme \
+        otf-monaspace
+    
+    fc-cache -f
     
     arch-update --tray --enable
     systemctl --user enable --now arch-update.timer
