@@ -228,23 +228,6 @@ apply_gnome_settings() {
     fi
 }
 
-# --- Wallpaper ---
-setup_wallpaper() {
-    LOG "Setting up wallpaper..."
-    mkdir -p "$HOME/Pictures/Wallpapers"
-    local WP="$HOME/Pictures/Wallpapers/default-wallpaper.jpg"
-    if [[ ! -f "$WP" ]]; then
-        curl -fsSL -O "$WP" https://raw.githubusercontent.com/vinceliuice/WhiteSur-wallpapers/main/4k/Monterey-dark.jpg || WARN "Failed to download wallpaper"
-    fi
-
-    if command -v gsettings >/dev/null 2>&1 && gsettings list-schemas >/dev/null 2>&1; then
-        gsettings set org.gnome.desktop.background picture-uri "file://$WP" || WARN "Failed to set light wallpaper"
-        gsettings set org.gnome.desktop.background picture-uri-dark "file://$WP" || WARN "Failed to set dark wallpaper"
-    else
-        WARN "gsettings not available or no session bus; skipping wallpaper apply."
-    fi
-}
-
 # --- Applications (pacman/AUR) ---
 install_apps() {
     LOG "Installing applications (AUR included)..."
@@ -435,7 +418,6 @@ main() {
     install_apps
     install_flatpaks
     apply_gnome_settings
-    setup_wallpaper
     set_fish_default_shell
     setup_laptop
     enable_bluetooth
