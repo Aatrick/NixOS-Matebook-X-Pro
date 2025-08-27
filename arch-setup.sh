@@ -37,6 +37,15 @@ configure_pacman() {
         echo "ParallelDownloads = 5" | sudo tee -a /etc/pacman.conf >/dev/null
     fi
 
+    # Enable Multilib
+    if ! grep -q '^#\[multilib\]' /etc/pacman.conf; then
+        if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
+            echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf >/dev/null
+        fi
+    else
+        sudo sed -i '/^#\[multilib\]/,/^#Include = \/etc\/pacman.d\/mirrorlist/s/^#//' /etc/pacman.conf
+    fi
+
     # Add ILoveCandy once
     if ! grep -q '^ILoveCandy$' /etc/pacman.conf; then
         echo "ILoveCandy" | sudo tee -a /etc/pacman.conf >/dev/null
@@ -242,7 +251,11 @@ install_apps() {
         gnome-extensions-cli \
         arch-update \
         papirus-icon-theme \
-        otf-monaspace
+        otf-monaspace \
+        lib32-nvidia-utils \
+        proton-ge-custom-bin \
+        steam 
+
     
     fc-cache -f
     
@@ -282,8 +295,6 @@ install_flatpaks() {
     flatpak install -y flathub \
         dev.vencord.Vesktop \
         com.mattjakeman.ExtensionManager \
-        com.valvesoftware.Steam \
-        com.valvesoftware.Steam.CompatibilityTool.Proton-GE \
         ca.desrt.dconf-editor \
         page.tesk.Refine \
         io.github.Foldex.AdwSteamGtk \
