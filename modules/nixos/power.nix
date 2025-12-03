@@ -22,9 +22,22 @@ in {
 
     powerManagement.powertop.enable = true;
 
-    services.system76-scheduler.settings.cfsProfiles.enable = true; # Better scheduling for CPU cycles - thanks System76!!!
     services.thermald.enable = true; # Enable thermald, the temperature management daemon. (only necessary if on Intel CPUs)
     services.power-profiles-daemon.enable = false; # Disable GNOMEs power management
-    services.auto-cpufreq.enable = true;
+    services.auto-cpufreq = {
+      enable = true;
+      settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "auto";
+          energy_perf_bias = "12";
+        };
+        charger = {
+          governor = "performance";
+          turbo = "auto";
+          energy_perf_bias = "6";
+        };
+      };
+    };
   };
 }
