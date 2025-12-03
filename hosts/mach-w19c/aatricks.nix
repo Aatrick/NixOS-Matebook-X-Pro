@@ -30,15 +30,7 @@
   };
 
   home.packages = with pkgs; [
-    foliate
-
-    vesktop
-
-    spotify
-    media-downloader
-    vlc
-
-    brave
+    equibop
     #deskflow
   ];
 

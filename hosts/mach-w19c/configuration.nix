@@ -19,7 +19,7 @@
     ../../modules/nixos/update.nix
     ../../modules/nixos/power.nix
     ../../modules/nixos/flatpak.nix
-    ../../modules/nixos/games.nix
+    #../../modules/nixos/games.nix
     # ../../modules/nixos/vm.nix
     ../../modules/nixos/docker.nix
   ];
@@ -59,6 +59,7 @@
 
   home-manager = {
     extraSpecialArgs = { inherit self inputs pkgs pkgs-unstable; };
+    backupFileExtension = "backup";
     users = {
       "aatricks" = import ./aatricks.nix;
     };
@@ -69,17 +70,13 @@
 
     services.undervolt = {
         enable = true;
-        analogioOffset = -20;
-        coreOffset = -95;
-        uncoreOffset = -95;
-        gpuOffset = -75;
+        coreOffset = -110;
+        gpuOffset = -100;
         useTimer = true;
-        # p1.limit = 5;
-        # p1.window = 20;
-        # p2.limit = 20;
-        # p2.window = 0.01;
-        tempBat = 50;
-        tempAc = 70;
+        p1.limit = 5;
+        p1.window = 20;
+        p2.limit = 20;
+        p2.window = 0.01;
       };
 
     boot.extraModprobeConfig = ''

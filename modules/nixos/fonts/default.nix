@@ -27,5 +27,6 @@ in
     noto-fonts-color-emoji
     nerd-fonts._0xproto
     nerd-fonts.droid-sans-mono
+    nerd-fonts.monaspace
   ];
 }

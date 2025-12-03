@@ -2,7 +2,7 @@
 {
   home.packages = with pkgs; [
     #pkgs-unstable.zed-editor
-    zeal
+    #zeal
     git
     gh
     blackbox-terminal
@@ -22,13 +22,13 @@
     # Python
     python312
     uv
-    ruff
 
     nil
     nixd # Nix language server for zeditor
     alejandra
 
     nodejs
+    pkgs-unstable.github-copilot-cli
   ];
 
 }
