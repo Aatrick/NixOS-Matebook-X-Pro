@@ -9,19 +9,22 @@
     pkgs-unstable.vscode
 
     # C / C++
-    clang-tools
-    clang
-    cmakeWithGui
-    gnumake
+    gcc
+    # clang-tools
+    # clang
+    # cmakeWithGui
+    # gnumake
 
     # Rust
-    cargo
-    rustc
-    rust-analyzer
+    rustup
 
     # Python
     python312
     uv
+
+    # Java
+    jdk
+    maven
 
     nil
     nixd # Nix language server for zeditor
