@@ -1,4 +1,4 @@
-{ pkgs, pkgs-unstable, ... }: {
+{ pkgs, pkgs-unstable, osConfig, ... }: {
 
   imports = [
     ../../modules/home-manager/gnome.nix
@@ -15,7 +15,7 @@
   winter = {
     update = {
         flake_path = "/home/aatricks/config";
-        flake_config = "mach-w19c";
+        flake_config = "homelab";
     };
     auto-update.enable = true;
   };
@@ -32,9 +32,8 @@
   home.packages = with pkgs; [
     vesktop
     spotify
-    brave
     #deskflow
   ];
 
-  home.stateVersion = "25.05";
+  home.stateVersion = osConfig.system.nixos.release;
 }

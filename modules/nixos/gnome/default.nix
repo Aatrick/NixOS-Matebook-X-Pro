@@ -18,12 +18,7 @@
     config = lib.mkMerge [
         {
             services = {
-                xserver = {
-                enable = true;
                 displayManager.gdm.enable = true;
-                excludePackages = with pkgs; [
-                    xterm
-                ];
                 desktopManager.gnome = {
                     enable = true;
                     extraGSettingsOverrides = ''
@@ -31,6 +26,11 @@
                       experimental-features=['scale-monitor-framebuffer','xwayland-native-scaling','variable-refresh-rate']
                     '';
                 };
+                xserver = {
+                enable = true;
+                excludePackages = with pkgs; [
+                    xterm
+                ];
                 xkb = {
                     layout = lib.mkDefault "us";
                     variant = "";

@@ -1,4 +1,4 @@
-{ pkgs, pkgs-unstable, ... }: {
+{ pkgs, pkgs-unstable, osConfig, ... }: {
 
   imports = [
     ../../modules/home-manager/gnome.nix
@@ -34,5 +34,5 @@
     #deskflow
   ];
 
-  home.stateVersion = "25.05";
+  home.stateVersion = osConfig.system.nixos.release;
 }

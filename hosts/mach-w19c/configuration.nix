@@ -8,6 +8,7 @@
     inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
     inputs.nixos-hardware.nixosModules.huawei-machc-wa
     ./hardware-configuration.nix
+    ../../modules/options.nix
     ../../modules/nixos/fonts
     ../../modules/nixos/gnome
     ../../modules/nixos/boot.nix
