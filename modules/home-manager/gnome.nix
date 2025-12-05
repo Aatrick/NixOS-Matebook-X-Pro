@@ -23,6 +23,7 @@
     gnomeExtensions.places-status-indicator
     gnomeExtensions.quick-settings-audio-panel
     gnomeExtensions.weather-oclock
+    gnomeExtensions.apps
     # Icons
     pkgs-unstable.papirus-icon-theme
   ];
@@ -58,6 +59,7 @@
 	          places-status-indicator.extensionUuid
             quick-settings-audio-panel.extensionUuid
             weather-oclock.extensionUuid
+            apps.extensionUuid
         ];
       };
     };

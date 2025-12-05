@@ -30,7 +30,7 @@
   };
 
   home.packages = with pkgs; [
-    vesktop
+    equibop
     spotify
     #deskflow
   ];
