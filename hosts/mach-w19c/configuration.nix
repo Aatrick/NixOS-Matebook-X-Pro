@@ -40,7 +40,7 @@
 
   networking.hostName = "FMac";
   boot.tmp.useTmpfs = false;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages;
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" "defaults" ];
 
   winter = {

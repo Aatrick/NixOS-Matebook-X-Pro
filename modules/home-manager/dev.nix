@@ -1,12 +1,12 @@
 { pkgs, pkgs-unstable, ... }:
 {
   home.packages = with pkgs; [
-    #pkgs-unstable.zed-editor
+    pkgs-unstable.zed-editor
     #zeal
     git
     gh
     blackbox-terminal
-    pkgs-unstable.vscode
+    # pkgs-unstable.vscode
 
     # C / C++
     gcc
@@ -16,7 +16,9 @@
     # gnumake
 
     # Rust
-    rustup
+    cargo
+    rustc
+    rust-analyzer
 
     # Python
     python312
@@ -32,6 +34,7 @@
 
     nodejs
     pkgs-unstable.github-copilot-cli
+    pkgs-unstable.opencode
   ];
 
 }

@@ -3,8 +3,14 @@
 let
     cfg = config.winter.update;
     cfga = config.winter.auto-update;
+
+    nix-latest-update = import ../../pkgs/nix-latest-update.nix {
+        pkgs = pkgs;
+    };
+
     flake-update = import ../../pkgs/flake-update.nix {
         pkgs = pkgs;
+        nix-latest-update = nix-latest-update;
         flake_path = cfg.flake_path;
         flake_config = cfg.flake_config;
     };
@@ -16,10 +22,6 @@ let
     };
 
     nix-clean = import ../../pkgs/nix-clean.nix {
-        pkgs = pkgs;
-    };
-
-    nix-latest-update = import ../../pkgs/nix-latest-update.nix {
         pkgs = pkgs;
     };
 in
@@ -44,7 +46,6 @@ in
             description = "Enable auto update";
         };
     };
-
     config = lib.mkMerge [
         {
             home.packages = [
@@ -71,7 +72,7 @@ in
 
             systemd.user.timers.winter-auto-update = {
                 Install = {
-                    WantedBy = [ "timers.target" ];
+                  WantedBy = [ "timers.target" ];
                 };
                 Unit = {
                     Description = "Execute every day";

@@ -1,121 +1,199 @@
-{ pkgs, pkgs-unstable, lib, ... }:
+{
+  pkgs,
+  pkgs-unstable,
+  lib,
+  ...
+}:
 
 {
   programs.zed-editor = {
     enable = true;
+    installRemoteServer = true;
     package = pkgs-unstable.zed-editor;
-    extensions = ["html" "toml" "make" "neocmake"];
+    extensions = [
+      "html"
+      "toml"
+      "nix"
+      "pyrefly"
+      "dockerfile"
+      "sql"
+      "git-firefly"
+      "angular"
+      "java"
+      "material-icon-theme"
+      "flat-themes"
+      "vue"
+    ];
 
     userSettings = {
+      # Notification & Panels
+      notification_panel = {
+        button = false;
+      };
+      collaboration_panel = {
+        button = false;
+      };
+      project_panel = {
+        hide_hidden = true;
+        hide_root = true;
+        button = true;
+      };
+      debugger = {
+        button = false;
+      };
+      search = {
+        button = false;
+      };
+      diagnostics = {
+        button = false;
+      };
 
-    hour_format = "hour24";
-    auto_update = true;
-    telemetry.enable = false;
-    terminal = {
-      alternate_scroll = "off";
-      blinking = "off";
-      copy_on_select = false;
-      dock = "bottom";
-      detect_venv = {
-        on = {
-          directories = [".env" "env" ".venv" "venv"];
-          activate_script = "default";
+      # Git
+      git = {
+        inline_blame = {
+          enabled = false;
         };
       };
-      env = {
-        TERM = "alacritty";
+
+      # Layout & Appearance
+      bottom_dock_layout = "full";
+      tab_bar = {
+        show = false;
       };
-      font_features = null;
-      font_size = null;
-      line_height = "comfortable";
-      option_as_meta = false;
-      button = false;
-      shell = "system";
-      toolbar = {
-        title = false;
-        breadcrumbs = false;
+      title_bar = {
+        show_sign_in = true;
+        show_branch_icon = false;
       };
+      status_bar = {
+        active_language_button = false;
+        cursor_position_button = false;
+      };
+      theme = {
+        mode = "system";
+        light = "Flat Light";
+        dark = "Flat Gray";
+      };
+      icon_theme = "Material Icon Theme";
+
+      # Editor Settings
+      gutter = {
+        line_numbers = true;
+      };
+      soft_wrap = "editor_width";
       scrollbar = {
-        show = "never";
+        axes = {
+          horizontal = false;
+        };
+        show = "auto";
       };
-      working_directory = "current_project_directory";
-    };
-    languages = {
-    "Python" = {
-        language_servers = [ "ruff" "pyright" ];
-        format_on_save = "on";
-        formatter = [
+      autosave = {
+        after_delay = {
+          milliseconds = 1000;
+        };
+      };
+      buffer_line_height = "comfortable";
+      restore_on_startup = "last_session";
+      ui_font_size = 16;
+      buffer_font_size = 17.0;
+      buffer_font_family = "Monaspace Neon NF";
 
-        ];
-    };
-    "Nix" = {
-        language_servers = [ "nixd" ];
-        formatter = [
-          "alejandra"
-        ];
-        format_on_save = "on";
-    };
-    };
-    lsp = {
-      clangd = {
-        binary.arguments = [ "--compile-commands-dir=build" ];
+      # Terminal
+      terminal = {
+        button = false;
+        font_family = "Monaspace Neon NF";
       };
-      pyright = {
-        settings = {
-          python.analysis = {
-            diagnosticMode = "workspace";
-            typeCheckingMode = "strict";
+
+      # AI & Features
+      features = {
+        edit_prediction_provider = "copilot";
+      };
+      edit_predictions = {
+        mode = "subtle";
+      };
+      agent = {
+        dock = "left";
+        always_allow_tool_actions = true;
+        default_profile = "write";
+        default_model = {
+          provider = "copilot_chat";
+          model = "grok-code-fast-1";
+        };
+        model_parameters = [ ];
+      };
+
+      # Telemetry
+      telemetry = {
+        diagnostics = true;
+        metrics = false;
+      };
+
+      # Languages
+      languages = {
+        "Python" = {
+          language_servers = [
+            "pyrefly"
+            "!pyright"
+            "!pylsp"
+          ];
+          inlay_hints = {
+            show_background = false;
+            enabled = true;
           };
-          python = {
-            pythonPath = ".venv/bin/python";
+          soft_wrap = "editor_width";
+        };
+      };
+
+      # LSP Configuration
+      lsp = {
+        pyrefly = {
+          binary = {
+            path = ".venv/bin/pyrefly";
+            arguments = [ "lsp" ];
+          };
+          settings = {
+            python = {
+              pythonPath = ".venv/bin/python";
+            };
+            pyrefly = {
+              project_includes = [
+                "src/**/*.py"
+                "tests/**/*.py"
+              ];
+              project_excludes = [
+                "**/.[!/.]*"
+                "**/*venv/**"
+              ];
+              search_path = [ "src" ];
+              ignore_errors_in_generated_code = true;
+            };
+          };
+        };
+        basedpyright = {
+          settings = {
+            typeCheckingMode = "standard";
+            "basedpyright.analysis" = {
+              diagnosticMode = "workspace";
+              inlayHints = {
+                callArgumentNames = false;
+              };
+            };
+          };
+        };
+        jdtls = {
+          settings = {
+            lombok_support = true;
+          };
+        };
+        # Keeping standard NixOS LSP config from qhorgues just in case
+        nix = {
+          binary = {
+            path_lookup = true;
           };
         };
       };
-      rust-analyzer = {
-        binary = {
-          path = lib.getExe pkgs.rust-analyzer;
-          path_lookup = true;
-        };
-      };
-      nix = {
-        binary = {
-          path_lookup = true;
-        };
-      };
-    };
 
-
-    ## tell zed to use direnv and direnv can use a flake.nix enviroment.
-    load_direnv = "shell_hook";
-    base_keymap = "VSCode";
-    icon_theme = "Material Icon Theme";
-    theme = {
-    mode = "system";
-    light = "One Light";
-    dark = "Material Theme Darker";
-    };
-    show_whitespaces = "none" ;
-    ui_font_size = 16;
-    buffer_font_size = 16;
-    diagnostics.include_warnings = true;
-    collaboration_panel.button = true;
-    chat_panel.button = "when_in_call";
-    show_wrap_guides = false;
-    tab_bar.show = false;
-    show_edit_predictions = true;
-    edit_predictions.enabled = true;
-    edit_predictions.mode = "subtle";
-    soft_wrap = "bounded";
-    soft_wrap_column = 80;
-    notification_panel.button = false;
-    autosave = "on_focus_change";
-    open_files_in_new_window = false;
-
-    calls = {
-      mute_on_join = true;
-      share_on_join = true;
-    };
-
+      # NixOS specific integration (from qhorgues)
+      load_direnv = "shell_hook";
     };
   };
 }
