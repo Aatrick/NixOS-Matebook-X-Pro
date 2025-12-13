@@ -1,12 +1,12 @@
 { pkgs, pkgs-unstable, ... }:
 {
   home.packages = with pkgs; [
-    pkgs-unstable.zed-editor
+    # pkgs-unstable.zed-editor
     #zeal
     git
     gh
     blackbox-terminal
-    # pkgs-unstable.vscode
+    pkgs-unstable.vscode
 
     # C / C++
     gcc
@@ -29,7 +29,7 @@
     maven
 
     nil
-    nixd # Nix language server for zeditor
+    # nixd # Nix language server for zeditor
     alejandra
 
     nodejs

@@ -83,6 +83,8 @@
                 iagno # go game
                 tali # poker game
                 totem # video player
+                showtime
+                papers
                 yelp
                 gnome-calculator
                 gnome-calendar
