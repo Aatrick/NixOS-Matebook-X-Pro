@@ -1,11 +1,18 @@
-{ self, inputs, pkgs, pkgs-unstable, config, ... }:
+{
+  self,
+  inputs,
+  pkgs,
+  pkgs-unstable,
+  config,
+  ...
+}:
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
-    #inputs.nixos-hardware.nixosModules.common-gpu-nvidia
+    inputs.nixos-hardware.nixosModules.common-gpu-intel
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
-    inputs.nixos-hardware.nixosModules.common-pc-laptop-ssd
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.nixos-hardware.nixosModules.huawei-machc-wa
     ./hardware-configuration.nix
     ../../modules/options.nix
@@ -26,74 +33,73 @@
   ];
 
   hardware.nvidia = {
-      modesetting.enable = true;
-      # powerManagement.enable = false;
-      # powerManagement.finegrained = false;
-      open = false;
-      nvidiaSettings = true;
-      #package = config.boot.kernelPackages.nvidiaPackages.beta;
-      prime = {
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-      };
+    modesetting.enable = true;
+    # powerManagement.enable = false;
+    # powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    #package = config.boot.kernelPackages.nvidiaPackages.beta;
+    prime = {
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
     };
+  };
+
+  environment.variables = {
+    ZED_MAX_FPS = "60";
+  };
 
   networking.hostName = "FMac";
   boot.tmp.useTmpfs = false;
   boot.kernelPackages = pkgs.linuxPackages;
-  fileSystems."/".options = [ "noatime" "nodiratime" "discard" "defaults" ];
+  fileSystems."/".options = [
+    "noatime"
+    "nodiratime"
+    "discard"
+    "defaults"
+  ];
 
   winter = {
-        main-user = {
-            enable = true;
-            userName = "aatricks";
-            userFullName = "Emilio Melis";
-        };
-        gnome = {
-            scaling = 2;
-            text-scaling = 0.8;
-        };
-        # vm = {
-        #     users = [ "aatricks" ];
-        # };
+    main-user = {
+      enable = true;
+      userName = "aatricks";
+      userFullName = "Emilio Melis";
     };
+    gnome = {
+      scaling = 2;
+      text-scaling = 0.8;
+    };
+    # vm = {
+    #     users = [ "aatricks" ];
+    # };
+  };
 
   home-manager = {
-    extraSpecialArgs = { inherit self inputs pkgs pkgs-unstable; };
+    extraSpecialArgs = {
+      inherit
+        self
+        inputs
+        pkgs
+        pkgs-unstable
+        ;
+    };
     backupFileExtension = "backup";
     users = {
       "aatricks" = import ./aatricks.nix;
     };
   };
 
-    zramSwap.memoryPercent = 25;
-    hardware.sensor.iio.enable = true;
+  zramSwap.memoryPercent = 25;
+  hardware.sensor.iio.enable = true;
 
-    services.undervolt = {
-        enable = true;
-        coreOffset = -110;
-        gpuOffset = -100;
-        useTimer = true;
-        p1.limit = 7;
-        p1.window = 10;
-        p2.limit = 15;
-        p2.window = 0.01;
-      };
-
-    boot.extraModprobeConfig = ''
-    blacklist nouveau
-    options nouveau modeset=0
-  '';
-
-  services.udev.extraRules = ''
-    # Remove NVIDIA USB xHCI Host Controller devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA USB Type-C UCSI devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA Audio devices, if present
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
-    # Remove NVIDIA VGA/3D controller devices
-    ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
-  '';
-  boot.blacklistedKernelModules = [ "nouveau" "nvidia" "nvidia_drm" "nvidia_modeset" ];
+  services.undervolt = {
+    enable = true;
+    coreOffset = -110;
+    gpuOffset = -100;
+    useTimer = true;
+    p1.limit = 7;
+    p1.window = 10;
+    p2.limit = 15;
+    p2.window = 0.01;
+  };
 }

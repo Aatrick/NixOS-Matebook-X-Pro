@@ -56,6 +56,7 @@
       };
 
       # Layout & Appearance
+      cursor_blink = false;
       bottom_dock_layout = "full";
       tab_bar = {
         show = false;
