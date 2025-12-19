@@ -1,8 +1,16 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   system.stateVersion = config.system.nixos.release;
 
   time.timeZone = "Europe/Paris";
@@ -24,7 +32,14 @@
 
   console.keyMap = "us";
 
-  programs.nix-ld.enable = lib.mkDefault true;
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib # libstdc++
+      zlib # libz
+      glib # libglib
+    ];
+  };
 
   services.devmon.enable = true;
   services.gvfs.enable = true;

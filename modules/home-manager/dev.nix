@@ -11,7 +11,6 @@
     git
     gh
     blackbox-terminal
-    # pkgs-unstable.vscode
 
     # C / C++
     gcc
