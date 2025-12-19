@@ -1,4 +1,10 @@
-{ pkgs, pkgs-unstable, lib, ... }: {
+{
+  pkgs,
+  pkgs-unstable,
+  lib,
+  ...
+}:
+{
   home.pointerCursor = {
     gtk.enable = true;
     package = pkgs.vanilla-dmz;
@@ -24,6 +30,7 @@
     gnomeExtensions.quick-settings-audio-panel
     gnomeExtensions.weather-oclock
     gnomeExtensions.apps
+    gnomeExtensions.just-perfection
     # Icons
     pkgs-unstable.papirus-icon-theme
   ];
@@ -51,15 +58,16 @@
       "org/gnome/shell" = {
         disable-user-extensions = false;
         enabled-extensions = with pkgs.gnomeExtensions; [
-	          blur-my-shell.extensionUuid
-	          dash-to-dock.extensionUuid
-	          user-themes.extensionUuid
-	          caffeine.extensionUuid
-	          appindicator.extensionUuid
-	          places-status-indicator.extensionUuid
-            quick-settings-audio-panel.extensionUuid
-            weather-oclock.extensionUuid
-            apps.extensionUuid
+          blur-my-shell.extensionUuid
+          dash-to-dock.extensionUuid
+          user-themes.extensionUuid
+          caffeine.extensionUuid
+          appindicator.extensionUuid
+          places-status-indicator.extensionUuid
+          quick-settings-audio-panel.extensionUuid
+          weather-oclock.extensionUuid
+          apps.extensionUuid
+          just-perfection.extensionUuid
         ];
       };
     };

@@ -22,11 +22,6 @@ in
   };
 
   config = lib.mkIf cfg.battery.enable {
-    environment.systemPackages = with pkgs; [
-      powertop
-    ];
-
-    powerManagement.powertop.enable = true;
 
     services.thermald.enable = true; # Enable thermald, the temperature management daemon. (only necessary if on Intel CPUs)
     services.power-profiles-daemon.enable = false; # Disable GNOMEs power management
@@ -34,7 +29,7 @@ in
       enable = true; # Enable TLP (better than gnomes internal power manager)
       settings = {
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
         PLATFORM_PROFILE_ON_AC = "performance";
         PLATFORM_PROFILE_ON_BAT = "low-power";
         WIFI_PWR_ON_AC = "off";

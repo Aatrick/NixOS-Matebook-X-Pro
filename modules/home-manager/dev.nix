@@ -28,6 +28,7 @@
     # Python
     python312
     uv
+    pyrefly
 
     # Java
     jdk
@@ -38,7 +39,6 @@
     alejandra
 
     nodejs
-    pkgs-unstable.github-copilot-cli
-    pkgs-unstable.opencode
+    pkgs-unstable.gemini-cli-bin
   ];
 }

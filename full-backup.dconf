@@ -9,13 +9,14 @@ pretty=true
 remember-window-size=true
 scrollback-mode=uint32 1
 show-headerbar=false
-show-scrollbars=false
+show-scrollbars=true
 terminal-bell=false
 terminal-padding=(uint32 5, uint32 5, uint32 5, uint32 5)
 theme-bold-is-bright=false
 theme-dark='Dracula'
-window-height=uint32 499
-window-width=uint32 788
+was-maximized=false
+window-height=uint32 550
+window-width=uint32 876
 
 [org/desktop/vm/preferences]
 button-layout='appmenu:minimize,maximize,close'
@@ -23,8 +24,12 @@ button-layout='appmenu:minimize,maximize,close'
 [org/gnome/SessionManager]
 logout-prompt=false
 
+[org/gnome/Showtime/State]
+is-maximized=false
+
 [org/gnome/TextEditor]
 indent-style='space'
+last-save-directory='file:///home/aatricks/Downloads'
 restore-session=true
 show-right-margin=false
 style-scheme='Adwaita'
@@ -33,16 +38,16 @@ use-system-font=true
 
 [org/gnome/Weather]
 locations=[<(uint32 2, <('Tours', 'LFOT', false, [(0.82815873007130947, 0.012508198790390201)], @a(dd) [])>)>]
-window-height=486
+window-height=500
 window-maximized=false
 window-width=587
 
 [org/gnome/control-center]
-last-panel='background'
+last-panel='power'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/app-folders]
-folder-children=['System', 'Utilities', 'YaST', 'Pardus', 'd60db5a9-e5b3-43e6-9a3a-921bdb883ad3', 'd3251663-5759-4c20-8d3e-afbf8ae68e24']
+folder-children=['System', 'YaST', 'Pardus', 'd3251663-5759-4c20-8d3e-afbf8ae68e24']
 
 [org/gnome/desktop/app-folders/folders/Pardus]
 categories=['X-Pardus-Apps']
@@ -54,31 +59,22 @@ apps=['org.gnome.baobab.desktop', 'org.gnome.DiskUtility.desktop', 'org.gnome.Lo
 name='X-GNOME-Shell-System.directory'
 translate=true
 
-[org/gnome/desktop/app-folders/folders/Utilities]
-apps=['org.gnome.Decibels.desktop', 'org.gnome.Connections.desktop', 'org.gnome.Papers.desktop', 'org.gnome.font-viewer.desktop', 'org.gnome.Loupe.desktop']
-name='X-GNOME-Shell-Utilities.directory'
-translate=true
-
 [org/gnome/desktop/app-folders/folders/YaST]
 categories=['X-SuSE-YaST']
 name='suse-yast.directory'
 translate=true
 
 [org/gnome/desktop/app-folders/folders/d3251663-5759-4c20-8d3e-afbf8ae68e24]
-apps=['com.mattjakeman.ExtensionManager.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop', 'org.gnome.Calculator.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Weather.desktop', 'org.gnome.tweaks.desktop', 'auto-cpufreq-gtk.desktop']
+apps=['com.mattjakeman.ExtensionManager.desktop', 'org.gnome.Extensions.desktop', 'org.gnome.Settings.desktop', 'org.gnome.Calculator.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Weather.desktop', 'org.gnome.tweaks.desktop', 'auto-cpufreq-gtk.desktop', 'btop.desktop', 'nvidia-settings.desktop', 'nixos-manual.desktop']
 name='Accessories'
-
-[org/gnome/desktop/app-folders/folders/d60db5a9-e5b3-43e6-9a3a-921bdb883ad3]
-apps=['fish.desktop', 'nixos-manual.desktop', 'cmake-gui.desktop', 'org.gnome.FileRoller.desktop', 'btop.desktop', 'nvidia-settings.desktop']
-name='Unnamed Folder'
 
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/aatricks/.local/share/backgrounds/2025-12-03-20-42-16-a_snowy_mountain_tops_with_blue_sky.jpg'
-picture-uri-dark='file:///home/aatricks/.local/share/backgrounds/2025-12-03-20-42-16-a_snowy_mountain_tops_with_blue_sky.jpg'
-primary-color='#000000000000'
-secondary-color='#000000000000'
+picture-uri='file:///home/aatricks/.config/background'
+picture-uri-dark='file:///home/aatricks/.config/background'
+primary-color='#86b6ef'
+secondary-color='#000000'
 
 [org/gnome/desktop/break-reminders/eyesight]
 play-sound=true
@@ -93,7 +89,10 @@ sources=[('xkb', 'fr+us')]
 xkb-options=@as []
 
 [org/gnome/desktop/interface]
+accent-color='slate'
 color-scheme='prefer-dark'
+enable-animations=true
+enable-hot-corners=false
 gtk-theme='Adwaita'
 icon-theme='Papirus'
 show-battery-percentage=true
@@ -101,7 +100,7 @@ text-scaling-factor=0.94999999999999996
 toolbar-style='text'
 
 [org/gnome/desktop/notifications]
-application-children=['com-raggesilver-blackbox', 'app-zen-browser-zen', 'equibop']
+application-children=['com-raggesilver-blackbox', 'app-zen-browser-zen', 'equibop', 'gnome-about-panel', 'discord']
 show-banners=false
 
 [org/gnome/desktop/notifications/application/app-zen-browser-zen]
@@ -110,8 +109,14 @@ application-id='app.zen_browser.zen.desktop'
 [org/gnome/desktop/notifications/application/com-raggesilver-blackbox]
 application-id='com.raggesilver.BlackBox.desktop'
 
+[org/gnome/desktop/notifications/application/discord]
+application-id='discord.desktop'
+
 [org/gnome/desktop/notifications/application/equibop]
 application-id='equibop.desktop'
+
+[org/gnome/desktop/notifications/application/gnome-about-panel]
+application-id='gnome-about-panel.desktop'
 
 [org/gnome/desktop/peripherals/touchpad]
 speed=0.20000000000000001
@@ -126,9 +131,9 @@ remove-old-trash-files=true
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///home/aatricks/.local/share/backgrounds/2025-12-03-20-42-16-a_snowy_mountain_tops_with_blue_sky.jpg'
-primary-color='#000000000000'
-secondary-color='#000000000000'
+picture-uri='file:///run/current-system/sw/share/backgrounds/gnome/curvy-l.jxl'
+primary-color='#86b6ef'
+secondary-color='#000000'
 
 [org/gnome/desktop/search-providers]
 sort-order=['org.gnome.Settings.desktop', 'org.gnome.Contacts.desktop', 'org.gnome.Nautilus.desktop']
@@ -136,6 +141,10 @@ sort-order=['org.gnome.Settings.desktop', 'org.gnome.Contacts.desktop', 'org.gno
 [org/gnome/desktop/wm/preferences]
 button-layout='appmenu:minimize,maximize,close'
 focus-mode='sloppy'
+
+[org/gnome/epiphany/state]
+is-maximized=false
+window-size=(1024, 768)
 
 [org/gnome/evolution-data-server]
 migrated=true
@@ -168,18 +177,51 @@ search-filter-time-type='last_modified'
 initial-size=(890, 550)
 initial-size-file-chooser=(890, 550)
 
+[org/gnome/nm-applet/eap/3d0c123c-2c48-4405-9b06-149278bac6a0]
+ignore-ca-cert=true
+ignore-phase2-ca-cert=false
+
+[org/gnome/papers]
+night-mode=false
+
+[org/gnome/papers/default]
+annot-color='yellow'
+continuous=true
+dual-page=false
+dual-page-odd-left=false
+enable-spellchecking=true
+show-sidebar=true
+sizing-mode='automatic'
+
+[org/gnome/portal/filechooser/app.zen_browser.zen]
+last-folder-path='/home/aatricks/Downloads'
+
+[org/gnome/portal/filechooser/code]
+last-folder-path='/home/aatricks/Dev/AoC'
+
+[org/gnome/portal/filechooser/discord]
+last-folder-path='/home/aatricks/Downloads'
+
 [org/gnome/portal/filechooser/org.gnome.Settings]
 last-folder-path='/home/aatricks/Downloads/wallpapers-20251203T193241Z-1-001/wallpapers'
+
+[org/gnome/portal/filechooser/org.gnome.TextEditor]
+last-folder-path='/home/aatricks/Downloads'
 
 [org/gnome/settings-daemon/plugins/color]
 night-light-enabled=true
 night-light-schedule-automatic=false
+night-light-temperature=uint32 2191
+
+[org/gnome/settings-daemon/plugins/housekeeping]
+donation-reminder-last-shown=int64 1765570063586754
 
 [org/gnome/shell]
-app-picker-layout=[{'d3251663-5759-4c20-8d3e-afbf8ae68e24': <{'position': <0>}>, 'd60db5a9-e5b3-43e6-9a3a-921bdb883ad3': <{'position': <1>}>, 'org.gnome.TextEditor.desktop': <{'position': <2>}>, 'equibop.desktop': <{'position': <3>}>}]
+app-picker-layout=[{'d3251663-5759-4c20-8d3e-afbf8ae68e24': <{'position': <0>}>, 'org.gnome.TextEditor.desktop': <{'position': <1>}>, 'discord.desktop': <{'position': <2>}>, 'code.desktop': <{'position': <3>}>, 'dev.zed.Zed.desktop': <{'position': <4>}>}]
 disable-user-extensions=false
-enabled-extensions=['blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'appindicatorsupport@rgcjonas.gmail.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'quick-settings-audio-panel@rayzeq.github.io', 'weatheroclock@CleoMenezesJr.github.io']
-favorite-apps=['app.zen_browser.zen.desktop', 'code.desktop', 'com.raggesilver.BlackBox.desktop']
+disabled-extensions=['apps@github.com.howbea']
+enabled-extensions=['blur-my-shell@aunetx', 'dash-to-dock@micxgx.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'appindicatorsupport@rgcjonas.gmail.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'quick-settings-audio-panel@rayzeq.github.io', 'weatheroclock@CleoMenezesJr.github.io', 'apps@github.com.howbea', 'just-perfection-desktop@just-perfection']
+favorite-apps=['dev.zed.Zed.desktop', 'app.zen_browser.zen.desktop', 'com.raggesilver.BlackBox.desktop']
 welcome-dialog-last-shown-version='49.2'
 
 [org/gnome/shell/extensions/blur-my-shell]
@@ -222,22 +264,39 @@ brightness=0.59999999999999998
 sigma=30
 
 [org/gnome/shell/extensions/caffeine]
-indicator-position-max=5
+indicator-position-max=3
+restore-state=true
 user-enabled=true
 
 [org/gnome/shell/extensions/dash-to-dock]
 background-opacity=0.29999999999999999
 custom-theme-shrink=true
+customize-alphas=true
 dash-max-icon-size=32
+dock-position='BOTTOM'
+height-fraction=0.90000000000000002
+max-alpha=0.29999999999999999
+min-alpha=0.0
+preferred-monitor=-2
+preferred-monitor-by-connector='eDP-1'
 show-icons-emblems=false
 show-show-apps-button=false
 show-trash=false
-transparency-mode='FIXED'
+transparency-mode='DYNAMIC'
+
+[org/gnome/shell/extensions/just-perfection]
+activities-button=false
+animation=2
+ripple-box=true
+top-panel-position=0
+workspace=true
+workspace-popup=true
 
 [org/gnome/shell/extensions/libpanel]
 layout=[['gnome@main', 'quick-settings-audio-panel@rayzeq.github.io/main']]
 
 [org/gnome/shell/extensions/quick-settings-audio-panel]
+profiles-renames={'Built-in Audio': {'off': ('Off', 'Off'), 'pro-audio': ('Pro Audio', 'Pro Audio'), 'input:analog-stereo': ('Analog Stereo Input', 'Analog Stereo Input'), 'output:hdmi-surround71-extra2': ('Digital Surround 7.1 (HDMI 3) Output', 'Digital Surround 7.1 (HDMI 3) Output'), 'output:hdmi-surround-extra2': ('Digital Surround 5.1 (HDMI 3) Output', 'Digital Surround 5.1 (HDMI 3) Output'), 'output:hdmi-surround71-extra1': ('Digital Surround 7.1 (HDMI 2) Output', 'Digital Surround 7.1 (HDMI 2) Output'), 'output:hdmi-surround-extra1': ('Digital Surround 5.1 (HDMI 2) Output', 'Digital Surround 5.1 (HDMI 2) Output'), 'output:hdmi-surround71-extra2+input:analog-stereo': ('Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround-extra2+input:analog-stereo': ('Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-surround71-extra1+input:analog-stereo': ('Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround-extra1+input:analog-stereo': ('Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-surround71': ('Digital Surround 7.1 (HDMI) Output', 'Digital Surround 7.1 (HDMI) Output'), 'output:hdmi-surround': ('Digital Surround 5.1 (HDMI) Output', 'Digital Surround 5.1 (HDMI) Output'), 'output:hdmi-surround71+input:analog-stereo': ('Digital Surround 7.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 7.1 (HDMI) Output + Analog Stereo Input'), 'output:hdmi-surround+input:analog-stereo': ('Digital Surround 5.1 (HDMI) Output + Analog Stereo Input', 'Digital Surround 5.1 (HDMI) Output + Analog Stereo Input'), 'output:analog-surround-40': ('Analog Surround 4.0 Output', 'Analog Surround 4.0 Output'), 'output:analog-surround-40+input:analog-stereo': ('Analog Surround 4.0 Output + Analog Stereo Input', 'Analog Surround 4.0 Output + Analog Stereo Input'), 'output:analog-surround-21': ('Analog Surround 2.1 Output', 'Analog Surround 2.1 Output'), 'output:analog-surround-21+input:analog-stereo': ('Analog Surround 2.1 Output + Analog Stereo Input', 'Analog Surround 2.1 Output + Analog Stereo Input'), 'output:hdmi-stereo-extra2': ('Digital Stereo (HDMI 3) Output', 'Digital Stereo (HDMI 3) Output'), 'output:hdmi-stereo-extra1': ('Digital Stereo (HDMI 2) Output', 'Digital Stereo (HDMI 2) Output'), 'output:hdmi-stereo-extra2+input:analog-stereo': ('Digital Stereo (HDMI 3) Output + Analog Stereo Input', 'Digital Stereo (HDMI 3) Output + Analog Stereo Input'), 'output:hdmi-stereo-extra1+input:analog-stereo': ('Digital Stereo (HDMI 2) Output + Analog Stereo Input', 'Digital Stereo (HDMI 2) Output + Analog Stereo Input'), 'output:hdmi-stereo': ('Digital Stereo (HDMI) Output', 'Digital Stereo (HDMI) Output'), 'output:hdmi-stereo+input:analog-stereo': ('Digital Stereo (HDMI) Output + Analog Stereo Input', 'Digital Stereo (HDMI) Output + Analog Stereo Input'), 'output:analog-stereo': ('Analog Stereo Output', 'Analog Stereo Output'), 'output:analog-stereo+input:analog-stereo': ('Analog Stereo Duplex', 'Analog Stereo Duplex')}}
 version=2
 
 [org/gnome/shell/extensions/weather-oclock]
@@ -249,3 +308,6 @@ locations=[<(uint32 2, <('Tours', 'LFOT', false, [(0.82815873007130947, 0.012508
 
 [org/gnome/tweaks]
 show-extensions-notice=false
+
+[org/gtk/gtk4/settings/file-chooser]
+show-hidden=false
