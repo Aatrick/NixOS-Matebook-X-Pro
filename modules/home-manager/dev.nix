@@ -1,4 +1,9 @@
 { pkgs, pkgs-unstable, ... }:
+
+let
+  gemini-cli-latest = pkgs.callPackage ../../pkgs/gemini-cli-latest.nix { };
+  update-gemini = pkgs.callPackage ../../pkgs/update-gemini.nix { };
+in
 {
   # Tell rust-analyzer where to find the rust standard library source
   home.sessionVariables = {
@@ -38,6 +43,8 @@
     alejandra
 
     nodejs
-    pkgs-unstable.gemini-cli-bin
+    # pkgs-unstable.gemini-cli-bin
+    # gemini-cli-latest
+    update-gemini
   ];
 }
