@@ -30,4 +30,10 @@ with lib; {
       description = "Path to lossless scaling DLL";
     };
   };
+
+  options.winter.system.flakePath = mkOption {
+    type = types.str;
+    default = "/home/aatricks/config";
+    description = "Path to the system flake configuration";
+  };
 }

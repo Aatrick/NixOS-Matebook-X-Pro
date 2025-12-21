@@ -41,23 +41,8 @@
   networking.hostName = "mach-w19c";
   boot.tmp.useTmpfs = false;
   boot.kernelPackages = pkgs.linuxPackages;
-  fileSystems."/".options = [
-    "noatime"
-    "nodiratime"
-    "discard"
-    "defaults"
-  ];
 
   winter = {
-    main-user = {
-      enable = true;
-      userName = "aatricks";
-      userFullName = "Emilio Melis";
-    };
-    gnome = {
-      scaling = 2;
-      text-scaling = 0.8;
-    };
     # vm = {
     #     users = [ "aatricks" ];
     # };
@@ -78,7 +63,6 @@
     };
   };
 
-  zramSwap.memoryPercent = 25;
   hardware.sensor.iio.enable = true;
 
   services.undervolt = {

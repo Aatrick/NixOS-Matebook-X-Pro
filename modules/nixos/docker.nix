@@ -1,20 +1,17 @@
+{ pkgs, config, ... }:
 {
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
+  # Enable Podman
   virtualisation.podman = {
     enable = true;
-    # Create the default bridge network for podman
+    dockerCompat = true; # Alias docker=podman
     defaultNetwork.settings.dns_enabled = true;
   };
+
+  # Enable Nvidia Container Toolkit (Modern CDI method)
+  hardware.nvidia-container-toolkit.enable = true;
+
+  # Useful tools
   environment.systemPackages = with pkgs; [
     podman-compose
-    nvidia-container-toolkit
   ];
-  virtualisation.docker.enableNvidia = true;
-  #sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
-  #find /nix/store -name nvidia-cdi-hook
-  #sudo ln -s /nix/store/cqdvc05s2g8cq6y1v69qyz52ixi8a7hv-nvidia-container-toolkit-1.17.8-tools/bin/nvidia-cdi-hook /usr/bin/nvidia-cdi-hook
 }

@@ -1,18 +1,20 @@
 {
   lib,
-  pkgs,
+  stdenv,
+  fetchurl,
+  php,
   ...
 }:
-pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "phpmyadmin";
   version = "5.2.2";
 
-  src = pkgs.fetchurl {
+  src = fetchurl {
     url = "https://files.phpmyadmin.net/phpMyAdmin/${version}/phpMyAdmin-${version}-all-languages.tar.gz";
     sha256 = "sha256-hVHIvzsWbyMtXPZLrId0cunQy48v4YWPqyT5defXZbY=";
   };
 
-  buildInputs = [pkgs.php];
+  buildInputs = [php];
 
   installPhase = ''
     mkdir -p $out/share/phpmyadmin

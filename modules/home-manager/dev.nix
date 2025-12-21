@@ -50,5 +50,6 @@
     # pkgs-unstable.gemini-cli-bin
     gemini-cli
     update-gemini
+    nix-update
   ];
 }

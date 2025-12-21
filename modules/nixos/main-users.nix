@@ -27,7 +27,7 @@ in {
   config = lib.mkIf cfg.enable {
     users.users.${cfg.userName} = {
       isNormalUser = true;
-      initialPassword = "1234";
+      # initialPassword = "1234"; # Change this using 'passwd' command or use 'hashedPassword'
       description = cfg.userFullName;
       extraGroups = [
         "wheel"

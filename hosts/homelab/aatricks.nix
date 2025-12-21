@@ -17,7 +17,6 @@
       flake_path = "/home/aatricks/config";
       flake_config = "homelab";
     };
-    auto-update.enable = true;
   };
 
   home.username = "aatricks";

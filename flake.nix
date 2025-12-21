@@ -36,6 +36,10 @@
     # Formatter for 'nix fmt'
     formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
 
+    packages.${system} = {
+      gemini-cli = pkgs-unstable.gemini-cli;
+    };
+
     nixosConfigurations = {
       "mach-w19c" = nixpkgs.lib.nixosSystem {
         inherit system;

@@ -30,10 +30,6 @@
     ];
     shellAliases = {
       ll = "ls -l";
-      # Modern flake update alias
-      update = "sudo nix flake update --flake /home/aatricks/config && sudo nixos-rebuild switch --flake /home/aatricks/config";
-      # Cleanup alias
-      clean = "sudo nix-collect-garbage -d";
     };
     functions = {
       # Function to kill processes by name

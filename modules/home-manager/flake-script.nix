@@ -5,7 +5,6 @@
   ...
 }: let
   cfg = config.winter.update;
-  cfga = config.winter.auto-update;
 
   nix-latest-update = import ../../pkgs/nix-latest-update.nix {
     pkgs = pkgs;
@@ -42,11 +41,6 @@ in {
         description = "Flake config name";
       };
     };
-    auto-update.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable auto update";
-    };
   };
   config = lib.mkMerge [
     {
@@ -57,35 +51,5 @@ in {
         nix-latest-update
       ];
     }
-    (lib.mkIf cfga.enable {
-      systemd.user.services.winter-auto-update = {
-        Unit = {
-          Description = "Auto update services";
-          After = ["graphical-session.target"];
-        };
-        Service = {
-          Type = "exec";
-          ExecStart = "${flake-update}/bin/flake-update";
-        };
-        Install = {
-          WantedBy = ["multi-user.target"];
-        };
-      };
-
-      systemd.user.timers.winter-auto-update = {
-        Install = {
-          WantedBy = ["timers.target"];
-        };
-        Unit = {
-          Description = "Execute every day";
-          Wants = ["winter-auto-update-service.service"];
-        };
-        Timer = {
-          OnCalendar = "daily";
-          Persistent = true;
-          Unit = "winter-auto-update-service.service";
-        };
-      };
-    })
   ];
 }

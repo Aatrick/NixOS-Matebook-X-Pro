@@ -27,7 +27,7 @@
     enable = true;
     dates = "weekly";
     allowReboot = true;
-    flake = "/home/aatricks/config";
+    flake = config.winter.system.flakePath;
     flags = [
       "--update-input"
       "nixpkgs"

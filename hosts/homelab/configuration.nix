@@ -33,7 +33,6 @@
   networking.hostName = "Homelab";
   boot.tmp.useTmpfs = true;
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages;
-  fileSystems."/".options = ["noatime" "nodiratime" "discard" "defaults"];
 
   winter = {
     nvidia.standby = {
@@ -41,15 +40,6 @@
       old-gpu = false;
     };
     #ollama.acceleration = "cuda";
-    main-user = {
-      enable = true;
-      userName = "aatricks";
-      userFullName = "Emilio Melis";
-    };
-    gnome = {
-      scaling = 2;
-      text-scaling = 0.8;
-    };
     wooting = {
       enable = true;
     };
@@ -64,6 +54,4 @@
       "aatricks" = import ./aatricks.nix;
     };
   };
-
-  zramSwap.memoryPercent = 25;
 }

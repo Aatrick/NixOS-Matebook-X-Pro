@@ -17,7 +17,6 @@
       flake_path = "/home/aatricks/config";
       flake_config = "mach-w19c";
     };
-    auto-update.enable = true;
   };
 
   home.username = "aatricks";

@@ -10,11 +10,11 @@ On your fresh NixOS install, you need git. If it isn't installed, drop into a sh
 nix-shell -p git
 ```
 
-The configuration expects to be located at /home/<username>/config for the auto-update scripts to work correctly later.
+The configuration expects to be located at `/home/<username>/config` for the default settings to work. You can change this path in `modules/options.nix` (option `winter.system.flakePath`) or override it in your host config.
 
 ```bash
-git clone <URL_TO_YOUR_REPO> /home/aatricks/config
-cd /home/aatricks/config
+git clone <URL_TO_YOUR_REPO> ~/config
+cd ~/config
 ```
 
 ## Update Hardware Configuration
