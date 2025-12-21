@@ -1,4 +1,10 @@
-{ pkgs, pkgs-unstable, osConfig, ... }: {
+{
+  pkgs,
+  pkgs-unstable,
+  osConfig,
+  ...
+}:
+{
 
   imports = [
     ../../modules/home-manager/gnome.nix
@@ -9,13 +15,13 @@
     ../../modules/home-manager/flake-script.nix
     #../../modules/home-manager/office.nix
     #../../modules/home-manager/vm-manager.nix
-    #../../modules/home-manager/android.nix
+    ../../modules/home-manager/android.nix
   ];
 
   winter = {
     update = {
-        flake_path = "/home/aatricks/config";
-        flake_config = "mach-w19c";
+      flake_path = "/home/aatricks/config";
+      flake_config = "mach-w19c";
     };
     auto-update.enable = true;
   };

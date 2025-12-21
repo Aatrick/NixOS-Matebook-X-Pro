@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   cfg = config.winter.main-user;
@@ -27,7 +32,11 @@ in
       isNormalUser = true;
       initialPassword = "1234";
       description = cfg.userFullName;
-      extraGroups = [ "wheel" "networkmanager" ];
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        "adbusers"
+      ];
       shell = pkgs.fish;
     };
     programs.fish.enable = true;

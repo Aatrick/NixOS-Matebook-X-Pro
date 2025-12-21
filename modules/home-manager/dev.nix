@@ -8,21 +8,28 @@ in
   # Tell rust-analyzer where to find the rust standard library source
   home.sessionVariables = {
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+    JAVA_HOME = "${pkgs.jdk17}";
   };
 
   home.packages = with pkgs; [
     pkgs-unstable.zed-editor
+    pkgs-unstable.vscode
     #zeal
     git
     gh
     blackbox-terminal
 
-    # C / C++
+    # C / C++ / Native Build
     gcc
-    # clang-tools
-    # clang
-    # cmakeWithGui
-    # gnumake
+    cmake
+    ninja
+    pkg-config
+
+    # Vulkan & Shaders (Required for LLMEdge GPU backend)
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    shaderc # Provides 'glslc' for shader compilation
 
     # Rust
     cargo
@@ -35,7 +42,7 @@ in
     pyrefly
 
     # Java
-    jdk
+    jdk17
     maven
 
     nil
@@ -44,7 +51,7 @@ in
 
     nodejs
     # pkgs-unstable.gemini-cli-bin
-    # gemini-cli-latest
+    gemini-cli-latest
     update-gemini
   ];
 }

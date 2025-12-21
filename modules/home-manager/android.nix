@@ -1,6 +1,7 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     android-studio
+    android-tools
   ];
-  programs.adb.enable = true;
 }

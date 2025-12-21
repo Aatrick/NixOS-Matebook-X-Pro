@@ -32,12 +32,24 @@
 
   console.keyMap = "us";
 
+  programs.adb.enable = true;
+
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
       stdenv.cc.cc.lib # libstdc++
       zlib # libz
       glib # libglib
+      ncurses5
+      libxml2
+      openssl
+      freetype
+      fontconfig
+      xorg.libX11
+      xorg.libXext
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libXi
     ];
   };
 
