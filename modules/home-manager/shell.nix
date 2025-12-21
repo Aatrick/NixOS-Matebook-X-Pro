@@ -30,17 +30,14 @@
     ];
     shellAliases = {
       ll = "ls -l";
-      update = "sudo nix-channel --update
-                sudo nix-env -u --always
-                sudo nixos-rebuild boot --upgrade-all
-                sudo rm /nix/var/nix/gcroots/auto/*
-                sudo nix-store --gc
-                sudo nix-collect-garbage -d
-                ";
-      clean = "sudo nix-env -u --always
-                sudo nix-store --gc
-                ";
-      killall = "pgrep -d ' ' $1 | xargs kill -15";
+      # Modern flake update alias
+      update = "sudo nix flake update --flake /home/aatricks/config && sudo nixos-rebuild switch --flake /home/aatricks/config";
+      # Cleanup alias
+      clean = "sudo nix-collect-garbage -d";
+    };
+    functions = {
+      # Function to kill processes by name
+      kall = "pgrep -d ' ' $argv | xargs kill -15";
     };
   };
 }

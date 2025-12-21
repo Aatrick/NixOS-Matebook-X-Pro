@@ -38,7 +38,7 @@
 
   custom.battery.enable = true;
 
-  networking.hostName = "FMac";
+  networking.hostName = "mach-w19c";
   boot.tmp.useTmpfs = false;
   boot.kernelPackages = pkgs.linuxPackages;
   fileSystems."/".options = [

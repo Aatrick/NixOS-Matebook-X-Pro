@@ -17,27 +17,40 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
+    
+    # Define overlays
+    overlays = [
+      (import ./pkgs/overlay.nix)
+    ];
+
     nixpkgsConfig = {
       allowUnfree = true;
     };
+    
+    # Import unstable pkgs with overlay
     pkgs-unstable = import nixpkgs-unstable {
-      inherit system;
+      inherit system overlays;
       config = nixpkgsConfig;
     };
   in {
+    # Formatter for 'nix fmt'
+    formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
+
     nixosConfigurations = {
       "mach-w19c" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         specialArgs = {inherit self inputs pkgs-unstable;};
         modules = [
+          { nixpkgs.overlays = overlays; }
           ./hosts/mach-w19c/configuration.nix
           inputs.home-manager.nixosModules.default
         ];
       };
       "homelab" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
         specialArgs = {inherit self inputs pkgs-unstable;};
         modules = [
+          { nixpkgs.overlays = overlays; }
           ./hosts/homelab/configuration.nix
           inputs.home-manager.nixosModules.default
         ];
