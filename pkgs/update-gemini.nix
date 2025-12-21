@@ -1,5 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
-
+{pkgs ? import <nixpkgs> {}}:
 pkgs.writeShellScriptBin "update-gemini" ''
   # 1. Get the latest version from GitHub API (removes 'v' prefix)
   LATEST_TAG=$(${pkgs.curl}/bin/curl -s https://api.github.com/repos/google-gemini/gemini-cli/releases/latest | ${pkgs.jq}/bin/jq -r .tag_name)
@@ -9,7 +8,7 @@ pkgs.writeShellScriptBin "update-gemini" ''
 
   # 2. Define the target file
   TARGET_FILE="pkgs/gemini-cli-latest.nix"
-  
+
   # Check if we are in the right directory or find the file
   if [ ! -f "$TARGET_FILE" ]; then
      # Try to find it relative to the script execution if not in root of config

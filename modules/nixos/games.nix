@@ -1,11 +1,13 @@
-{ config, pkgs, pkgs-unstable, lib, ... }:
-
-let
-  lsfg-vk = pkgs.callPackage ../../pkgs/lsfg-vk.nix { };
-  lsfg-vk-ui = pkgs.callPackage ../../pkgs/lsfg-vk-ui.nix { };
-in
 {
-
+  config,
+  pkgs,
+  pkgs-unstable,
+  lib,
+  ...
+}: let
+  lsfg-vk = pkgs.callPackage ../../pkgs/lsfg-vk.nix {};
+  lsfg-vk-ui = pkgs.callPackage ../../pkgs/lsfg-vk-ui.nix {};
+in {
   config = {
     programs = {
       gamescope = {
@@ -26,33 +28,44 @@ in
       steam = {
         enable = true;
         gamescopeSession = {
-            enable = true;
+          enable = true;
         };
         extest.enable = true;
         remotePlay.openFirewall = false;
         dedicatedServer.openFirewall = false;
         localNetworkGameTransfers.openFirewall = true;
-        extraPackages = []
-        ++ lib.optional config.winter.games.lsfg.enable lsfg-vk;
+        extraPackages =
+          []
+          ++ lib.optional config.winter.games.lsfg.enable lsfg-vk;
         extraCompatPackages = [
           pkgs-unstable.proton-ge-bin
         ];
         package = pkgs.steam.override {
-          extraEnv = {
-            TZ = ":/etc/localtime";
-            MANGOHUD = true;
-
-          } //
-          (if config.winter.games.lsfg.enable == true then {
-            VK_LAYER_PATH= "${lsfg-vk}/share/vulkan/explicit_layer.d";
-            ENABLE_LFSG=1;
-            LSFG_LEGACY=1;
-            LFSG_MULTIPLIER=2;
-          } else {})
-          // (if config.winter.games.lsfg.enable == true
-            && config.winter.games.lsfg.steam_library_for_lossless_scaling != null then {
-            LSFG_DLL_PATH="${config.winter.games.lsfg.steam_library_for_lossless_scaling}/steamapps/common/Lossless Scaling/Lossless.dll";
-          } else {});
+          extraEnv =
+            {
+              TZ = ":/etc/localtime";
+              MANGOHUD = true;
+            }
+            // (
+              if config.winter.games.lsfg.enable == true
+              then {
+                VK_LAYER_PATH = "${lsfg-vk}/share/vulkan/explicit_layer.d";
+                ENABLE_LFSG = 1;
+                LSFG_LEGACY = 1;
+                LFSG_MULTIPLIER = 2;
+              }
+              else {}
+            )
+            // (
+              if
+                config.winter.games.lsfg.enable
+                == true
+                && config.winter.games.lsfg.steam_library_for_lossless_scaling != null
+              then {
+                LSFG_DLL_PATH = "${config.winter.games.lsfg.steam_library_for_lossless_scaling}/steamapps/common/Lossless Scaling/Lossless.dll";
+              }
+              else {}
+            );
         };
       };
     };
@@ -67,29 +80,31 @@ in
       adwsteamgtk
     ];
     hardware = {
-        graphics = {
-          enable = true;
-          package = pkgs.mesa;
-          package32 = pkgs.pkgsi686Linux.mesa;
-        };
+      graphics = {
+        enable = true;
+        package = pkgs.mesa;
+        package32 = pkgs.pkgsi686Linux.mesa;
+      };
     };
 
     nixpkgs.overlays = [
       (self: super: {
-        linuxPackages = super.linuxPackages // {
-          kernel = super.linuxPackages.kernel.override {
-            structuredExtraConfig = with lib.kernel; {
-              HZ_1000 = yes;
-              HZ = 1000;
-              PREEMPT_FULL = yes;
-              IOSCHED_BFQ = yes;
-              DEFAULT_BFQ = yes;
-              DEFAULT_IOSCHED = "bfq";
-              V4L2_LOOPBACK = module;
-              HID = yes;
+        linuxPackages =
+          super.linuxPackages
+          // {
+            kernel = super.linuxPackages.kernel.override {
+              structuredExtraConfig = with lib.kernel; {
+                HZ_1000 = yes;
+                HZ = 1000;
+                PREEMPT_FULL = yes;
+                IOSCHED_BFQ = yes;
+                DEFAULT_BFQ = yes;
+                DEFAULT_IOSCHED = "bfq";
+                V4L2_LOOPBACK = module;
+                HID = yes;
+              };
             };
           };
-        };
       })
     ];
 

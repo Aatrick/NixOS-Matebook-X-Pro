@@ -1,6 +1,10 @@
-{ pkgs, pkgs-unstable, config, lib, ... }:
-
 {
+  pkgs,
+  pkgs-unstable,
+  config,
+  lib,
+  ...
+}: {
   options.winter.ollama.acceleration = lib.mkOption {
     description = "ollama acceleration";
     type = lib.types.nullOr lib.types.str;
@@ -22,7 +26,7 @@
 
     services.ollama = {
       enable = true;
-      loadModels = [ "qwen3:8b" ];
+      loadModels = ["qwen3:8b"];
       acceleration = config.winter.ollama.acceleration; # use cuda if nvidia, rocm if amd, and cpu only otherwise
     };
   };

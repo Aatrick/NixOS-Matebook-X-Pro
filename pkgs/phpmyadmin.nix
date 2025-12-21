@@ -1,5 +1,8 @@
-{ lib, pkgs, ... }:
-
+{
+  lib,
+  pkgs,
+  ...
+}:
 pkgs.stdenv.mkDerivation rec {
   pname = "phpmyadmin";
   version = "5.2.2";
@@ -9,7 +12,7 @@ pkgs.stdenv.mkDerivation rec {
     sha256 = "sha256-hVHIvzsWbyMtXPZLrId0cunQy48v4YWPqyT5defXZbY=";
   };
 
-  buildInputs = [ pkgs.php ];
+  buildInputs = [pkgs.php];
 
   installPhase = ''
     mkdir -p $out/share/phpmyadmin
@@ -20,6 +23,6 @@ pkgs.stdenv.mkDerivation rec {
     description = "Web-based MySQL administration tool";
     homepage = "https://www.phpmyadmin.net/";
     license = licenses.gpl2Plus;
-    maintainers = [ "Quentin Horgues" ];
+    maintainers = ["Quentin Horgues"];
   };
 }

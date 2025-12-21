@@ -5,7 +5,6 @@
   vulkan-headers,
   llvmPackages,
 }:
-
 llvmPackages.stdenv.mkDerivation rec {
   pname = "lsfg-vk";
   version = "1.0.0";
@@ -39,6 +38,6 @@ llvmPackages.stdenv.mkDerivation rec {
     changelog = "https://github.com/PancakeTAS/lsfg-vk/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pabloaul ];
+    maintainers = with lib.maintainers; [pabloaul];
   };
 }

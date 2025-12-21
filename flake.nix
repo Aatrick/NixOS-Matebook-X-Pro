@@ -10,8 +10,12 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.6.0";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, ... }@inputs:
-  let
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    ...
+  } @ inputs: let
     system = "x86_64-linux";
     nixpkgsConfig = {
       allowUnfree = true;
@@ -20,32 +24,30 @@
       inherit system;
       config = nixpkgsConfig;
     };
-  in
-  {
-    nixosConfigurations =
-    {
+  in {
+    nixosConfigurations = {
       "mach-w19c" = nixpkgs.lib.nixosSystem {
-       	system = "x86_64-linux";
-       	specialArgs = { inherit self inputs pkgs-unstable; };
-       	modules = [
-       	  ./hosts/mach-w19c/configuration.nix
+        system = "x86_64-linux";
+        specialArgs = {inherit self inputs pkgs-unstable;};
+        modules = [
+          ./hosts/mach-w19c/configuration.nix
           inputs.home-manager.nixosModules.default
-       	];
+        ];
       };
       "homelab" = nixpkgs.lib.nixosSystem {
-       	system = "x86_64-linux";
-       	specialArgs = { inherit self inputs pkgs-unstable; };
-       	modules = [
-       	  ./hosts/homelab/configuration.nix
+        system = "x86_64-linux";
+        specialArgs = {inherit self inputs pkgs-unstable;};
+        modules = [
+          ./hosts/homelab/configuration.nix
           inputs.home-manager.nixosModules.default
-       	];
+        ];
       };
     };
 
     homeConfigurations = {
       "aatricks@fedora" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
-        extraSpecialArgs = { inherit self inputs pkgs-unstable; };
+        extraSpecialArgs = {inherit self inputs pkgs-unstable;};
         modules = [
           ./hosts/fedora/aatricks.nix
         ];

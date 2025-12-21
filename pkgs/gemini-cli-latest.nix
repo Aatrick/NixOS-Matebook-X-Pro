@@ -1,7 +1,4 @@
-{
-  pkgs ? import <nixpkgs> { },
-}:
-
+{pkgs ? import <nixpkgs> {}}:
 pkgs.stdenv.mkDerivation rec {
   pname = "gemini-cli";
   version = "0.21.3";
@@ -13,7 +10,7 @@ pkgs.stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ pkgs.nodejs ];
+  buildInputs = [pkgs.nodejs];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/gemini
@@ -32,7 +29,7 @@ pkgs.stdenv.mkDerivation rec {
     description = "Gemini CLI (Latest Manual Update)";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [];
     platforms = platforms.all;
   };
 }

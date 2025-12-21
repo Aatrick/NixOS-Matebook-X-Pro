@@ -1,6 +1,9 @@
-{ pkgs, lib, config, ... }:
-
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options.winter.cuda.enable = lib.mkOption {
     type = lib.types.bool;
     default = true;

@@ -3,12 +3,9 @@
   lib,
   config,
   ...
-}:
-
-let
+}: let
   cfg = config.winter.main-user;
-in
-{
+in {
   options = {
     winter.main-user.enable = lib.mkEnableOption "enable user module";
 

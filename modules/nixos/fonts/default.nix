@@ -1,8 +1,5 @@
-{ pkgs, ... }:
-
-let
-  cooper-black = import ./cooper-black.nix { inherit pkgs; };
-
+{pkgs, ...}: let
+  cooper-black = import ./cooper-black.nix {inherit pkgs;};
 
   winter-use-system-font = pkgs.writeShellScriptBin "winter-use-system-font" ''
     mkdir -p ~/.local/share/fonts
@@ -12,8 +9,7 @@ let
     done
     chmod 644 ~/.local/share/fonts/* 1>/dev/null 2>/dev/null
   '';
-in
-{
+in {
   environment.systemPackages = [
     winter-use-system-font
   ];

@@ -3,9 +3,7 @@
   pkgs-unstable,
   lib,
   ...
-}:
-
-{
+}: {
   programs.zed-editor = {
     enable = true;
     installRemoteServer = true;
@@ -119,7 +117,7 @@
           provider = "copilot_chat";
           model = "grok-code-fast-1";
         };
-        model_parameters = [ ];
+        model_parameters = [];
       };
 
       # Telemetry
@@ -149,7 +147,7 @@
         pyrefly = {
           binary = {
             path = ".venv/bin/pyrefly";
-            arguments = [ "lsp" ];
+            arguments = ["lsp"];
           };
           settings = {
             python = {
@@ -164,7 +162,7 @@
                 "**/.[!/.]*"
                 "**/*venv/**"
               ];
-              search_path = [ "src" ];
+              search_path = ["src"];
               ignore_errors_in_generated_code = true;
             };
           };

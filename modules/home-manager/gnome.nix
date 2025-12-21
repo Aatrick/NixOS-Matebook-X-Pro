@@ -3,8 +3,7 @@
   pkgs-unstable,
   lib,
   ...
-}:
-{
+}: {
   home.pointerCursor = {
     gtk.enable = true;
     package = pkgs.vanilla-dmz;
@@ -15,7 +14,6 @@
     gnome-text-editor
     gnome-calculator
     nautilus
-
     fastfetch
     btop
     #dconf-editor
@@ -46,9 +44,9 @@
     };
 
     associations.added = {
-      "text/html" = [ "app.zen_browser.zen.desktop" ];
-      "x-scheme-handler/http" = [ "app.zen_browser.zen.desktop" ];
-      "x-scheme-handler/https" = [ "app.zen_browser.zen.desktop" ];
+      "text/html" = ["app.zen_browser.zen.desktop"];
+      "x-scheme-handler/http" = ["app.zen_browser.zen.desktop"];
+      "x-scheme-handler/https" = ["app.zen_browser.zen.desktop"];
     };
   };
 

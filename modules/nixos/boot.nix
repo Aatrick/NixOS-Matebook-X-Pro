@@ -1,6 +1,8 @@
-{ pkgs, lib, ... }:
-
 {
+  pkgs,
+  lib,
+  ...
+}: {
   boot = {
     loader.systemd-boot.enable = lib.mkDefault true;
     loader.systemd-boot.configurationLimit = lib.mkDefault 10;
@@ -8,7 +10,7 @@
     tmp.useTmpfs = lib.mkDefault true;
 
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-    kernelParams = lib.mkDefault [ "quiet" ];
+    kernelParams = lib.mkDefault ["quiet"];
 
     initrd.systemd.enable = lib.mkDefault true;
     plymouth.enable = lib.mkDefault true;

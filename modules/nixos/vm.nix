@@ -1,8 +1,10 @@
-{ lib, config, pkgs, ... }:
-
-with lib;
-
-let
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.winter.vm;
 in {
   options.winter.vm = {
@@ -50,18 +52,21 @@ in {
         swtpm.enable = true;
         ovmf = {
           enable = true;
-          packages = [ (pkgs.OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-          }).fd ];
+          packages = [
+            (pkgs.OVMF.override {
+              secureBoot = true;
+              tpmSupport = true;
+            }).fd
+          ];
         };
       };
     };
 
     users.users = builtins.listToAttrs (map (user: {
-      name = user;
-      value.extraGroups = [ "kvm" "libvirtd" ];
-    }) cfg.users);
+        name = user;
+        value.extraGroups = ["kvm" "libvirtd"];
+      })
+      cfg.users);
 
     environment.systemPackages = with pkgs; [
       spice

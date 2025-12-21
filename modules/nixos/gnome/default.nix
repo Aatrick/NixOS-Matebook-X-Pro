@@ -3,10 +3,7 @@
   lib,
   config,
   ...
-}:
-
-{
-
+}: {
   options.winter.gnome.scaling = lib.mkOption {
     type = lib.types.int;
     default = 1;
@@ -122,11 +119,11 @@
       # Enable portals and MIME database so default applications can be managed via GNOME Settings
       xdg.portal = {
         enable = true;
-        extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+        extraPortals = [pkgs.xdg-desktop-portal-gnome];
         #gtkUsePortal = true;
       };
       xdg.mime.enable = true;
-      environment.systemPackages = [ pkgs.xdg-utils ];
+      environment.systemPackages = [pkgs.xdg-utils];
     }
     {
       # Is used to fix blank screen on GDM

@@ -1,8 +1,12 @@
-{ self, pkgs , ... }: {
+{
+  self,
+  pkgs,
+  ...
+}: {
   home.packages = with pkgs; [
     grc
     fish
-	  fzf
+    fzf
     fishPlugins.done
     fishPlugins.fzf-fish
     fishPlugins.forgit
@@ -33,7 +37,7 @@
                 sudo nix-store --gc
                 sudo nix-collect-garbage -d
                 ";
-      clean  = "sudo nix-env -u --always
+      clean = "sudo nix-env -u --always
                 sudo nix-store --gc
                 ";
       killall = "pgrep -d ' ' $1 | xargs kill -15";

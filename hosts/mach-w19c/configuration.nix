@@ -5,8 +5,7 @@
   pkgs-unstable,
   config,
   ...
-}:
-{
+}: {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.nixos-hardware.nixosModules.common-gpu-intel

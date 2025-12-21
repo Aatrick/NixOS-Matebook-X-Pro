@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     #../../modules/home-manager/android.nix
     ../../modules/home-manager/dev.nix
@@ -19,8 +21,8 @@
     equibop
     #deskflow
   ];
-  
-  nixpkgs.config.allowUnfree=true;
+
+  nixpkgs.config.allowUnfree = true;
 
   # Set the state version
   home.stateVersion = "25.05";
