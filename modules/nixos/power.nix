@@ -8,14 +8,11 @@
 }:
 let
   cfg = config.custom;
-  hasBattery = lib.any (x: lib.strings.hasPrefix "BAT" x) (
-    builtins.attrNames (builtins.readDir "/sys/class/power_supply")
-  );
 in
 {
   options.custom = {
     battery.enable = lib.mkOption {
-      default = hasBattery;
+      default = false;
       description = "Enable better battery support";
       type = lib.types.bool;
     };

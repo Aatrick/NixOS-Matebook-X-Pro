@@ -15,21 +15,9 @@
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.nixos-hardware.nixosModules.huawei-machc-wa
     ./hardware-configuration.nix
-    ../../modules/options.nix
-    ../../modules/nixos/fonts
-    ../../modules/nixos/gnome
-    ../../modules/nixos/boot.nix
-    ../../modules/nixos/common.nix
-    ../../modules/nixos/main-users.nix
-    ../../modules/nixos/sound.nix
-    ../../modules/nixos/security.nix
-    ../../modules/nixos/zram.nix
-    ../../modules/nixos/update.nix
-    ../../modules/nixos/power.nix
-    ../../modules/nixos/flatpak.nix
+    ../../modules/nixos/profiles/workstation.nix
     #../../modules/nixos/games.nix
     # ../../modules/nixos/vm.nix
-    ../../modules/nixos/docker.nix
   ];
 
   hardware.nvidia = {
@@ -48,6 +36,8 @@
   environment.variables = {
     ZED_MAX_FPS = "60";
   };
+
+  custom.battery.enable = true;
 
   networking.hostName = "FMac";
   boot.tmp.useTmpfs = false;

@@ -6,25 +6,13 @@
     inputs.nixos-hardware.nixosModules.common-pc
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
-    ../../modules/options.nix
+    ../../modules/nixos/profiles/workstation.nix
     ../../modules/nixos/nvidia-standby-fix.nix
-    ../../modules/nixos/fonts
-    ../../modules/nixos/gnome
-    ../../modules/nixos/boot.nix
-    ../../modules/nixos/common.nix
-    ../../modules/nixos/main-users.nix
-    ../../modules/nixos/sound.nix
-    ../../modules/nixos/security.nix
-    ../../modules/nixos/zram.nix
-    ../../modules/nixos/update.nix
-    ../../modules/nixos/power.nix
     ../../modules/nixos/games.nix
     # ../../modules/nixos/vm.nix
-    ../../modules/nixos/flatpak.nix
     #../../modules/nixos/ollama.nix
     ../../modules/nixos/wooting.nix
     ../../modules/nixos/cuda.nix
-    ../../modules/nixos/docker.nix
   ];
 
   hardware.nvidia = {
