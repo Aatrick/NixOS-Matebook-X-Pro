@@ -2,11 +2,12 @@
   pkgs,
   pkgs-unstable,
   ...
-}: {
+}:
+{
   # Tell rust-analyzer where to find the rust standard library source
   home.sessionVariables = {
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-    JAVA_HOME = "${pkgs.jdk17}";
+    JAVA_HOME = "${pkgs.jdk21}";
   };
 
   home.packages = with pkgs; [
@@ -22,11 +23,11 @@
     ninja
     pkg-config
 
-    # Vulkan & Shaders (Required for LLMEdge GPU backend)
-    vulkan-headers
-    vulkan-loader
-    vulkan-tools
-    shaderc # Provides 'glslc' for shader compilation
+    # Vulkan & Shaders
+    # vulkan-headers
+    # vulkan-loader
+    # vulkan-tools
+    # shaderc # Provides 'glslc' for shader compilation
 
     # Rust
     cargo
@@ -39,7 +40,7 @@
     pyrefly
 
     # Java
-    jdk17
+    jdk21
     maven
 
     nil

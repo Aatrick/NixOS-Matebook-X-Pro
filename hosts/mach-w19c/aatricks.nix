@@ -9,7 +9,7 @@
     ../../modules/home-manager/zed.nix
     #../../modules/home-manager/office.nix
     #../../modules/home-manager/vm-manager.nix
-    ../../modules/home-manager/android.nix
+    # ../../modules/home-manager/android.nix
   ];
 
   winter = {

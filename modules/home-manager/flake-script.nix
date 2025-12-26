@@ -10,9 +10,14 @@
     pkgs = pkgs;
   };
 
+  update-gemini = import ../../pkgs/update-gemini.nix {
+    pkgs = pkgs;
+  };
+
   flake-update = import ../../pkgs/flake-update.nix {
     pkgs = pkgs;
     nix-latest-update = nix-latest-update;
+    update-gemini = update-gemini;
     flake_path = cfg.flake_path;
     flake_config = cfg.flake_config;
   };
@@ -46,6 +51,7 @@ in {
     {
       home.packages = [
         flake-update
+        update-gemini
         nix-clean-boot
         nix-clean
         nix-latest-update
