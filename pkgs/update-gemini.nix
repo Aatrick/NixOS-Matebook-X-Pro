@@ -15,7 +15,7 @@ pkgs.writeShellScriptBin "update-gemini" ''
   cd "$ROOT"
   echo "Updating gemini-cli in $PWD..."
 
-  ${pkgs.nix-update}/bin/nix-update --flake . gemini-cli --version=latest --override-filename pkgs/gemini-cli-latest.nix
+  UPDATE_NIX_ATTR_PATH=gemini-cli ${pkgs.nix-update}/bin/nix-update --flake --url https://github.com/google-gemini/gemini-cli --override-filename pkgs/gemini-cli-latest.nix
 
   echo "Done."
 ''

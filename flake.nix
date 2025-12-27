@@ -38,6 +38,7 @@
 
     packages.${system} = {
       gemini-cli = pkgs-unstable.gemini-cli;
+      update-gemini = pkgs-unstable.update-gemini;
     };
 
     nixosConfigurations = {

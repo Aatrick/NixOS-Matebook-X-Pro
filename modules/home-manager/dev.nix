@@ -37,7 +37,6 @@
     # Python
     python312
     uv
-    pyrefly
 
     # Java
     jdk21
