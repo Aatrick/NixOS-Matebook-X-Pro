@@ -42,6 +42,11 @@
     jdk21
     maven
 
+    # Kotlin
+    kotlin
+    kotlin-language-server
+    gradle
+
     nil
     nixd # Nix language server for zeditor
     alejandra

@@ -5,9 +5,11 @@
   lib,
   vars,
   ...
-}: let
+}:
+let
   cfg = config.custom;
-in {
+in
+{
   options.custom = {
     battery.enable = lib.mkOption {
       default = false;
@@ -28,20 +30,16 @@ in {
         PLATFORM_PROFILE_ON_BAT = "low-power";
         WIFI_PWR_ON_AC = "off";
         WIFI_PWR_ON_BAT = "on";
-        CPU_MIN_PERF_ON_AC = 0;
-        CPU_MAX_PERF_ON_AC = 100;
-        CPU_MIN_PERF_ON_BAT = 0;
-        CPU_MAX_PERF_ON_BAT = 70;
         # CPU_BOOST_ON_AC=1;
         # CPU_BOOST_ON_BAT=0;
         # CPU_HWP_DYN_BOOST_ON_AC=1;
         # CPU_HWP_DYN_BOOST_ON_BAT=0;
-        INTEL_GPU_MIN_FREQ_ON_AC = 300;
-        INTEL_GPU_MIN_FREQ_ON_BAT = 300;
-        INTEL_GPU_MAX_FREQ_ON_AC = 1100;
-        INTEL_GPU_MAX_FREQ_ON_BAT = 300;
-        INTEL_GPU_BOOST_FREQ_ON_AC = 1100;
-        INTEL_GPU_BOOST_FREQ_ON_BAT = 300;
+        # INTEL_GPU_MIN_FREQ_ON_AC = 300;
+        # INTEL_GPU_MIN_FREQ_ON_BAT = 300;
+        # INTEL_GPU_MAX_FREQ_ON_AC = 1100;
+        # INTEL_GPU_MAX_FREQ_ON_BAT = 300;
+        # INTEL_GPU_BOOST_FREQ_ON_AC = 1100;
+        # INTEL_GPU_BOOST_FREQ_ON_BAT = 300;
         PCIE_ASPM_ON_BAT = "powersupersave";
         USB_AUTOSUSPEND = 1;
         RUNTIME_PM_ON_AC = "auto";

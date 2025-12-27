@@ -18,6 +18,7 @@
       "git-firefly"
       "angular"
       "java"
+      "kotlin"
       "material-icon-theme"
       "flat-themes"
       "vue"
@@ -181,6 +182,14 @@
         jdtls = {
           settings = {
             lombok_support = true;
+          };
+        };
+        kotlin_language_server = {
+          binary = {
+            path_lookup = true;
+            env = {
+              JAVA_HOME = "${pkgs.jdk21}";
+            };
           };
         };
         # Keeping standard NixOS LSP config from qhorgues just in case
