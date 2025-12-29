@@ -3,10 +3,11 @@
   pkgs-unstable,
   osConfig,
   ...
-}: {
+}:
+{
   imports = [
     ../../modules/home-manager/profiles/common.nix
-    ../../modules/home-manager/zed.nix
+    # ../../modules/home-manager/zed.nix
     #../../modules/home-manager/office.nix
     #../../modules/home-manager/vm-manager.nix
     ../../modules/home-manager/android.nix

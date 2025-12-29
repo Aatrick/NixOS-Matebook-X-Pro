@@ -11,7 +11,8 @@
   };
 
   home.packages = with pkgs; [
-    pkgs-unstable.zed-editor
+    # pkgs-unstable.zed-editor
+    pkgs-unstable.vscode
     #zeal
     git
     gh
@@ -56,5 +57,7 @@
     gemini-cli
     update-gemini
     nix-update
+
+    tree
   ];
 }
