@@ -25,7 +25,7 @@ in
       enable = true; # Enable TLP (better than gnomes internal power manager)
       settings = {
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
         PLATFORM_PROFILE_ON_AC = "performance";
         PLATFORM_PROFILE_ON_BAT = "low-power";
         WIFI_PWR_ON_AC = "off";

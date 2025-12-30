@@ -4,11 +4,6 @@
   lib,
   ...
 }: {
-  home.pointerCursor = {
-    gtk.enable = true;
-    package = pkgs.vanilla-dmz;
-    name = "Vanilla-DMZ";
-  };
   home.packages = with pkgs; [
     #wineWowPackages.waylandFull
     gnome-text-editor

@@ -70,9 +70,9 @@
     coreOffset = -110;
     gpuOffset = -100;
     useTimer = true;
-    p1.limit = 7;
+    p1.limit = 5;
     p1.window = 10;
-    p2.limit = 15;
-    p2.window = 0.01;
+    p2.limit = 10;
+    p2.window = 0.001;
   };
 }

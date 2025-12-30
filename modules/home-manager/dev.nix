@@ -11,7 +11,6 @@
   };
 
   home.packages = with pkgs; [
-    # pkgs-unstable.zed-editor
     pkgs-unstable.vscode
     #zeal
     git
@@ -34,6 +33,7 @@
     cargo
     rustc
     rust-analyzer
+    rustfmt
 
     # Python
     python312
@@ -51,6 +51,7 @@
     nil
     nixd # Nix language server for zeditor
     alejandra
+    nixfmt
 
     nodejs
     # pkgs-unstable.gemini-cli-bin
