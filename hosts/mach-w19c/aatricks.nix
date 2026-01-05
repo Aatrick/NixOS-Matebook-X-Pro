@@ -27,8 +27,8 @@
     variant = "us";
   };
 
-  home.packages = with pkgs; [
-    discord
-    #deskflow
+  home.packages = [
+    pkgs.discord
   ];
+
 }

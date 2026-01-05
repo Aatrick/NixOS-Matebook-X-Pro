@@ -5,7 +5,8 @@
   pkgs-unstable,
   config,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.nixos-hardware.nixosModules.common-gpu-intel
@@ -61,6 +62,10 @@
     users = {
       "aatricks" = import ./aatricks.nix;
     };
+  };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1"; # Hint for Electron/Chromium apps to use Wayland
   };
 
   hardware.sensor.iio.enable = true;

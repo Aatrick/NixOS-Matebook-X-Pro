@@ -3,7 +3,8 @@
   pkgs-unstable,
   lib,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     #wineWowPackages.waylandFull
     gnome-text-editor
@@ -30,19 +31,6 @@
 
   xdg.mimeApps = {
     enable = true;
-    defaultApplications = {
-      "text/html" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/http" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/https" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/about" = "app.zen_browser.zen.desktop";
-      "x-scheme-handler/unknown" = "app.zen_browser.zen.desktop";
-    };
-
-    associations.added = {
-      "text/html" = ["app.zen_browser.zen.desktop"];
-      "x-scheme-handler/http" = ["app.zen_browser.zen.desktop"];
-      "x-scheme-handler/https" = ["app.zen_browser.zen.desktop"];
-    };
   };
 
   dconf = {
