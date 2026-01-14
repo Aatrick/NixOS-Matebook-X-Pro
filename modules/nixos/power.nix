@@ -25,7 +25,7 @@ in
       enable = true; # Enable TLP (better than gnomes internal power manager)
       settings = {
         CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
         PLATFORM_PROFILE_ON_AC = "performance";
         PLATFORM_PROFILE_ON_BAT = "low-power";
         WIFI_PWR_ON_AC = "off";
@@ -34,12 +34,6 @@ in
         # CPU_BOOST_ON_BAT=0;
         # CPU_HWP_DYN_BOOST_ON_AC=1;
         # CPU_HWP_DYN_BOOST_ON_BAT=0;
-        INTEL_GPU_MIN_FREQ_ON_AC = 300;
-        INTEL_GPU_MIN_FREQ_ON_BAT = 300;
-        INTEL_GPU_MAX_FREQ_ON_AC = 1100;
-        INTEL_GPU_MAX_FREQ_ON_BAT = 300;
-        INTEL_GPU_BOOST_FREQ_ON_AC = 1100;
-        INTEL_GPU_BOOST_FREQ_ON_BAT = 300;
         PCIE_ASPM_ON_BAT = "powersupersave";
         USB_AUTOSUSPEND = 1;
         RUNTIME_PM_ON_AC = "auto";

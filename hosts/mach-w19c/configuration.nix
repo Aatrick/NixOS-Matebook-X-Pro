@@ -39,6 +39,7 @@
 
   custom.battery.enable = true;
 
+
   networking.hostName = "mach-w19c";
   boot.tmp.useTmpfs = false;
   boot.kernelPackages = pkgs.linuxPackages;
@@ -73,11 +74,7 @@
   services.undervolt = {
     enable = true;
     coreOffset = -110;
-    gpuOffset = -100;
+    gpuOffset = -120;
     useTimer = true;
-    p1.limit = 5;
-    p1.window = 10;
-    p2.limit = 10;
-    p2.window = 0.001;
   };
 }
