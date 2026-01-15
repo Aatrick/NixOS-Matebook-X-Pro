@@ -33,12 +33,7 @@
     };
   };
 
-  environment.variables = {
-    ZED_MAX_FPS = "60";
-  };
-
   custom.battery.enable = true;
-
 
   networking.hostName = "mach-w19c";
   boot.tmp.useTmpfs = false;
@@ -76,5 +71,9 @@
     coreOffset = -110;
     gpuOffset = -120;
     useTimer = true;
+    p1.limit = 7;
+    p1.window = 10;
+    p2.limit = 15;
+    p2.window = 0.01;
   };
 }

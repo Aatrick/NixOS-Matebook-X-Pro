@@ -37,7 +37,7 @@
 
     # Python
     python312
-    uv
+    pkgs-unstable.uv
 
     # Java
     jdk21
