@@ -8,10 +8,12 @@
   home.sessionVariables = {
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
     JAVA_HOME = "${pkgs.jdk21}";
+    LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.zlib}/lib";
   };
 
   home.packages = with pkgs; [
     pkgs-unstable.vscode
+    pkgs-unstable.zed-editor
     #zeal
     git
     gh
@@ -38,6 +40,7 @@
     # Python
     python312
     pkgs-unstable.uv
+    pyrefly
 
     # Java
     jdk21
@@ -54,6 +57,7 @@
     nixfmt
 
     nodejs
+    bun
     # pkgs-unstable.gemini-cli-bin
     gemini-cli
     update-gemini
