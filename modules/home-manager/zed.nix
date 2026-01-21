@@ -193,7 +193,7 @@
       lsp = {
         pyrefly = {
           binary = {
-            path = "${pkgs.pyrefly}";
+            path = "${pkgs.pyrefly}/bin/pyrefly";
             arguments = [ "lsp" ];
           };
           settings = {
