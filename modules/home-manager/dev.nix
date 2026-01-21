@@ -8,11 +8,11 @@
   home.sessionVariables = {
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
     JAVA_HOME = "${pkgs.jdk21}";
-    LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.zlib}/lib";
+    LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.zlib}/lib";
   };
 
   home.packages = with pkgs; [
-    pkgs-unstable.vscode
+    # pkgs-unstable.vscode
     pkgs-unstable.zed-editor
     #zeal
     git

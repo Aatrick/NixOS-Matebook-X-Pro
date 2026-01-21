@@ -40,6 +40,19 @@ in
       services.tlp = {
         enable = true;
         settings = {
+          INTEL_GPU_MIN_FREQ_ON_AC = 300;
+          INTEL_GPU_MIN_FREQ_ON_BAT = 300;
+          INTEL_GPU_MAX_FREQ_ON_AC = 800;
+          INTEL_GPU_MAX_FREQ_ON_BAT = 300;
+          INTEL_GPU_BOOST_FREQ_ON_AC = 1100;
+          INTEL_GPU_BOOST_FREQ_ON_BAT = 300;
+
+          RUNTIME_PM_ON_AC = "auto";
+          RUNTIME_PM_ON_BAT = "auto";
+          
+          WIFI_PWR_ON_AC="on";
+          WIFI_PWR_ON_BAT="on";
+
           START_CHARGE_THRESH_BAT0 = 65;
           STOP_CHARGE_THRESH_BAT0 = 80;
 

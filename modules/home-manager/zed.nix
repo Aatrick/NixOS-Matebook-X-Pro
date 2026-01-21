@@ -3,7 +3,8 @@
   pkgs-unstable,
   lib,
   ...
-}: {
+}:
+{
   programs.zed-editor = {
     enable = true;
     installRemoteServer = true;
@@ -22,9 +23,27 @@
       "material-icon-theme"
       "flat-themes"
       "vue"
+      "make"
+      "neocmake"
     ];
 
     userSettings = {
+      git_panel = {
+        status_style = "icon";
+        sort_by_path = true;
+        collapse_untracked_diff = false;
+        tree_view = true;
+      };
+      colorize_brackets = true;
+      inlay_hints = {
+        show_type_hints = false;
+      };
+      always_treat_brackets_as_autoclosed = false;
+      toolbar = {
+        code_actions = false;
+      };
+      hover_popover_delay = 200;
+
       # Notification & Panels
       notification_panel = {
         button = false;
@@ -36,6 +55,9 @@
         hide_hidden = true;
         hide_root = true;
         button = true;
+        folder_icons = false;
+        file_icons = false;
+        auto_reveal_entries = false;
       };
       debugger = {
         button = false;
@@ -46,8 +68,11 @@
       diagnostics = {
         button = false;
       };
-      session= {
-        trust_all_worktrees= true;
+      session = {
+        trust_all_worktrees = true;
+      };
+      indent_guides = {
+        enabled = false;
       };
 
       # Git
@@ -57,11 +82,27 @@
         };
       };
 
+      file_scan_exclusions = [
+        "**/.git"
+        "**/node_modules"
+        "**/target"
+        "**/dist"
+        "**/.venv"
+        "**/build"
+      ];
+      base_keymap = "VSCode";
+
       # Layout & Appearance
       cursor_blink = false;
       bottom_dock_layout = "full";
       tab_bar = {
         show = false;
+      };
+      preview_tabs = {
+        enabled = false;
+      };
+      minimap = {
+        show = "never";
       };
       title_bar = {
         show_sign_in = true;
@@ -94,6 +135,7 @@
           milliseconds = 1000;
         };
       };
+      ensure_final_newline_on_save = true;
       buffer_line_height = "comfortable";
       restore_on_startup = "last_session";
       ui_font_size = 16;
@@ -102,8 +144,9 @@
 
       # Terminal
       terminal = {
-        button = false;
+        font_size = 17.0;
         font_family = "MonaspiceNe Nerd Font";
+        button = false;
       };
 
       # AI & Features
@@ -121,7 +164,7 @@
           provider = "copilot_chat";
           model = "grok-code-fast-1";
         };
-        model_parameters = [];
+        model_parameters = [ ];
       };
 
       # Telemetry
@@ -151,7 +194,7 @@
         pyrefly = {
           binary = {
             path = "${pkgs.pyrefly}";
-            arguments = ["lsp"];
+            arguments = [ "lsp" ];
           };
           settings = {
             python = {
@@ -166,7 +209,7 @@
                 "**/.[!/.]*"
                 "**/*venv/**"
               ];
-              search_path = ["src"];
+              search_path = [ "src" ];
               ignore_errors_in_generated_code = true;
             };
           };
@@ -188,7 +231,7 @@
           };
         };
       };
-      
+
       load_direnv = "shell_hook";
     };
   };
