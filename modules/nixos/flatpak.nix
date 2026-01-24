@@ -21,6 +21,7 @@
     ];
 
     packages = [
+      "app.zen_browser.zen"
     ];
   };
 }

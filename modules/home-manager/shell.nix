@@ -2,12 +2,16 @@
   self,
   pkgs,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     grc
     fish
     fzf
   ];
+  programs.starship = {
+    enable = true;
+  };
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -31,10 +35,6 @@
           rev = "4.4.4";
           hash = "sha256-e8gIaVbuUzTwKtuMPNXBT5STeddYqQegduWBtURLT3M=";
         };
-      }
-      {
-        name = "tide";
-        src = pkgs.fishPlugins.tide.src;
       }
       {
         name = "done";

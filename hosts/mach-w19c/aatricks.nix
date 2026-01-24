@@ -30,15 +30,6 @@
 
   home.packages = [
     pkgs.discord
-    (pkgs-unstable.brave.override {
-      commandLineArgs = [
-        # Enable two-finger back/forward swipe gestures
-        "--enable-features=TouchpadOverscrollHistoryNavigation"
-
-        # Force Brave to run natively on Wayland (improves scroll physics/speed)
-        "--ozone-platform-hint=auto"
-      ];
-    })
   ];
 
 }

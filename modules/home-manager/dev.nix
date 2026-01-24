@@ -12,7 +12,6 @@
   };
 
   home.packages = with pkgs; [
-    # pkgs-unstable.vscode
     pkgs-unstable.zed-editor
     #zeal
     git
@@ -44,6 +43,7 @@
 
     # Java
     jdk21
+    jdt-language-server
     maven
 
     # Kotlin
@@ -56,9 +56,7 @@
     alejandra
     nixfmt
 
-    nodejs
     bun
-    # pkgs-unstable.gemini-cli-bin
     gemini-cli
     update-gemini
     nix-update
