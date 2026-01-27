@@ -37,13 +37,7 @@
 
   networking.hostName = "mach-w19c";
   boot.tmp.useTmpfs = false;
-  boot.kernelPackages = pkgs.linuxPackages;
-
-  winter = {
-    # vm = {
-    #     users = [ "aatricks" ];
-    # };
-  };
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   home-manager = {
     extraSpecialArgs = {
@@ -60,10 +54,6 @@
     };
   };
 
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # Hint for Electron/Chromium apps to use Wayland
-  };
-
   hardware.sensor.iio.enable = true;
 
   services.undervolt = {
@@ -71,9 +61,9 @@
     coreOffset = -110;
     gpuOffset = -120;
     useTimer = true;
-    p1.limit = 7;
+    p1.limit = 10;
     p1.window = 10;
-    p2.limit = 15;
+    p2.limit = 10;
     p2.window = 0.01;
   };
 }

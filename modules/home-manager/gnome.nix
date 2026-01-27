@@ -18,7 +18,6 @@
     gnomeExtensions.dash-to-dock
     gnomeExtensions.blur-my-shell
     gnomeExtensions.appindicator
-    gnomeExtensions.caffeine
     gnomeExtensions.user-themes
     gnomeExtensions.places-status-indicator
     gnomeExtensions.quick-settings-audio-panel
@@ -55,7 +54,6 @@
           blur-my-shell.extensionUuid
           dash-to-dock.extensionUuid
           user-themes.extensionUuid
-          caffeine.extensionUuid
           appindicator.extensionUuid
           places-status-indicator.extensionUuid
           quick-settings-audio-panel.extensionUuid

@@ -29,7 +29,7 @@ in
         settings = {
           battery = {
             governor = "powersave";
-            turbo = "auto";
+            turbo = "false";
           };
           charger = {
             governor = "performance";
@@ -49,9 +49,9 @@ in
 
           RUNTIME_PM_ON_AC = "auto";
           RUNTIME_PM_ON_BAT = "auto";
-          
-          WIFI_PWR_ON_AC="on";
-          WIFI_PWR_ON_BAT="on";
+
+          WIFI_PWR_ON_AC = "on";
+          WIFI_PWR_ON_BAT = "on";
 
           START_CHARGE_THRESH_BAT0 = 65;
           STOP_CHARGE_THRESH_BAT0 = 80;

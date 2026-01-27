@@ -37,7 +37,12 @@
     rustfmt
 
     # Python
-    python312
+    (python312.withPackages (
+      ps: with ps; [
+        jupyter
+        ipykernel
+      ]
+    ))
     pkgs-unstable.uv
     pyrefly
 
