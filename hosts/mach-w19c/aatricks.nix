@@ -10,7 +10,6 @@
     #../../modules/home-manager/office.nix
     #../../modules/home-manager/vm-manager.nix
     ../../modules/home-manager/android.nix
-    ../../modules/home-manager/zed.nix
   ];
 
   winter = {
@@ -28,8 +27,9 @@
     variant = "us";
   };
 
-  home.packages = [
-    pkgs.discord
+  home.packages = with pkgs; [
+    discord
+    krita
   ];
 
 }

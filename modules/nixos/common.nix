@@ -55,6 +55,11 @@
     ];
   };
 
+  environment.systemPackages = with pkgs; [
+    gvfs
+    gnome-online-accounts
+  ];
+
   services.devmon.enable = true;
   services.gvfs.enable = true;
   services.udisks2 = {

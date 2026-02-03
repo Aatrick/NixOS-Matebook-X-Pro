@@ -12,11 +12,14 @@
   };
 
   home.packages = with pkgs; [
-    pkgs-unstable.zed-editor
+    pkgs-unstable.vscode-fhs
+
     #zeal
     git
     gh
     blackbox-terminal
+
+    msedit
 
     # C / C++ / Native Build
     gcc
@@ -41,6 +44,7 @@
       ps: with ps; [
         jupyter
         ipykernel
+        tkinter
       ]
     ))
     pkgs-unstable.uv

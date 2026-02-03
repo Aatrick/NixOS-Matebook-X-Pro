@@ -7,7 +7,7 @@
 {
   home.packages = with pkgs; [
     #wineWowPackages.waylandFull
-    gnome-text-editor
+    #gnome-text-editor
     gnome-calculator
     nautilus
     fastfetch

@@ -33,6 +33,8 @@
     };
   };
 
+  hardware.opentabletdriver.enable = true;
+
   custom.battery.enable = true;
 
   networking.hostName = "mach-w19c";
@@ -59,11 +61,11 @@
   services.undervolt = {
     enable = true;
     coreOffset = -110;
-    gpuOffset = -120;
+    gpuOffset = -200;
     useTimer = true;
-    p1.limit = 10;
+    p1.limit = 6;
     p1.window = 10;
-    p2.limit = 10;
+    p2.limit = 6;
     p2.window = 0.01;
   };
 }

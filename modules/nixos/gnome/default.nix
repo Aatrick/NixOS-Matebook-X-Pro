@@ -15,9 +15,9 @@
     default = 1.0;
     description = "Facteur de mise à l’échelle du texte GNOME.";
   };
-
   config = lib.mkMerge [
     {
+      services.gnome.gnome-online-accounts.enable = true;
       services = {
         displayManager.gdm.enable = true;
         desktopManager.gnome = {
