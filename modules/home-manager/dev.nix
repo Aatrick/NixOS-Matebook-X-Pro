@@ -12,7 +12,7 @@
   };
 
   home.packages = with pkgs; [
-    pkgs-unstable.vscode-fhs
+    pkgs-unstable.antigravity-fhs
 
     #zeal
     git
@@ -48,7 +48,7 @@
       ]
     ))
     pkgs-unstable.uv
-    pyrefly
+    pkgs-unstable.pyrefly
 
     # Java
     jdk21
