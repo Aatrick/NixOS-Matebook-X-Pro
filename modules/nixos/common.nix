@@ -3,15 +3,16 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
   nix.settings = {
-    substituters = ["https://nix-community.cachix.org"];
-    trusted-public-keys = ["nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
+    substituters = [ "https://nix-community.cachix.org" ];
+    trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
   };
   system.stateVersion = config.system.nixos.release;
 
@@ -30,7 +31,15 @@
   };
 
   networking.networkmanager.enable = lib.mkDefault true;
-  networking.firewall.enable = lib.mkForce true;
+  networking.firewall = {
+    enable = lib.mkForce true;
+    # Allows Tailscale traffic
+    trustedInterfaces = [ "tailscale0" ];
+
+    # Required for Tailscale to route correctly (UDP hole punching)
+    checkReversePath = "loose";
+  };
+  services.tailscale.enable = true;
 
   console.keyMap = "us";
 

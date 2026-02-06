@@ -177,7 +177,7 @@
       languages = {
         "Python" = {
           language_servers = [
-            "pyrefly"
+            "ty"
             "!pyright"
             "!pylsp"
           ];
@@ -191,40 +191,6 @@
 
       # LSP Configuration
       lsp = {
-        pyrefly = {
-          binary = {
-            path = "${pkgs.pyrefly}/bin/pyrefly";
-            arguments = [ "lsp" ];
-          };
-          settings = {
-            python = {
-              pythonPath = ".venv/bin/python";
-            };
-            pyrefly = {
-              project_includes = [
-                "src/**/*.py"
-                "tests/**/*.py"
-              ];
-              project_excludes = [
-                "**/.[!/.]*"
-                "**/*venv/**"
-              ];
-              search_path = [ "src" ];
-              ignore_errors_in_generated_code = true;
-            };
-          };
-        };
-        basedpyright = {
-          settings = {
-            typeCheckingMode = "standard";
-            "basedpyright.analysis" = {
-              diagnosticMode = "workspace";
-              inlayHints = {
-                callArgumentNames = false;
-              };
-            };
-          };
-        };
         jdtls = {
           settings = {
             lombok_support = true;

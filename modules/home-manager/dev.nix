@@ -48,7 +48,7 @@
       ]
     ))
     pkgs-unstable.uv
-    pkgs-unstable.pyrefly
+    pkgs-unstable.ty
 
     # Java
     jdk21
@@ -72,5 +72,6 @@
 
     tree
     obsidian
+    parsec-bin
   ];
 }

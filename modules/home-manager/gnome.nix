@@ -44,6 +44,7 @@
       "x-scheme-handler/https" = [ "app.zen_browser.zen.desktop" ];
     };
   };
+  
 
   dconf = {
     enable = true;
