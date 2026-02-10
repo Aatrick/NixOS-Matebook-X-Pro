@@ -1,6 +1,7 @@
 {
   pkgs,
   pkgs-unstable,
+  lib,
   ...
 }:
 {
@@ -8,11 +9,27 @@
   home.sessionVariables = {
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
     JAVA_HOME = "${pkgs.jdk21}";
-    LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.zlib}/lib";
+    LD_LIBRARY_PATH = with pkgs; lib.makeLibraryPath [
+      stdenv.cc.cc.lib
+      zlib
+      glib
+      libxkbcommon
+      fontconfig
+      freetype
+      xorg.libX11
+      xorg.libXext
+      xorg.libXrender
+      xorg.libICE
+      xorg.libSM
+      xorg.libxcb
+      xorg.libXau
+      xorg.libXdmcp
+      libGL
+    ];
   };
 
   home.packages = with pkgs; [
-    pkgs-unstable.antigravity-fhs
+    pkgs-unstable.vscode-fhs
 
     #zeal
     git
@@ -45,6 +62,7 @@
         jupyter
         ipykernel
         tkinter
+        opencv4
       ]
     ))
     pkgs-unstable.uv
@@ -54,6 +72,7 @@
     jdk21
     jdt-language-server
     maven
+    direnv
 
     # Kotlin
     kotlin
@@ -73,5 +92,6 @@
     tree
     obsidian
     parsec-bin
+    graphviz
   ];
 }

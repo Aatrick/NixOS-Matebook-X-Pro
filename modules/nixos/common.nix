@@ -56,11 +56,18 @@
       openssl
       freetype
       fontconfig
+      libxkbcommon
       xorg.libX11
       xorg.libXext
       xorg.libXrender
       xorg.libXtst
       xorg.libXi
+      xorg.libxcb
+      xorg.libXau
+      xorg.libXdmcp
+      libGL
+      xorg.libSM
+      xorg.libICE
     ];
   };
 
