@@ -74,6 +74,11 @@
   environment.systemPackages = with pkgs; [
     gvfs
     gnome-online-accounts
+
+    # audio tools & codec libraries for better Bluetooth support
+    pavucontrol
+    helvum
+    ldacbt
   ];
 
   services.devmon.enable = true;
