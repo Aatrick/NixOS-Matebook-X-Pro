@@ -28,6 +28,8 @@
 
   winter.security.hardening = lib.mkDefault true;
 
+  services.fstrim.enable = lib.mkDefault true;
+
   fileSystems."/".options = [
     "noatime"
     "nodiratime"

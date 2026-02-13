@@ -43,6 +43,11 @@
 
   console.keyMap = "us";
 
+  boot.kernel.sysctl = {
+    "net.core.default_qdisc" = "fq";
+    "net.ipv4.tcp_congestion_control" = "bbr";
+  };
+
   programs.adb.enable = true;
 
   programs.nix-ld = {

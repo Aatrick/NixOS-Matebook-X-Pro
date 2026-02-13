@@ -38,7 +38,11 @@
   custom.battery.enable = true;
 
   networking.hostName = "mach-w19c";
-  boot.tmp.useTmpfs = false;
+  boot.tmp.useTmpfs = true;
+  boot.kernelParams = [
+    "i915.enable_psr=1"
+    "i915.enable_guc=3"
+  ];
   # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   home-manager = {

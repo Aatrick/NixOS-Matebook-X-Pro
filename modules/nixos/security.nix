@@ -18,7 +18,12 @@
     (lib.mkIf config.winter.security.hardening {
       security.apparmor.enable = true;
       security.auditd.enable = true;
-      security.audit.enable = true;
+      security.audit.enable = false;
+      # security.audit.backlogLimit = 8192;
+      # security.audit.rules = [
+      #   "-a always,exit -F arch=b64 -S execve"
+      #   "-a always,exit -F arch=b32 -S execve"
+      # ];
       security.sudo.execWheelOnly = true;
 
       services.resolved.dnssec = "true";
