@@ -13,7 +13,6 @@
       "html"
       "toml"
       "nix"
-      "pyrefly"
       "dockerfile"
       "sql"
       "git-firefly"

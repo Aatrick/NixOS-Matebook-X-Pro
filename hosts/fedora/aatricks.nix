@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    #../../modules/home-manager/android.nix
+    ../../modules/home-manager/android.nix
     ../../modules/home-manager/dev.nix
     ../../modules/home-manager/git.nix
     ../../modules/home-manager/gnome.nix
@@ -18,11 +18,6 @@
   home.homeDirectory = "/home/aatricks";
 
   home.packages = with pkgs; [
-    equibop
-    #deskflow
-  ];
-
-  nixpkgs.config.allowUnfree = true;
 
   # Set the state version
   home.stateVersion = "25.05";

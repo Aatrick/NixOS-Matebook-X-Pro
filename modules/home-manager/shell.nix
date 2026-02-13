@@ -16,6 +16,18 @@
     enable = true;
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
+
+      # Source home-manager session variables (POSIX to Fish translation)
+      if test -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+          cat "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" | while read -l line
+              if string match -qr '^export ' $line
+                  set -l entry (string replace -r '^export ' ''' $line | string split -m 1 '=')
+                  set -l key $entry[1]
+                  set -l val (string trim -c '"' $entry[2])
+                  set -gx $key $val
+              end
+          end
+      end
     '';
     plugins = [
       {

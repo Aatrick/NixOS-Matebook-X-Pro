@@ -19,7 +19,7 @@ in
   };
 
   config = lib.mkMerge [
-    { environment.systemPackages = [ pkgs.powertop ]; }
+    { environment.systemPackages = [ pkgs.powertop pkgs-unstable.tlp ]; }
     (lib.mkIf cfg.battery.enable {
       services.thermald.enable = true; # Enable thermald, the temperature management daemon. (only necessary if on Intel CPUs)
       services.power-profiles-daemon.enable = false; # Disable GNOMEs power management
@@ -37,6 +37,30 @@ in
           };
         };
       };
+      services.tlp = {
+        enable = true;
+        settings = {
+          INTEL_GPU_MIN_FREQ_ON_AC = 300;
+          INTEL_GPU_MIN_FREQ_ON_BAT = 300;
+          INTEL_GPU_MAX_FREQ_ON_AC = 800;
+          INTEL_GPU_MAX_FREQ_ON_BAT = 300;
+          INTEL_GPU_BOOST_FREQ_ON_AC = 1100;
+          INTEL_GPU_BOOST_FREQ_ON_BAT = 300;
+
+          RUNTIME_PM_ON_AC = "auto";
+          RUNTIME_PM_ON_BAT = "auto";
+
+          WIFI_PWR_ON_AC = "on";
+          WIFI_PWR_ON_BAT = "on";
+
+          START_CHARGE_THRESH_BAT0 = 65;
+          STOP_CHARGE_THRESH_BAT0 = 80;
+
+          RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+          TLP_DEFAULT_MODE = "BAT";
+        };
+      };
     })
   ];
+
 }

@@ -9,7 +9,7 @@
     loader.efi.canTouchEfiVariables = lib.mkDefault true;
     tmp.useTmpfs = lib.mkDefault true;
 
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages;
     kernelParams = lib.mkDefault ["quiet"];
 
     initrd.systemd.enable = lib.mkDefault true;

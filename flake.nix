@@ -25,6 +25,7 @@
 
     nixpkgsConfig = {
       allowUnfree = true;
+      android_sdk.accept_license = true;
     };
     
     # Import unstable pkgs with overlay
@@ -46,7 +47,10 @@
         inherit system;
         specialArgs = {inherit self inputs pkgs-unstable;};
         modules = [
-          { nixpkgs.overlays = overlays; }
+          {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config = nixpkgsConfig;
+          }
           ./hosts/mach-w19c/configuration.nix
           inputs.home-manager.nixosModules.default
         ];
@@ -55,7 +59,10 @@
         inherit system;
         specialArgs = {inherit self inputs pkgs-unstable;};
         modules = [
-          { nixpkgs.overlays = overlays; }
+          {
+            nixpkgs.overlays = overlays;
+            nixpkgs.config = nixpkgsConfig;
+          }
           ./hosts/homelab/configuration.nix
           inputs.home-manager.nixosModules.default
         ];
@@ -64,7 +71,10 @@
 
     homeConfigurations = {
       "aatricks@fedora" = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          config = nixpkgsConfig;
+        };
         extraSpecialArgs = {inherit self inputs pkgs-unstable;};
         modules = [
           ./hosts/fedora/aatricks.nix
