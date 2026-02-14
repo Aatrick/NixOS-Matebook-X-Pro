@@ -33,4 +33,30 @@
     krita
   ];
 
+  home.file.".config/monitors.xml".text = ''
+    <monitors version="2">
+      <configuration>
+        <layoutmode>logical</layoutmode>
+        <logicalmonitor>
+          <x>0</x>
+          <y>0</y>
+          <scale>1</scale>
+          <primary>yes</primary>
+          <monitor>
+            <monitorspec>
+              <connector>eDP-1</connector>
+              <vendor>JDI</vendor>
+              <product>0x422a</product>
+              <serial>0x00000000</serial>
+            </monitorspec>
+            <mode>
+              <width>1680</width>
+              <height>1050</height>
+              <rate>59.954</rate>
+            </mode>
+          </monitor>
+        </logicalmonitor>
+      </configuration>
+    </monitors>
+  '';
 }

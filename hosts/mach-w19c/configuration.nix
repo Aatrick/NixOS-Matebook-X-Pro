@@ -43,8 +43,19 @@
     "i915.enable_psr=1"
     "i915.enable_guc=3"
     "i915.enable_fbc=1"
+    "i915.fastboot=1"
+    "i915.enable_dc=2"
   ];
   boot.kernelPackages = pkgs.linuxPackages;
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      intel-vaapi-driver
+      libvdpau-va-gl
+    ];
+  };
 
   home-manager = {
     extraSpecialArgs = {
@@ -66,9 +77,9 @@
   services.undervolt = {
     enable = true;
     coreOffset = -110;
-    gpuOffset = -115;
-    uncoreOffset = -115;
-    analogioOffset = -115;
+    gpuOffset = -110;
+    uncoreOffset = -110;
+    analogioOffset = -110;
     useTimer = true;
     p1.limit = 6;
     p1.window = 10;
