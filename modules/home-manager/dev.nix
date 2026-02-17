@@ -34,7 +34,7 @@
     #zeal
     git
     gh
-    blackbox-terminal
+    ghostty
 
     msedit
 
@@ -79,8 +79,8 @@
     kotlin-language-server
     gradle
 
-    nil
-    nixd # Nix language server for zeditor
+    pkgs-unstable.nil
+    pkgs-unstable.nixd # Nix language server for zeditor
     alejandra
     nixfmt
 

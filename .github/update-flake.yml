@@ -1,0 +1,124 @@
+name: Update Flake Lock
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch: # Allow manual execution
+
+jobs:
+  update-flake:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update flake.lock
+        run: |
+          nix flake update
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet flake.lock; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create update branch
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          BRANCH_NAME="flake-update-$(date +%Y%m%d-%H%M%S)"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          git checkout -b "$BRANCH_NAME"
+          git add flake.lock
+          git commit -m "chore: update flake.lock"
+          git push origin "$BRANCH_NAME"
+
+      - name: Create or verify labels
+        if: steps.check_changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Create labels if they don't exist (ignore errors if they already exist)
+          gh label create "dependencies" --description "Pull requests that update a dependency file" --color "0366d6" || true
+          gh label create "automated" --description "Automated pull requests" --color "34d058" || true
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --title "Automatic flake.lock update" \
+            --body "This PR automatically updates flake.lock.
+
+          **Auto-merge scheduled in 48h**
+
+          This PR will be automatically merged after a 48-hour review period.
+
+          Review the changes and close this PR if you don't want to apply this update." \
+            --base master \
+            --head "$BRANCH_NAME" \
+            --label "dependencies,automated"
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Find old PRs to merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Find PRs created more than 48h ago with specific criteria
+          CUTOFF_DATE=$(date -u -d '48 hours ago' --iso-8601=seconds)
+
+          gh pr list \
+            --state open \
+            --label "automated" \
+            --json number,createdAt,headRefName,title,author \
+            --jq ".[] | select(.createdAt < \"$CUTOFF_DATE\") | select(.headRefName | startswith(\"flake-update-\")) | select(.title | startswith(\"Automatic flake.lock update\")) | select(.author.login == \"github-actions[bot]\") | .number" | while read -r PR_NUMBER; do
+
+            echo "Merging PR #$PR_NUMBER (flake.lock auto-update older than 48h)"
+
+            # Additional safety check: verify only flake.lock was changed
+            CHANGED_FILES=$(gh pr view "$PR_NUMBER" --json files --jq '.files[].path')
+            if [ "$CHANGED_FILES" != "flake.lock" ]; then
+              echo "⚠️  PR #$PR_NUMBER has unexpected file changes, skipping for safety"
+              echo "Changed files: $CHANGED_FILES"
+              continue
+            fi
+
+            # Check if PR is still mergeable
+            if gh pr view "$PR_NUMBER" --json mergeable --jq '.mergeable' | grep -q "MERGEABLE"; then
+              gh pr merge "$PR_NUMBER" \
+                --squash \
+                --delete-branch \
+                --subject "chore: update flake.lock [automated]" \
+                --body "Automatic flake.lock update after 48h review period"
+            else
+              echo "PR #$PR_NUMBER is not mergeable, skipping"
+            fi
+          done

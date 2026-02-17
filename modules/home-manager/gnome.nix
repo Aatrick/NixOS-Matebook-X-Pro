@@ -24,6 +24,7 @@
     gnomeExtensions.weather-oclock
     gnomeExtensions.apps
     gnomeExtensions.just-perfection
+    gnomeExtensions.hide-top-bar
     # Icons
     pkgs-unstable.papirus-icon-theme
   ];
@@ -44,7 +45,6 @@
       "x-scheme-handler/https" = [ "app.zen_browser.zen.desktop" ];
     };
   };
-  
 
   dconf = {
     enable = true;
@@ -61,6 +61,7 @@
           weather-oclock.extensionUuid
           apps.extensionUuid
           just-perfection.extensionUuid
+          hide-top-bar.extensionUuid
         ];
       };
     };
