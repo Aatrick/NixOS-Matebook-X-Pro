@@ -8,7 +8,7 @@
 }:
 {
   imports = [
-    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.nixos-hardware.nixosModules.common-gpu-intel
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
@@ -22,7 +22,7 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    # powerManagement.enable = false;
+    powerManagement.enable = true;
     # powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = true;
@@ -30,6 +30,10 @@
     prime = {
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
+      offload = {
+        enable = true;
+        enableOffloadCmd = true;
+      };
     };
   };
 
@@ -46,7 +50,7 @@
     "i915.fastboot=1"
     "i915.enable_dc=2"
   ];
-  boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   hardware.graphics = {
     enable = true;
@@ -81,9 +85,9 @@
     uncoreOffset = -110;
     analogioOffset = -110;
     useTimer = true;
-    p1.limit = 6;
+    p1.limit = 15;
     p1.window = 10;
-    p2.limit = 6;
+    p2.limit = 25;
     p2.window = 0.01;
   };
 }

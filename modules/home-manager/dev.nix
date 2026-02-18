@@ -58,7 +58,6 @@
     # Python
     (python312.withPackages (
       ps: with ps; [
-        jupyter
         ipykernel
         tkinter
         opencv4
@@ -89,7 +88,6 @@
     nix-update
 
     tree
-    obsidian
     parsec-bin
     graphviz
   ];

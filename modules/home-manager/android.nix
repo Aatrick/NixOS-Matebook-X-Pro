@@ -4,8 +4,8 @@
   ...
 }: let
   android-sdk = (pkgs-unstable.androidenv.composeAndroidPackages {
-    platformVersions = ["34" "35" "36"];
-    buildToolsVersions = ["34.0.0" "35.0.0" "36.0.0"];
+    platformVersions = ["36"];
+    buildToolsVersions = ["36.0.0"];
     includeEmulator = true;
     includeSystemImages = true;
     systemImageTypes = ["google_apis_playstore"];

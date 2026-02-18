@@ -82,6 +82,10 @@
     ];
   };
 
+  environment.variables = {
+    LIBVA_DRIVER_NAME = "iHD";
+  };
+
   environment.systemPackages = with pkgs; [
     gvfs
     gnome-online-accounts
