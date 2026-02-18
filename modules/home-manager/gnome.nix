@@ -24,7 +24,6 @@
     gnomeExtensions.weather-oclock
     gnomeExtensions.apps
     gnomeExtensions.just-perfection
-    gnomeExtensions.hide-top-bar
     # Icons
     pkgs-unstable.papirus-icon-theme
   ];
@@ -61,7 +60,6 @@
           weather-oclock.extensionUuid
           apps.extensionUuid
           just-perfection.extensionUuid
-          hide-top-bar.extensionUuid
         ];
       };
     };

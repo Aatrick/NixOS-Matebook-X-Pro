@@ -34,7 +34,6 @@
     #zeal
     git
     gh
-    ghostty
 
     msedit
 

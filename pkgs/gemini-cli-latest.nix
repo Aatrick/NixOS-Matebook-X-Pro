@@ -1,11 +1,11 @@
 {pkgs ? import <nixpkgs> {}}:
 pkgs.stdenv.mkDerivation rec {
   pname = "gemini-cli";
-  version = "0.28.2";
+  version = "0.29.0";
 
   src = pkgs.fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${version}/gemini.js";
-    hash = "sha256-QrYpxMVm0LW42bL6yQn2TuBdyII4hVO2zlesMPiI0DQ=";
+    hash = "sha256-uuGIDSoMo+SGzFR8e8r9hOm7xWeqfA+2ClljiLkTh0k=";
   };
 
   dontUnpack = true;

@@ -3,6 +3,7 @@
     ../gnome.nix
     ../git.nix
     ../dev.nix
+    ../ghostty.nix
     ../shell.nix
     ../flake-script.nix
   ];
