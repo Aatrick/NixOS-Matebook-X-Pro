@@ -29,6 +29,7 @@
   winter.security.hardening = lib.mkDefault true;
 
   services.fstrim.enable = lib.mkDefault true;
+  services.dbus.implementation = "broker";
 
   fileSystems."/".options = [
     "noatime"

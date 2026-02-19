@@ -1,5 +1,6 @@
 final: prev: {
   gemini-cli = final.callPackage ./gemini-cli-latest.nix {};
+  helium-browser = final.callPackage ./helium-browser.nix {};
   flake-update = final.callPackage ./flake-update.nix {};
   lsfg-vk = final.callPackage ./lsfg-vk.nix {};
   nix-clean-boot = final.callPackage ./nix-clean-boot.nix {};

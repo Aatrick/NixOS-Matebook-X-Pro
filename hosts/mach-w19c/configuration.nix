@@ -8,7 +8,7 @@
 }:
 {
   imports = [
-    # inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
+    inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.nixos-hardware.nixosModules.common-gpu-intel
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
@@ -20,22 +20,22 @@
     # ../../modules/nixos/vm.nix
   ];
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = true;
-    # powerManagement.finegrained = false;
-    open = false;
-    nvidiaSettings = true;
-    #package = config.boot.kernelPackages.nvidiaPackages.beta;
-    prime = {
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
-      offload = {
-        enable = true;
-        enableOffloadCmd = true;
-      };
-    };
-  };
+  # hardware.nvidia = {
+  #   modesetting.enable = true;
+  #   powerManagement.enable = true;
+  #   # powerManagement.finegrained = false;
+  #   open = false;
+  #   nvidiaSettings = true;
+  #   #package = config.boot.kernelPackages.nvidiaPackages.beta;
+  #   prime = {
+  #     intelBusId = "PCI:0:2:0";
+  #     nvidiaBusId = "PCI:1:0:0";
+  #     offload = {
+  #       enable = true;
+  #       enableOffloadCmd = true;
+  #     };
+  #   };
+  # };
 
   hardware.opentabletdriver.enable = true;
 
