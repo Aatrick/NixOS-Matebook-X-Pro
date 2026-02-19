@@ -90,4 +90,9 @@
     p2.limit = 25;
     p2.window = 0.01;
   };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+  };
 }
