@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl, symlinkJoin }:
+{ appimageTools, lib, fetchurl, symlinkJoin, buildFHSEnv, runCommand, writeScript, widevine-cdm }:
 
 let
   pname = "helium-browser";
@@ -10,14 +10,41 @@ let
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
+
+  # Create a directory with AppImage contents + Widevine symlink
+  heliumRoot = runCommand "helium-root" {} ''
+    mkdir -p $out
+    cp -r ${appimageContents}/* $out/
+    chmod -R +w $out
+    
+    # Create the WidevineCdm directory symlink next to the binary
+    mkdir -p $out/opt/helium/WidevineCdm
+    ln -s ${widevine-cdm}/share/google/chrome/WidevineCdm/* $out/opt/helium/WidevineCdm/
+  '';
+
+  # Define the FHS wrapper
+  fhs = buildFHSEnv {
+    name = "helium-browser";
+    
+    multiPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs);
+    targetPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.targetPkgs pkgs) ++ [ widevine-cdm ];
+    
+    runScript = writeScript "helium-wrapper" ''
+      # Symlink WidevineCdm to user configuration directory
+      # This helps if the browser ignores flags and looks in default locations
+      mkdir -p $HOME/.config/net.imput.helium
+      ln -snf ${widevine-cdm}/share/google/chrome/WidevineCdm $HOME/.config/net.imput.helium/WidevineCdm
+
+      exec ${heliumRoot}/opt/helium/helium \
+        --widevine-cdm-path=${widevine-cdm}/share/google/chrome/WidevineCdm \
+        --widevine-cdm-version=${widevine-cdm.version} \
+        "$@"
+    '';
+  };
 in
   symlinkJoin {
     name = "${pname}-${version}";
-    paths = [
-      (appimageTools.wrapType2 {
-        inherit pname version src;
-      })
-    ];
+    paths = [ fhs ];
 
     postBuild = ''
       mkdir -p $out/share/applications
