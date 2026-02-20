@@ -33,7 +33,7 @@
     exec = "env -u NIXOS_OZONE_WL NIXOS_OZONE_WL=0 helium-browser --ozone-platform=x11 %U";
     terminal = false;
     type = "Application";
-    icon = "helium";
+    icon = "helium-browser";
   };
 
   dconf = {

@@ -95,4 +95,10 @@
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
   };
+  environment.etc."libinput/local-overrides.quirks".text = ''
+    [Huawei Mach Touchpad Resolution]
+    MatchUdevType=touchpad
+    MatchName=*SYNA1D31:00 06CB:CD48 Touchpad*
+    AttrResolutionHint=50x50
+  '';
 }
