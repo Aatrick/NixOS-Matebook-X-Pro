@@ -23,6 +23,8 @@
   system.stateVersion = config.system.nixos.release;
 
   time.timeZone = "Europe/Paris";
+  location.latitude = 48.8566;
+  location.longitude = 2.3522;
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "fr_FR.UTF-8";

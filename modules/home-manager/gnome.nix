@@ -28,12 +28,21 @@
     pkgs-unstable.papirus-icon-theme
   ];
 
-  xdg.desktopEntries.helium = {
-    name = "Helium";
-    exec = "env -u NIXOS_OZONE_WL NIXOS_OZONE_WL=0 helium-browser --ozone-platform=x11 %U";
-    terminal = false;
-    type = "Application";
-    icon = "helium-browser";
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "app.zen_browser.zen.desktop";
+      "x-scheme-handler/http" = "app.zen_browser.zen.desktop";
+      "x-scheme-handler/https" = "app.zen_browser.zen.desktop";
+      "x-scheme-handler/about" = "app.zen_browser.zen.desktop";
+      "x-scheme-handler/unknown" = "app.zen_browser.zen.desktop";
+    };
+
+    associations.added = {
+      "text/html" = [ "app.zen_browser.zen.desktop" ];
+      "x-scheme-handler/http" = [ "app.zen_browser.zen.desktop" ];
+      "x-scheme-handler/https" = [ "app.zen_browser.zen.desktop" ];
+    };
   };
 
   dconf = {

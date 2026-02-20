@@ -33,6 +33,7 @@ in
     (lib.mkIf cfg.battery.enable {
       services.thermald.enable = true; # Enable thermald, the temperature management daemon. (only necessary if on Intel CPUs)
       services.power-profiles-daemon.enable = false; # Disable GNOMEs power management
+      services.clight.enable = true; # Enable automatic brightness adjustment
       powerManagement.powertop.enable = true; # Enable powertop auto-tune
 
       services.tlp = {
