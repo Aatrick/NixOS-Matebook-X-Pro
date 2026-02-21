@@ -145,16 +145,22 @@
             lux=$(echo "$line" | sed -E 's/.*Light changed: ([0-9]+)[,.].*/\1/')
             if [ -z "$lux" ]; then continue; fi
 
-            # Calculate target based on typical tinted-sensor lux ranges
+            # more granular brightness targets
             if [ "$lux" -le 5 ]; then
               target="1%"
-            elif [ "$lux" -le 50 ]; then
-              target="15%"
-            elif [ "$lux" -le 60 ]; then
-              target="35%"
-            elif [ "$lux" -le 150 ]; then
-              target="55%"
-            elif [ "$lux" -le 400 ]; then
+            elif [ "$lux" -le 10 ]; then
+              target="5%"
+            elif [ "$lux" -le 20 ]; then
+              target="10%"
+            elif [ "$lux" -le 40 ]; then
+              target="20%"
+            elif [ "$lux" -le 80 ]; then
+              target="30%"
+            elif [ "$lux" -le 160 ]; then
+              target="40%"
+            elif [ "$lux" -le 320 ]; then
+              target="60%"
+            elif [ "$lux" -le 640 ]; then
               target="80%"
             else
               target="100%"
