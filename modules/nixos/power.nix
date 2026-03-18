@@ -24,14 +24,14 @@ in
   };
 
   config = lib.mkMerge [
-    {
+    (lib.mkIf (cfg.battery.enable && cfg.battery.tool == "auto-cpufreq") {
       environment.systemPackages = [
         pkgs-unstable.auto-cpufreq
       ];
-    }
+    })
     (lib.mkIf cfg.battery.enable {
       services.thermald.enable = true; # Enable thermald, the temperature management daemon. (only necessary if on Intel CPUs)
-      services.power-profiles-daemon.enable = cfg.battery.tool == "power-profiles-daemon"; # Disable GNOMEs power management
+      services.power-profiles-daemon.enable = cfg.battery.tool == "power-profiles-daemon";
 
       services.tlp = {
         enable = cfg.battery.tool == "tlp";
@@ -39,8 +39,22 @@ in
           RUNTIME_PM_ON_AC = "auto";
           RUNTIME_PM_ON_BAT = "auto";
 
-          WIFI_PWR_ON_AC = "on";
+          WIFI_PWR_ON_AC = "off";
           WIFI_PWR_ON_BAT = "on";
+
+          WOL_DISABLE = "Y";
+
+          USB_AUTOSUSPEND = 1;
+          USB_EXCLUDE_BTUSB = 1;
+
+          CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+          CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+
+          CPU_BOOST_ON_AC = 1;
+          CPU_BOOST_ON_BAT = 0;
+
+          PLATFORM_PROFILE_ON_AC = "balanced";
+          PLATFORM_PROFILE_ON_BAT = "low-power";
 
           START_CHARGE_THRESH_BAT0 = 65;
           STOP_CHARGE_THRESH_BAT0 = 80;

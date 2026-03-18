@@ -101,12 +101,12 @@
         gnome-maps
         gnome-screenshot
         gnome-system-monitor
-        #gnome-weather
+        # gnome-weather
         gnome-connections
         gnome-software
         gnome-disk-utility
         gnome-console
-        gnome-text-editor
+        # gnome-text-editor
         nautilus
         decibels
         loupe
@@ -150,17 +150,17 @@
               target="1%"
             elif [ "$lux" -le 10 ]; then
               target="5%"
-            elif [ "$lux" -le 20 ]; then
+            elif [ "$lux" -le 30 ]; then
               target="10%"
-            elif [ "$lux" -le 40 ]; then
+            elif [ "$lux" -le 60 ]; then
               target="20%"
-            elif [ "$lux" -le 80 ]; then
+            elif [ "$lux" -le 120 ]; then
               target="30%"
-            elif [ "$lux" -le 160 ]; then
+            elif [ "$lux" -le 240 ]; then
               target="40%"
-            elif [ "$lux" -le 320 ]; then
+            elif [ "$lux" -le 480 ]; then
               target="60%"
-            elif [ "$lux" -le 640 ]; then
+            elif [ "$lux" -le 960 ]; then
               target="80%"
             else
               target="100%"

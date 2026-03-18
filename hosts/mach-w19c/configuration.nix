@@ -1,6 +1,7 @@
 {
   self,
   inputs,
+  lib,
   pkgs,
   pkgs-unstable,
   config,
@@ -13,10 +14,9 @@
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     inputs.nixos-hardware.nixosModules.common-pc-ssd
-    inputs.nixos-hardware.nixosModules.huawei-machc-wa
     ./hardware-configuration.nix
     ../../modules/nixos/profiles/workstation.nix
-    #../../modules/nixos/games.nix
+    # ../../modules/nixos/games.nix
     # ../../modules/nixos/vm.nix
   ];
 
@@ -40,8 +40,15 @@
   hardware.opentabletdriver.enable = true;
 
   custom.battery.enable = true;
+  custom.battery.tool = "tlp";
+  winter.security.hardening = false;
+
+  services.devmon.enable = lib.mkForce false;
+  services.udisks2.mountOnMedia = lib.mkForce false;
+  hardware.bluetooth.powerOnBoot = lib.mkForce false;
 
   networking.hostName = "mach-w19c";
+  boot.loader.systemd-boot.configurationLimit = lib.mkForce 3;
   boot.tmp.useTmpfs = false;
   boot.kernelParams = [
     "i915.enable_psr=1"
@@ -51,6 +58,17 @@
     "i915.enable_dc=2"
   ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
+
+  systemd.sleep.extraConfig = ''
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
+  zramSwap = {
+    memoryPercent = 50;
+    priority = lib.mkForce 20;
+  };
 
   hardware.graphics = {
     enable = true;
@@ -80,10 +98,10 @@
 
   services.undervolt = {
     enable = true;
-    coreOffset = -110;
-    gpuOffset = -110;
-    uncoreOffset = -110;
-    analogioOffset = -110;
+    coreOffset = -80;
+    gpuOffset = -90;
+    uncoreOffset = -80;
+    analogioOffset = 0;
     useTimer = true;
     p1.limit = 15;
     p1.window = 10;

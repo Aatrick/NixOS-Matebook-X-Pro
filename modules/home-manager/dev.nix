@@ -35,7 +35,7 @@
     git
     gh
 
-    msedit
+    nano
 
     # C / C++ / Native Build
     gcc
@@ -88,7 +88,7 @@
     nix-update
 
     tree
-    parsec-bin
-    graphviz
+
+    pkgs-unstable.codex
   ];
 }

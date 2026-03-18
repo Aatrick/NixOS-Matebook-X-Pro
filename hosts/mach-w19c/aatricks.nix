@@ -10,10 +10,11 @@
     #../../modules/home-manager/office.nix
     #../../modules/home-manager/vm-manager.nix
     ../../modules/home-manager/android.nix
-    #../../modules/home-manager/zed.nix
+    ../../modules/home-manager/zed.nix
   ];
 
   winter = {
+    gnome.lowPowerExtensions = false;
     update = {
       flake_path = "/home/aatricks/config";
       flake_config = "mach-w19c";
@@ -30,6 +31,7 @@
 
   home.packages = with pkgs; [
     discord
-    krita
+    parsec-bin
+    tailscale
   ];
 }
