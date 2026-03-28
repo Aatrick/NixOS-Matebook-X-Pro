@@ -7,6 +7,15 @@
   config,
   ...
 }:
+let
+  envycontrol = pkgs.python3Packages.buildPythonApplication {
+    pname = "envycontrol";
+    version = "3.5.2";
+    src = inputs.envycontrol;
+    pyproject = true;
+    build-system = [ pkgs.python3Packages.setuptools ];
+  };
+in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
@@ -70,6 +79,15 @@
     priority = lib.mkForce 20;
   };
 
+  # Keep zram as primary swap (priority 20), use disk swap as overflow.
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 8192;
+      priority = 5;
+    }
+  ];
+
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -78,6 +96,11 @@
       libvdpau-va-gl
     ];
   };
+
+  environment.systemPackages = [
+    envycontrol
+    pkgs.pciutils
+  ];
 
   home-manager = {
     extraSpecialArgs = {
@@ -103,10 +126,10 @@
     uncoreOffset = -80;
     analogioOffset = 0;
     useTimer = true;
-    p1.limit = 15;
+    p1.limit = 10;
     p1.window = 10;
-    p2.limit = 25;
-    p2.window = 0.01;
+    p2.limit = 15;
+    p2.window = 0.001;
   };
 
   environment.sessionVariables = {

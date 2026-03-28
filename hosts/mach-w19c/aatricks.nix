@@ -28,7 +28,6 @@
     layout = "us";
     variant = "us";
   };
-
   home.packages = with pkgs; [
     discord
     parsec-bin

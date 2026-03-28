@@ -7,13 +7,13 @@
   options.winter.gnome.scaling = lib.mkOption {
     type = lib.types.int;
     default = 1;
-    description = "Facteur de mise à l’échelle GNOME.";
+    description = "Facteur de mise à l'échelle GNOME.";
   };
 
   options.winter.gnome.text-scaling = lib.mkOption {
     type = lib.types.float;
     default = 1.0;
-    description = "Facteur de mise à l’échelle du texte GNOME.";
+    description = "Facteur de mise à l'échelle du texte GNOME.";
   };
   config = lib.mkMerge [
     {
@@ -24,7 +24,7 @@
           enable = true;
           extraGSettingsOverrides = ''
             [org.gnome.mutter]
-            experimental-features=['scale-monitor-framebuffer','xwayland-native-scaling','variable-refresh-rate']
+            experimental-features=['scale-monitor-framebuffer','xwayland-native-scaling']
           '';
         };
         xserver = {
@@ -53,6 +53,7 @@
                   scaling-factor = lib.gvariant.mkUint32 config.winter.gnome.scaling;
                   show-battery-percentage = true;
                   text-scaling-factor = lib.gvariant.mkDouble config.winter.gnome.text-scaling;
+                  enable-animations = false;
                 };
                 "org/gnome/desktop/input-sources" = {
                   sources = [
@@ -148,20 +149,32 @@
             # more granular brightness targets
             if [ "$lux" -le 5 ]; then
               target="1%"
-            elif [ "$lux" -le 10 ]; then
+            elif [ "$lux" -le 20 ]; then
               target="5%"
-            elif [ "$lux" -le 30 ]; then
+            elif [ "$lux" -le 40 ]; then
               target="10%"
             elif [ "$lux" -le 60 ]; then
+              target="15%"
+            elif [ "$lux" -le 80 ]; then
               target="20%"
             elif [ "$lux" -le 120 ]; then
+              target="25%"
+            elif [ "$lux" -le 160 ]; then
               target="30%"
-            elif [ "$lux" -le 240 ]; then
+            elif [ "$lux" -le 200 ]; then
+              target="35%"
+            elif [ "$lux" -le 280 ]; then
               target="40%"
-            elif [ "$lux" -le 480 ]; then
+            elif [ "$lux" -le 360 ]; then
+              target="50%"
+            elif [ "$lux" -le 560 ]; then
               target="60%"
-            elif [ "$lux" -le 960 ]; then
+            elif [ "$lux" -le 800 ]; then
+              target="70%"
+            elif [ "$lux" -le 1120 ]; then
               target="80%"
+            elif [ "$lux" -le 1600 ]; then
+              target="90%"
             else
               target="100%"
             fi

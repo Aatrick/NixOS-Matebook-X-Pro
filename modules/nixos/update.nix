@@ -43,6 +43,8 @@
   };
 
   nix.settings.auto-optimise-store = true;
+  nix.settings.min-free = "5G";
+  nix.settings.max-free = "10G";
   nix.gc = {
     automatic = true;
     dates = "daily";

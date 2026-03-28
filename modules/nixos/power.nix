@@ -48,10 +48,10 @@ in
           USB_EXCLUDE_BTUSB = 1;
 
           CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-          CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+          CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
 
           CPU_BOOST_ON_AC = 1;
-          CPU_BOOST_ON_BAT = 0;
+          CPU_BOOST_ON_BAT = 1;
 
           PLATFORM_PROFILE_ON_AC = "balanced";
           PLATFORM_PROFILE_ON_BAT = "low-power";
@@ -59,7 +59,7 @@ in
           START_CHARGE_THRESH_BAT0 = 65;
           STOP_CHARGE_THRESH_BAT0 = 80;
 
-          RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+          RESTORE_DEVICE_STATE_ON_STARTUP = 0;
         };
       };
 

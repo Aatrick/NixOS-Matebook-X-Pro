@@ -8,6 +8,10 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.6.0";
+    envycontrol = {
+      url = "github:bayasdev/envycontrol";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -17,7 +21,7 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
-    
+
     # Define overlays
     overlays = [
       (import ./pkgs/overlay.nix)
@@ -27,7 +31,7 @@
       allowUnfree = true;
       android_sdk.accept_license = true;
     };
-    
+
     # Import unstable pkgs with overlay
     pkgs-unstable = import nixpkgs-unstable {
       inherit system overlays;

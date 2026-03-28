@@ -136,7 +136,6 @@
       };
       ensure_final_newline_on_save = true;
       buffer_line_height = "comfortable";
-      restore_on_startup = "last_session";
       ui_font_size = 16;
       buffer_font_size = 17.0;
       buffer_font_family = "MonaspiceNe Nerd Font";
@@ -168,7 +167,7 @@
 
       # Telemetry
       telemetry = {
-        diagnostics = true;
+        diagnostics = false;
         metrics = false;
       };
 
