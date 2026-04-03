@@ -38,14 +38,14 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
-  networking.nameservers = [
-    "1.1.1.1"
-    "1.0.0.1"
-    "2606:4700:4700::1111"
-    "2606:4700:4700::1001"
-  ];
-  networking.networkmanager.dns = "none";
-  networking.dhcpcd.extraConfig = "nohook resolv.conf";
+  # networking.nameservers = [
+  #   "1.1.1.1"
+  #   "1.0.0.1"
+  #   "2606:4700:4700::1111"
+  #   "2606:4700:4700::1001"
+  # ];
+  # networking.networkmanager.dns = "none";
+  # networking.dhcpcd.extraConfig = "nohook resolv.conf";
   networking.networkmanager.enable = lib.mkDefault true;
   networking.firewall = {
     enable = lib.mkForce true;

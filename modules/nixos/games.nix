@@ -4,10 +4,12 @@
   pkgs-unstable,
   lib,
   ...
-}: let
-  lsfg-vk = pkgs.callPackage ../../pkgs/lsfg-vk.nix {};
-  lsfg-vk-ui = pkgs.callPackage ../../pkgs/lsfg-vk-ui.nix {};
-in {
+}:
+let
+  lsfg-vk = pkgs.callPackage ../../pkgs/lsfg-vk.nix { };
+  lsfg-vk-ui = pkgs.callPackage ../../pkgs/lsfg-vk-ui.nix { };
+in
+{
   config = {
     programs = {
       gamescope = {
@@ -31,41 +33,40 @@ in {
           enable = true;
         };
         extest.enable = true;
-        remotePlay.openFirewall = false;
-        dedicatedServer.openFirewall = false;
+        remotePlay.openFirewall = true;
+        dedicatedServer.openFirewall = true;
         localNetworkGameTransfers.openFirewall = true;
-        extraPackages =
-          []
-          ++ lib.optional config.winter.games.lsfg.enable lsfg-vk;
+        extraPackages = [ ] ++ lib.optional config.winter.games.lsfg.enable lsfg-vk;
         extraCompatPackages = [
           pkgs-unstable.proton-ge-bin
         ];
         package = pkgs.steam.override {
-          extraEnv =
-            {
-              TZ = ":/etc/localtime";
-              MANGOHUD = true;
-            }
-            // (
-              if config.winter.games.lsfg.enable == true
-              then {
+          extraEnv = {
+            TZ = ":/etc/localtime";
+            MANGOHUD = true;
+          }
+          // (
+            if config.winter.games.lsfg.enable == true then
+              {
                 VK_LAYER_PATH = "${lsfg-vk}/share/vulkan/explicit_layer.d";
                 ENABLE_LFSG = 1;
                 LSFG_LEGACY = 1;
                 LFSG_MULTIPLIER = 2;
               }
-              else {}
-            )
-            // (
-              if
-                config.winter.games.lsfg.enable
-                == true
-                && config.winter.games.lsfg.steam_library_for_lossless_scaling != null
-              then {
+            else
+              { }
+          )
+          // (
+            if
+              config.winter.games.lsfg.enable == true
+              && config.winter.games.lsfg.steam_library_for_lossless_scaling != null
+            then
+              {
                 LSFG_DLL_PATH = "${config.winter.games.lsfg.steam_library_for_lossless_scaling}/steamapps/common/Lossless Scaling/Lossless.dll";
               }
-              else {}
-            );
+            else
+              { }
+          );
         };
       };
     };
@@ -87,44 +88,44 @@ in {
       };
     };
 
-    nixpkgs.overlays = [
-      (self: super: {
-        linuxPackages =
-          super.linuxPackages
-          // {
-            kernel = super.linuxPackages.kernel.override {
-              structuredExtraConfig = with lib.kernel; {
-                HZ_1000 = yes;
-                HZ = 1000;
-                PREEMPT_FULL = yes;
-                IOSCHED_BFQ = yes;
-                DEFAULT_BFQ = yes;
-                DEFAULT_IOSCHED = "bfq";
-                V4L2_LOOPBACK = module;
-                HID = yes;
-              };
-            };
-          };
-      })
-    ];
+    #   nixpkgs.overlays = [
+    #     (self: super: {
+    #       linuxPackages =
+    #         super.linuxPackages
+    #         // {
+    #           kernel = super.linuxPackages.kernel.override {
+    #             structuredExtraConfig = with lib.kernel; {
+    #               HZ_1000 = yes;
+    #               HZ = 1000;
+    #               PREEMPT_FULL = yes;
+    #               IOSCHED_BFQ = yes;
+    #               DEFAULT_BFQ = yes;
+    #               DEFAULT_IOSCHED = "bfq";
+    #               V4L2_LOOPBACK = module;
+    #               HID = yes;
+    #             };
+    #           };
+    #         };
+    #     })
+    #   ];
 
-    services.udev.extraRules = ''
-      ACTION=="add|change", SUBSYSTEM=="block", ATTR{queue/scheduler}="bfq"
-    '';
+    #   services.udev.extraRules = ''
+    #     ACTION=="add|change", SUBSYSTEM=="block", ATTR{queue/scheduler}="bfq"
+    #   '';
 
-    boot.kernel.sysctl = {
-      "kernel.split_lock_mitigate" = 0;
-      "vm.swappiness" = 10;
-      "vm.vfs_cache_pressure" = 50;
-      "vm.dirty_bytes" = 268435456;
-      "vm.max_map_count" = 16777216;
-      "vm.dirty_background_bytes" = 67108864;
-      "vm.dirty_writeback_centisecs" = 1500;
-      "kernel.nmi_watchdog" = 0;
-      "kernel.unprivileged_userns_clone" = 1;
-      "kernel.printk" = "3 3 3 3";
-      "kernel.kptr_restrict" = 2;
-      "kernel.kexec_load_disabled" = 1;
-    };
+    #   boot.kernel.sysctl = {
+    #     "kernel.split_lock_mitigate" = 0;
+    #     "vm.swappiness" = 10;
+    #     "vm.vfs_cache_pressure" = 50;
+    #     "vm.dirty_bytes" = 268435456;
+    #     "vm.max_map_count" = 16777216;
+    #     "vm.dirty_background_bytes" = 67108864;
+    #     "vm.dirty_writeback_centisecs" = 1500;
+    #     "kernel.nmi_watchdog" = 0;
+    #     "kernel.unprivileged_userns_clone" = 1;
+    #     "kernel.printk" = "3 3 3 3";
+    #     "kernel.kptr_restrict" = 2;
+    #     "kernel.kexec_load_disabled" = 1;
+    #   };
   };
 }

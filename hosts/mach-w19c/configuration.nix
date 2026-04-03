@@ -25,7 +25,7 @@ in
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
     ../../modules/nixos/profiles/workstation.nix
-    # ../../modules/nixos/games.nix
+    ../../modules/nixos/games.nix
     # ../../modules/nixos/vm.nix
   ];
 
