@@ -52,6 +52,25 @@ in
   custom.battery.tool = "tlp";
   winter.security.hardening = false;
 
+  # This MateBook does not expose ACPI platform profiles, so prefer TLP's
+  # Intel pstate/EPP tuning instead of platform-profile integration.
+  services.tlp.settings = {
+    PLATFORM_PROFILE_ON_AC = lib.mkForce "";
+    PLATFORM_PROFILE_ON_BAT = lib.mkForce "";
+    PLATFORM_PROFILE_ON_SAV = lib.mkForce "";
+
+    CPU_SCALING_GOVERNOR_ON_AC = lib.mkForce "powersave";
+    CPU_SCALING_GOVERNOR_ON_BAT = lib.mkForce "powersave";
+    CPU_SCALING_GOVERNOR_ON_SAV = lib.mkForce "powersave";
+
+    CPU_ENERGY_PERF_POLICY_ON_BAT = lib.mkForce "balance_power";
+    CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
+
+    CPU_BOOST_ON_BAT = lib.mkForce 0;
+    CPU_BOOST_ON_SAV = 0;
+    CPU_MAX_PERF_ON_SAV = 50;
+  };
+
   services.devmon.enable = lib.mkForce false;
   services.udisks2.mountOnMedia = lib.mkForce false;
   hardware.bluetooth.powerOnBoot = lib.mkForce false;
