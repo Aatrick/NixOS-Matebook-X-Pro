@@ -83,9 +83,8 @@
     nixfmt
 
     bun
-    gemini-cli
-    update-gemini
     nix-update
+    pkgs-unstable.gemini-cli
 
     tree
 

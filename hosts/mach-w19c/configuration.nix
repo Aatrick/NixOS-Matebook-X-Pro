@@ -57,7 +57,7 @@ in
   hardware.bluetooth.powerOnBoot = lib.mkForce false;
 
   networking.hostName = "mach-w19c";
-  boot.loader.systemd-boot.configurationLimit = lib.mkForce 3;
+  boot.loader.systemd-boot.configurationLimit = lib.mkForce 1;
   boot.tmp.useTmpfs = false;
   boot.kernelParams = [
     "i915.enable_psr=1"
@@ -122,13 +122,13 @@ in
   services.undervolt = {
     enable = true;
     coreOffset = -80;
-    gpuOffset = -90;
+    gpuOffset = -80;
     uncoreOffset = -80;
     analogioOffset = 0;
     useTimer = true;
-    p1.limit = 10;
-    p1.window = 10;
-    p2.limit = 15;
+    p1.limit = 15;
+    p1.window = 28;
+    p2.limit = 25;
     p2.window = 0.001;
   };
 
