@@ -89,7 +89,7 @@
         hitori # sudoku game
         iagno # go game
         tali # poker game
-        totem # video player
+        # totem # video player
         showtime
         papers
         yelp
@@ -148,7 +148,7 @@
 
             # more granular brightness targets
             if [ "$lux" -le 5 ]; then
-              target="1%"
+              target="1"
             elif [ "$lux" -le 20 ]; then
               target="5%"
             elif [ "$lux" -le 40 ]; then

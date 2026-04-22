@@ -66,7 +66,7 @@ in
     CPU_ENERGY_PERF_POLICY_ON_BAT = lib.mkForce "balance_power";
     CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
 
-    CPU_BOOST_ON_BAT = lib.mkForce 0;
+    CPU_BOOST_ON_BAT = lib.mkForce 1;
     CPU_BOOST_ON_SAV = 0;
     CPU_MAX_PERF_ON_SAV = 50;
   };
@@ -140,10 +140,10 @@ in
 
   services.undervolt = {
     enable = true;
-    coreOffset = -80;
-    gpuOffset = -80;
-    uncoreOffset = -80;
-    analogioOffset = 0;
+    coreOffset = -110;
+    gpuOffset = -100;
+    uncoreOffset = -110;
+    analogioOffset = -100;
     useTimer = true;
     p1.limit = 15;
     p1.window = 28;
