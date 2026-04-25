@@ -84,10 +84,9 @@
 
     bun
     nix-update
-    pkgs-unstable.gemini-cli
 
     tree
 
-    pkgs-unstable.codex
+    nodejs_24
   ];
 }

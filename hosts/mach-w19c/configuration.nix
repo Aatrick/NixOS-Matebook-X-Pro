@@ -15,6 +15,35 @@ let
     pyproject = true;
     build-system = [ pkgs.python3Packages.setuptools ];
   };
+
+  applyUndervoltPowerLimits = pkgs.writeShellScript "apply-undervolt-power-limits" ''
+    set -eu
+
+    on_ac=0
+
+    for supply in /sys/class/power_supply/*; do
+      [ -e "$supply/type" ] || continue
+
+      if [ "$(cat "$supply/type")" = "Mains" ] \
+        && [ -e "$supply/online" ] \
+        && [ "$(cat "$supply/online")" = "1" ]; then
+        on_ac=1
+        break
+      fi
+    done
+
+    if [ "$on_ac" = "1" ]; then
+      # AC: normal performance
+      exec ${pkgs.undervolt}/bin/undervolt \
+        --power-limit-long 15 28 \
+        --power-limit-short 25 2
+    else
+      # Battery: battery-life focused
+      exec ${pkgs.undervolt}/bin/undervolt \
+        --power-limit-long 8 28 \
+        --power-limit-short 12 2
+    fi
+  '';
 in
 {
   imports = [
@@ -140,16 +169,52 @@ in
 
   services.undervolt = {
     enable = true;
-    coreOffset = -110;
-    gpuOffset = -100;
-    uncoreOffset = -110;
-    analogioOffset = -100;
+    verbose = true;
+
+    # NixOS sets both CPU core and cache from coreOffset.
+    coreOffset = -75;
+
+    # Your YouTube 4K test suggests -100 mV is too aggressive.
+    gpuOffset = -80;
+
+    # Do not set these unless separately tested.
+    # uncoreOffset = ...;
+    # analogioOffset = ...;
+
+    # Keep this if your machine resets undervolt settings.
+    # Since p1/p2 are not set here, the timer will not overwrite
+    # the dynamic AC/BAT power limits below.
     useTimer = true;
-    p1.limit = 15;
-    p1.window = 28;
-    p2.limit = 25;
-    p2.window = 0.001;
   };
+  systemd.services.undervolt-power-limits = {
+    description = "Apply Intel PL1/PL2 depending on AC or battery";
+    after = [ "undervolt.service" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = applyUndervoltPowerLimits;
+    };
+  };
+
+  systemd.services.undervolt-power-limits-resume = {
+    description = "Reapply Intel PL1/PL2 after resume";
+    wantedBy = [ "sleep.target" ];
+    before = [ "sleep.target" ];
+
+    unitConfig.StopWhenUnneeded = true;
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.coreutils}/bin/true";
+      ExecStop = applyUndervoltPowerLimits;
+    };
+  };
+
+  services.udev.extraRules = ''
+    ACTION=="change", SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="${pkgs.systemd}/bin/systemctl --no-block start undervolt-power-limits.service"
+  '';
 
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
