@@ -40,9 +40,46 @@ let
     else
       # Battery: battery-life focused
       exec ${pkgs.undervolt}/bin/undervolt \
-        --power-limit-long 8 28 \
-        --power-limit-short 12 2
+        --power-limit-long 6 28 \
+        --power-limit-short 10 2
     fi
+  '';
+
+  applyDisplayRefreshRate = pkgs.writeShellScript "apply-display-refresh-rate" ''
+    set -eu
+
+    uid="$(${pkgs.coreutils}/bin/id -u)"
+    runtime_dir="/run/user/$uid"
+
+    [ -S "$runtime_dir/bus" ] || exit 0
+
+    export XDG_RUNTIME_DIR="$runtime_dir"
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime_dir/bus"
+
+    on_ac=0
+
+    for supply in /sys/class/power_supply/*; do
+      [ -e "$supply/type" ] || continue
+
+      if [ "$(${pkgs.coreutils}/bin/cat "$supply/type")" = "Mains" ] \
+        && [ -e "$supply/online" ] \
+        && [ "$(${pkgs.coreutils}/bin/cat "$supply/online")" = "1" ]; then
+        on_ac=1
+        break
+      fi
+    done
+
+    output="eDP-1"
+
+    if [ "$on_ac" = "1" ]; then
+      mode="3000x2000@59.999"
+    else
+      mode="3000x2000@48.009"
+    fi
+
+    exec ${pkgs.gnome-randr}/bin/gnome-randr modify \
+      --mode "$mode" \
+      "$output"
   '';
 in
 {
@@ -148,6 +185,7 @@ in
   environment.systemPackages = [
     envycontrol
     pkgs.pciutils
+    pkgs.gnome-randr
   ];
 
   home-manager = {
@@ -212,8 +250,21 @@ in
     };
   };
 
-  services.udev.extraRules = ''
+  systemd.services.display-refresh-rate = {
+    description = "Set GNOME display refresh rate depending on AC or battery";
+    after = [ "display-manager.service" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      User = "aatricks";
+      ExecStart = applyDisplayRefreshRate;
+    };
+  };
+
+    services.udev.extraRules = ''
     ACTION=="change", SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="${pkgs.systemd}/bin/systemctl --no-block start undervolt-power-limits.service"
+    ACTION=="change", SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="${pkgs.systemd}/bin/systemctl --no-block start display-refresh-rate.service"
   '';
 
   environment.sessionVariables = {
