@@ -27,7 +27,19 @@
     ];
 
     userSettings = {
+      outline_panel = {
+        dock = "left";
+      };
+      agent_servers = {
+        gemini = {
+          type = "registry";
+        };
+        codex-acp = {
+          type = "registry";
+        };
+      };
       git_panel = {
+        dock = "left";
         status_style = "icon";
         sort_by_path = true;
         collapse_untracked_diff = false;
@@ -51,6 +63,7 @@
         button = false;
       };
       project_panel = {
+        dock = "left";
         hide_hidden = true;
         hide_root = true;
         button = true;
@@ -62,6 +75,7 @@
         button = false;
       };
       search = {
+        include_ignored = false;
         button = false;
       };
       diagnostics = {
@@ -105,7 +119,6 @@
       };
       title_bar = {
         show_sign_in = true;
-        show_branch_icon = false;
       };
       status_bar = {
         active_language_button = false;
@@ -148,15 +161,15 @@
       };
 
       # AI & Features
-      features = {
-        edit_prediction_provider = "copilot";
-      };
       edit_predictions = {
+        provider = "copilot";
         mode = "subtle";
       };
       agent = {
         dock = "left";
-        always_allow_tool_actions = true;
+        tool_permissions = {
+          default = "allow";
+        };
         default_profile = "write";
         default_model = {
           provider = "copilot_chat";
